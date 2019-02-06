@@ -1,19 +1,23 @@
-var express = require('express');
-var bodyParser = require('body-parser');
-require('dotenv').config();
-var mongoose = require('mongoose');
-var app = express();
+'use strict';
 
-var User = require('./models/user');
-var Event = require('./models/event');
+const express = require('express');
+const bodyParser = require('body-parser');
+require('dotenv').config();
+const mongoose = require('mongoose');
+const app = express();
+const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+
+const User = require('./models/user');
+const Event = require('./models/event');
 
 // Middleware
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
-var port = process.env.PORT || 8080;
+const port = process.env.PORT || 8080;
 
-var router = express.Router();
+const router = express.Router();
 
 // Ping route
 router.get('/', function(req, res) {
@@ -94,7 +98,7 @@ app.use('/api', router);
 
 // Start database connection
 mongoose.connect(process.env.DB_CONN, { useNewUrlParser: true });
-var db = mongoose.connection;
+const db = mongoose.connection;
 db.on('error', console.error.bind(console, 'Connection error:'));
 db.once('open', function() {
 
