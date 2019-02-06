@@ -9,25 +9,40 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
 const User = require('./models/user');
-const Event = require('./models/event');
+const Post = require('./models/post');
 
 // Middleware
 app.use(bodyParser.urlencoded({extended: true}));
 app.use(bodyParser.json());
 
 const port = process.env.PORT || 8080;
-
 const router = express.Router();
+
+// Route middleware to check for token
+router.use(function(req, res, next) {
+
+    let rootPath = req.path.split('/')[1];
+    console.log('Authenticating request to path: /' + rootPath);
+    if (rootPath && (rootPath === 'users' || rootPath === 'posts')) {
+
+      // Exclusions
+      if (rootPath === 'users' && releaseEvents.method === 'POST') next();
+
+      let token = req.headers['x-access-token'];
+      if (!token) {
+        return res.status(401).send({ error: 'No token provided.' });
+      }
+    }
+    next();
+});
+
+// ==========
+// API Routes
+// ==========
 
 // Ping route
 router.get('/', function(req, res) {
   res.json({ message: 'Welcome to our API!' });
-});
-
-// Intercept routes
-router.use(function(req, res, next) {
-  // TODO: Check /users and /events for credential token
-  next();
 });
 
 // Login route
@@ -37,11 +52,16 @@ router.route('/login').post(function(req, res) {
 
 // Users
 router.route('/users').post(function(req, res) {
-  // TODO: Create a token
-  let user = new User({ username: req.body.username });
+  // Registration
+  let username = req.body.username;
+  let password = bcrypt.hashSync(req.body.password, 8);
+
+  let user = new User({ username: username, password: password, posts: [] });
   user.save(function(err) {
     if (err) res.send(err);
-    res.json({ message: 'User created!'});
+
+    let token = jwt.sign({id: user._id}, process.env.SECRET, {expiresIn: 86400})
+    res.json({ message: 'User created!', token: token });
   });
 }).get(function(req, res) {
   // TODO: Needs auth
@@ -62,6 +82,7 @@ router.route('/users/:user_id').get(function(req, res) {
   // TODO: Needs auth
   User.findById(req.params.user_id, function(err, user) {
     if (err) res.send(err);
+    // TODO: Check which attributes are being updated
     user.username = req.body.username;
     user.save(function(err) {
       if (err) res.send(err);
@@ -78,20 +99,24 @@ router.route('/users/:user_id').get(function(req, res) {
   });
 });
 
-// Events
-router.route('/events').post(function(req, res) {
-
-  let event = new Event({
+// Posts
+router.route('/posts').post(function(req, res) {
+  // TODO: Needs auth
+  let post = new Post({
     name: req.body.name
   });
 
   User.findById(req.params.user_id, function(err, user) {
-    event.save(function(err) {
+    post.save(function(err) {
       if (err) res.json(err);
-      res.json({ messsage: 'Event posted!' });
+      res.json({ messsage: 'Posted!' });
     });
   });
 });
+
+// =========
+// Execution
+// =========
 
 // Register routes
 app.use('/api', router);
