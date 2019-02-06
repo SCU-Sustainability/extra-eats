@@ -1,15 +1,62 @@
 import 'package:flutter/material.dart';
 
-class Settings extends StatefulWidget {
-  Settings({Key key}) : super(key: key);
+class UserSettings extends StatelessWidget {
+  UserSettings({Key key}) : super(key: key);
 
-  @override
-  _SettingsState createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
-    return Text('Settings');
+     return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('User Settings'),
+      )
+    );
+  }
+}
+
+class PostArchive extends StatelessWidget {
+  PostArchive({Key key}) : super(key: key);
+
+  @override
+  Widget build(BuildContext context) {
+    return new Scaffold(
+      appBar: new AppBar(
+        title: new Text('Post Archive'),
+      )
+    );
+  }
+}
+
+class Settings extends StatelessWidget {
+  Settings({Key key}) : super(key: key);
+
+  final widgetList = [UserSettings()];
+
+  @override
+  Widget build(BuildContext context) {
+    return ListView(
+      children: <Widget>[
+        ListTile(
+          leading: Icon(Icons.person),
+          title: Text('User Settings'),
+          onTap: () {
+            Navigator.push(
+              context, 
+              MaterialPageRoute(builder: (context) => UserSettings()),
+            );
+          },
+        ),
+        Divider(color: Colors.grey),
+        ListTile(
+          leading: Icon(Icons.archive),
+          title: Text('Post Archive'),
+          onTap: () {
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => PostArchive()),
+            );
+          },
+        )
+      ]
+    );
   }
 }

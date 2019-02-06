@@ -14,27 +14,28 @@ class TasteTheWaste extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.blue,
       ),
-      home: Home(title: 'Taste The Waste'),
+      home: AppContainer(),
     );
   }
 }
 
-class Home extends StatefulWidget {
-  Home({Key key, this.title}) : super(key: key);
-
-  final String title;
+class AppContainer extends StatefulWidget {
+  AppContainer({Key key}) : super(key: key);
 
   @override
-  _HomeState createState() => _HomeState();
+  _AppContainerState createState() => _AppContainerState();
 }
 
-class _HomeState extends State<Home> {
+class _AppContainerState extends State<AppContainer> {
   int _currentIndex = 0;
+
   final List<Widget> _children = [
     Feed(),
     SubmitPost(),
     Settings()
   ];
+
+  final _names = ['Home Feed', 'Submit Post', 'Settings'];
 
   void onTabTapped(int index) {
     setState(() {
@@ -46,7 +47,7 @@ class _HomeState extends State<Home> {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: Text(widget.title),
+        title: Text(_names[_currentIndex]),
       ),
       body: _children[_currentIndex],
       bottomNavigationBar: BottomNavigationBar(
