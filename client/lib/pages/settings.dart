@@ -45,9 +45,9 @@ class Settings extends StatelessWidget {
             );
           },
         ),
-        Divider(color: Colors.grey),
+        Divider(color: Colors.grey, height: 0.0),
         ListTile(
-          leading: Icon(Icons.archive),
+          leading: Icon(Icons.history),
           title: Text('Post Archive'),
           onTap: () {
             Navigator.push(
