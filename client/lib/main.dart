@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import './pages/feed.dart';
+import './pages/settings.dart';
+import './pages/submit_post.dart';
 
 void main() => runApp(TasteTheWaste());
 
@@ -65,47 +68,5 @@ class _HomeState extends State<Home> {
         ],
       ),
     );
-  }
-}
-
-class Feed extends StatefulWidget {
-  Feed({Key key}) : super(key: key);
-
-  @override
-  _FeedState createState() => _FeedState();
-}
-
-class _FeedState extends State<Feed> {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Feed');
-  }
-}
-
-class SubmitPost extends StatefulWidget {
-  SubmitPost({Key key}) : super(key: key);
-
-  @override
-  _SubmitPostState createState() => _SubmitPostState();
-}
-
-class _SubmitPostState extends State<SubmitPost> {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Submit post');
-  }
-}
-
-class Settings extends StatefulWidget {
-  Settings({Key key}) : super(key: key);
-
-  @override
-  _SettingsState createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
-  @override
-  Widget build(BuildContext context) {
-    return Text('Settings');
   }
 }
