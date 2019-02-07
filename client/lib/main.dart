@@ -65,19 +65,24 @@ class _AppContainerState extends State<AppContainer> {
   }
 
   Future<http.Response> _login(String username, String password) async {
-    return http.post("https://taste-the-waste.herokuapp.com/api/login", body: {
-      username: username,
-      password: password
+    this._currentIndex = 0;
+    return http.post('http://10.0.2.2:8080/api/login', body: {
+      'username': username,
+      'password': password
     }, headers: {
       'Accept': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/x-www-form-urlencoded'
     }).then((res) {
-      //Map<String, dynamic> response = convert.json.decode(res.body);
-      print(res.body);
-      /*print(response);
-      if (response['token']) {
-        this.setToken(response['token']);
-      }**/
+      try {
+
+        Map<String, dynamic> response = convert.json.decode(res.body);
+        if (response.containsKey('token')) {
+          this.setToken(response['token']);
+        }
+      } catch (Exception) {
+        return;
+      }
+     
     });
   }
 
