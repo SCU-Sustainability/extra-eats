@@ -24,6 +24,7 @@ class Login extends StatefulWidget {
   Login({Key key}): super(key: key);
 
 
+
   @override
   _LoginState createState() => _LoginState();
 
@@ -31,12 +32,23 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TextField(
+          controller: usernameController,
           decoration: InputDecoration(
             hintText: 'Username',
             contentPadding: EdgeInsets.all(20.0),
@@ -48,6 +60,7 @@ class _LoginState extends State<Login> {
           height: 0.0
         ),
         TextField(
+          controller: passwordController,
           decoration: InputDecoration(
             hintText: 'Password',
             contentPadding: EdgeInsets.all(20.0),
@@ -73,7 +86,10 @@ class _LoginState extends State<Login> {
               textColor: Colors.white,
               color: Colors.lightBlue,  
               child: Text('Login'),
-              onPressed: LoginAction.of(context).login
+              onPressed: () {
+                LoginAction.of(context).login(usernameController.text, passwordController.text);
+              }
+                
             )),
           ]
         )),

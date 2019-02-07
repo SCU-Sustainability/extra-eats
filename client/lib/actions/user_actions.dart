@@ -18,7 +18,7 @@ class LoginAction extends InheritedWidget {
   LoginAction({Key key, @required this.login, @required Widget child}): assert(login != null), 
     assert(child != null),
     super(key: key, child: child);
-  final VoidCallback login;
+  final Function(String, String) login;
 
   static LoginAction of(BuildContext context) {
     return context.inheritFromWidgetOfExactType(LoginAction);
