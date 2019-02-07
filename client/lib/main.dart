@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'dart:convert' as convert;
 import './pages/feed.dart';
 import './pages/settings.dart';
@@ -39,6 +41,7 @@ class _AppContainerState extends State<AppContainer> {
   ];
 
   final _names = ['Home Feed', 'Submit Post', 'Settings'];
+  final _googleSignIn = GoogleSignIn();
 
   _AppContainerState() {
     _children.add(Settings());
@@ -86,7 +89,33 @@ class _AppContainerState extends State<AppContainer> {
     });
   }
 
+  void _loginWithGoogle() async {
+    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
+    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
+    AuthCredential credential = GoogleAuthProvider.getCredential(
+      accessToken: googleAuth.accessToken,
+      idToken: googleAuth.idToken,
+    );
+    FirebaseUser user = await FirebaseAuth.instance.signInWithCredential(credential);
+    FirebaseUser current = await FirebaseAuth.instance.currentUser();
+    if (user.uid == current.uid) {
+      this.setToken(googleAuth.accessToken);
+    }
+  }
+
   Widget _handleMainScreen() {
+    /* return new StreamBuilder<FirebaseUser>(
+      stream: FirebaseAuth.instance.onAuthStateChanged,
+      builder: (BuildContext context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.waiting) {
+          return new Splash();
+        } else {
+          if (snapshot.hasData) {
+            return _children[_currentIndex];
+          }
+        }
+      }
+    );**/
     return _isLoggedIn() ? _children[_currentIndex] : Login();
   }
 

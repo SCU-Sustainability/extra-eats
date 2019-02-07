@@ -27,3 +27,17 @@ class LoginAction extends InheritedWidget {
   @override
   bool updateShouldNotify(LoginAction old) => login != old.login;
 }
+
+class GoogleLoginAction extends InheritedWidget {
+  GoogleLoginAction({Key key, @required this.login, @required Widget child}): assert(login != null), 
+    assert(child != null),
+    super(key: key, child: child);
+  final VoidCallback login;
+
+  static GoogleLoginAction of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(GoogleLoginAction);
+  }
+  
+  @override
+  bool updateShouldNotify(LoginAction old) => login != old.login;
+}
