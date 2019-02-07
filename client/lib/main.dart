@@ -66,7 +66,7 @@ class _AppContainerState extends State<AppContainer> {
 
   Future<http.Response> _login(String username, String password) async {
     this._currentIndex = 0;
-    return http.post('http://10.0.2.2:8080/api/login', body: {
+    return http.post('https://taste-the-waste.herokuapp.com/api/login', body: {
       'username': username,
       'password': password
     }, headers: {
@@ -86,6 +86,10 @@ class _AppContainerState extends State<AppContainer> {
     });
   }
 
+  Widget _handleMainScreen() {
+    return _isLoggedIn() ? _children[_currentIndex] : Login();
+  }
+
   @override
   Widget build(BuildContext context) {
     return LoginAction(
@@ -94,7 +98,7 @@ class _AppContainerState extends State<AppContainer> {
       appBar: AppBar(
         title: Text(_isLoggedIn() ? _names[_currentIndex] : 'Login'),
       ),
-      body: _isLoggedIn() ? _children[_currentIndex] : Login(),
+      body: _handleMainScreen(),
       bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(
         onTap: _setIndex,
         currentIndex: _currentIndex,
