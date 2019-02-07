@@ -8,8 +8,108 @@ class SubmitPost extends StatefulWidget {
 }
 
 class _SubmitPostState extends State<SubmitPost> {
+
+  final nameController = TextEditingController();
+  final descriptionController = TextEditingController();
+
+  @override
+  void dispose() {
+    nameController.dispose();
+    descriptionController.dispose();
+    super.dispose();
+  }
+
+  void _clear() {
+    nameController.clear();
+    descriptionController.clear();
+    FocusScope.of(context).requestFocus(new FocusNode());
+  }
+
+  Future<void> _ensureCancel() async {
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text('Cancel this post?'),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('No'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            ),
+            RaisedButton(
+              textColor: Colors.white,
+              child: Text('Cancel'),
+              onPressed: () {
+                _clear();
+                Navigator.of(context).pop();
+              }
+            ),
+          ],
+        );
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Text('Submit post');
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        new TextField(
+          controller: nameController,
+          decoration: InputDecoration(
+            hintText: 'Name',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+        const Divider(
+          color: Colors.grey,
+          height: 0.0
+        ),
+        new TextField(
+          controller: descriptionController,
+          decoration: InputDecoration(
+            hintText: 'Description',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+        const Divider(
+          color: Colors.grey,
+          height: 0.0
+        ),
+        new Expanded(
+          child: new Align(
+            alignment: FractionalOffset.bottomRight,
+            child: new Padding(
+              padding: EdgeInsets.all(32.0),
+              child: Row(
+                children: [
+                  new FlatButton(
+                    textColor: Colors.blue,
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      _ensureCancel();
+                    }
+                  ),
+                  Spacer(flex: 1),
+                  new RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.lightBlue,
+                    child: Text('Submit'),
+                    onPressed: () {
+                      _clear();
+                    },
+                  ),
+                ]
+              )
+            ),
+          ),
+        ),
+      ],
+    );
   }
 }
