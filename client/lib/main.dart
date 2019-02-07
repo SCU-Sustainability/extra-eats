@@ -55,16 +55,16 @@ class _AppContainerState extends State<AppContainer> {
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
-            icon: new Icon(Icons.home),
-            title: new Text('Home'),
+            icon: Icon(Icons.home),
+            title: Text('Home'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.add_a_photo),
-            title: new Text('Post'),
+            icon: Icon(Icons.add_a_photo),
+            title: Text('Post'),
           ),
           BottomNavigationBarItem(
-            icon: new Icon(Icons.settings),
-            title: new Text('Extras')
+            icon: Icon(Icons.settings),
+            title: Text('Extras')
           )
         ],
       ),
