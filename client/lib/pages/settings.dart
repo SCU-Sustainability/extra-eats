@@ -45,7 +45,7 @@ class Settings extends StatelessWidget {
             );
           },
         ),
-        Divider(color: Colors.grey, height: 0.0),
+        const Divider(color: Colors.grey, height: 0.0),
         ListTile(
           leading: Icon(Icons.history),
           title: Text('Post Archive'),
@@ -55,7 +55,8 @@ class Settings extends StatelessWidget {
               MaterialPageRoute(builder: (context) => PostArchive()),
             );
           },
-        )
+        ),
+        Divider(color: Colors.grey, height: 0.0)
       ]
     );
   }
