@@ -42,18 +42,18 @@ class _FeedState extends State<Feed> {
   }
 
   Widget _postCards(List<Post> posts) {
-    Widget listView = new ListView.builder(
-      physics: const AlwaysScrollableScrollPhysics(),
+    Widget listView = ListView.builder(
+      physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       itemCount: posts.length,
       itemBuilder: (context, index) {
-        return new Card(
-          child: new ListTile(
+        return Padding(padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0), child: Card(
+          child: ListTile(
             leading: Icon(Icons.fastfood),
             title: Text(posts[posts.length - index - 1].name),
             subtitle: Text(posts[posts.length - index - 1].description)
           )
-        );
+        ));
       }
     );
     return listView;
@@ -73,15 +73,19 @@ class _FeedState extends State<Feed> {
               ],
               labelColor: Colors.blueGrey,
             )),
-          Expanded(child: TabBarView(
-            children: <Widget>[
-              new RefreshIndicator(
-                child: _postCards(mockFeed),
-                onRefresh: _handleRefresh,
-              ),
-              _postCards(mockArchive),
-            ]
-          )),
+          Expanded(
+            child: Container(padding: EdgeInsets.all(9.0), decoration: BoxDecoration(
+              color: Colors.black12,
+            ), child: TabBarView(
+              children: <Widget>[
+                RefreshIndicator(
+                  child: _postCards(mockFeed),
+                  onRefresh: _handleRefresh,
+                ),
+                _postCards(mockArchive),
+              ]
+            ))
+          ),
         ],
       ),
     );

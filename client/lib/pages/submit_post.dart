@@ -57,7 +57,7 @@ class _SubmitPostState extends State<SubmitPost> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        new TextField(
+        TextField(
           controller: nameController,
           decoration: InputDecoration(
             hintText: 'Name',
@@ -65,11 +65,11 @@ class _SubmitPostState extends State<SubmitPost> {
             border: InputBorder.none,
           ),
         ),
-        const Divider(
+        Divider(
           color: Colors.grey,
           height: 0.0
         ),
-        new TextField(
+        TextField(
           controller: descriptionController,
           decoration: InputDecoration(
             hintText: 'Description',
@@ -77,18 +77,18 @@ class _SubmitPostState extends State<SubmitPost> {
             border: InputBorder.none,
           ),
         ),
-        const Divider(
+        Divider(
           color: Colors.grey,
           height: 0.0
         ),
-        new Expanded(
-          child: new Align(
+        Expanded(
+          child: Align(
             alignment: FractionalOffset.bottomRight,
-            child: new Padding(
+            child: Padding(
               padding: EdgeInsets.all(32.0),
               child: Row(
                 children: [
-                  new FlatButton(
+                  FlatButton(
                     textColor: Colors.blue,
                     child: Text('Cancel'),
                     onPressed: () {
@@ -96,7 +96,7 @@ class _SubmitPostState extends State<SubmitPost> {
                     }
                   ),
                   Spacer(flex: 1),
-                  new RaisedButton(
+                  RaisedButton(
                     textColor: Colors.white,
                     color: Colors.lightBlue,
                     child: Text('Submit'),

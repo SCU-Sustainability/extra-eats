@@ -1,27 +1,62 @@
 import 'package:flutter/material.dart';
 
-class UserSettings extends StatelessWidget {
+class UserSettings extends StatefulWidget {
   UserSettings({Key key}) : super(key: key);
 
   @override
+  _UserSettingsState createState() => _UserSettingsState();
+}
+
+class _UserSettingsState extends State<UserSettings> {
+
+  bool _pushNotifications = true;
+
+  @override
   Widget build(BuildContext context) {
-     return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('User Settings'),
-      )
+     return Scaffold(
+      appBar: AppBar(
+        title: Text('User Settings'),
+      ),
+      body: Container(
+        padding: EdgeInsets.all(16.0),
+        child: Column(
+          children: <Widget>[
+            Row(
+              mainAxisAlignment: MainAxisAlignment.start,
+              children: <Widget>[
+                Text('Push notifications: ', style: TextStyle(fontSize: 20)),
+                Spacer(flex: 1),
+                Transform.scale(scale: 1.5, child: Switch(
+                  value: _pushNotifications,
+                  onChanged: (bool changed) {
+                    setState(() {
+                      _pushNotifications = changed;
+                    });
+                  },
+                )),
+              ],
+            ),
+            Divider(color: Colors.grey, height: 16.0),
+
+          ]
+        ),
+      ),
     );
   }
 }
 
-class PostArchive extends StatelessWidget {
-  PostArchive({Key key}) : super(key: key);
+class ArchiveSettings extends StatelessWidget {
+  ArchiveSettings({Key key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    return new Scaffold(
-      appBar: new AppBar(
-        title: new Text('Post Archive'),
-      )
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Archive Settings'),
+      ),
+      body: Column(
+        
+      ),
     );
   }
 }
@@ -48,11 +83,11 @@ class Settings extends StatelessWidget {
         const Divider(color: Colors.grey, height: 0.0),
         ListTile(
           leading: Icon(Icons.history),
-          title: Text('Post Archive'),
+          title: Text('Archive Settings'),
           onTap: () {
             Navigator.push(
               context,
-              MaterialPageRoute(builder: (context) => PostArchive()),
+              MaterialPageRoute(builder: (context) => ArchiveSettings()),
             );
           },
         ),
