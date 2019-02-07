@@ -61,4 +61,4 @@ dependencies {
 }
 
 // Firebase google sign-in
-apply plugin: 'com.google.gms.google-services'
+// apply plugin: 'com.google.gms.google-services'
