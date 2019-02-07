@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../actions/user_actions.dart';
+
+import '../actions.dart';
 
 class Register extends StatefulWidget {
   Register({Key key}): super(key: key);
@@ -90,7 +91,7 @@ class _LoginState extends State<Login> {
                 if (usernameController.text == '' || passwordController.text == '') {
                   return; // Show a dialog?
                 }
-                LoginAction.of(context).login(usernameController.text, passwordController.text);
+                ClientAction.of(context).login(usernameController.text, passwordController.text);
               }
                 
             )),

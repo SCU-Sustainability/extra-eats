@@ -1,11 +1,13 @@
+import 'dart:convert' as convert;
+
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
-import 'dart:convert' as convert;
+
 import './pages/feed.dart';
 import './pages/settings.dart';
 import './pages/submit_post.dart';
 import './pages/login.dart';
-import './actions/user_actions.dart';
+import './actions.dart';
 
 void main() => runApp(TasteTheWaste());
 
@@ -44,6 +46,12 @@ class _AppContainerState extends State<AppContainer> {
     _children.add(Settings());
   }
 
+  @override
+  void initState() {
+    _wakeApi();
+    super.initState();
+  }
+
   void _setIndex(int index) {
     setState(() {
       _currentIndex = index;
@@ -62,6 +70,15 @@ class _AppContainerState extends State<AppContainer> {
 
   void _logout() {
     this.setToken('');
+  }
+
+  Future<http.Response> _wakeApi() async {
+    return http.get('https://taste-the-waste.herokuapp.com/api/', headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }).then((res) {
+      
+    });
   }
 
   Future<http.Response> _login(String username, String password) async {
@@ -118,8 +135,7 @@ class _AppContainerState extends State<AppContainer> {
 
   @override
   Widget build(BuildContext context) {
-    return LoginAction(
-      child: LogoutAction(
+    return ClientAction(
       child: Scaffold(
       appBar: AppBar(
         title: Text(_isLoggedIn() ? _names[_currentIndex] : 'Login'),
@@ -145,7 +161,7 @@ class _AppContainerState extends State<AppContainer> {
       ) : null,
     ),
     logout: this._logout,
-    ), login: this._login);
+    login: this._login);
     
   }
 }

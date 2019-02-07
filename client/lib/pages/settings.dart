@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
-import '../actions/user_actions.dart';
+
+import '../actions.dart';
 
 class UserSettings extends StatefulWidget {
   UserSettings({Key key}) : super(key: key);
@@ -25,7 +26,7 @@ class _UserSettingsState extends State<UserSettings> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text('Push notifications: ', style: TextStyle(fontSize: 20)),
+                Text('Push notifications: ', style: TextStyle(fontSize: 18)),
                 Spacer(flex: 1),
                 Transform.scale(scale: 1.5, child: Switch(
                   value: _pushNotifications,
@@ -102,7 +103,7 @@ class _SettingsState extends State<Settings> {
         ListTile(
           leading: Icon(Icons.arrow_back_ios),
           title: Text('Signout'),
-          onTap: LogoutAction.of(context).logout,
+          onTap: ClientAction.of(context).logout,
         ),
       ]
     );
