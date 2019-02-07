@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert' as convert;
 import './pages/feed.dart';
 import './pages/settings.dart';
 import './pages/submit_post.dart';
@@ -62,9 +64,21 @@ class _AppContainerState extends State<AppContainer> {
     this.setToken('');
   }
 
-  void _login() {
-    this._setIndex(0);
-    this.setToken('test');
+  Future<http.Response> _login(String username, String password) async {
+    return http.post("https://taste-the-waste.herokuapp.com/api/login", body: {
+      username: username,
+      password: password
+    }, headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }).then((res) {
+      //Map<String, dynamic> response = convert.json.decode(res.body);
+      print(res.body);
+      /*print(response);
+      if (response['token']) {
+        this.setToken(response['token']);
+      }**/
+    });
   }
 
   @override
