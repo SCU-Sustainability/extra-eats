@@ -87,6 +87,9 @@ class _LoginState extends State<Login> {
               color: Colors.lightBlue,  
               child: Text('Login'),
               onPressed: () {
+                if (usernameController.text == '' || passwordController.text == '') {
+                  return; // Show a dialog?
+                }
                 LoginAction.of(context).login(usernameController.text, passwordController.text);
               }
                 
