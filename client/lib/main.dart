@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import './pages/feed.dart';
 import './pages/settings.dart';
 import './pages/submit_post.dart';
+import './pages/login.dart';
+import './actions/user_actions.dart';
 
 void main() => runApp(TasteTheWaste());
 
@@ -28,30 +30,54 @@ class AppContainer extends StatefulWidget {
 
 class _AppContainerState extends State<AppContainer> {
   int _currentIndex = 0;
-
-  final List<Widget> _children = [
+  String _accessToken = '';
+  List<Widget> _children = [
     Feed(),
     SubmitPost(),
-    Settings()
   ];
 
   final _names = ['Home Feed', 'Submit Post', 'Settings'];
 
-  void onTabTapped(int index) {
+  _AppContainerState() {
+    _children.add(Settings());
+  }
+
+  void _setIndex(int index) {
     setState(() {
       _currentIndex = index;
     });
   }
 
+  bool _isLoggedIn() {
+    return this._accessToken.toString() != '';
+  }
+
+  void setToken(String token) {
+    setState(() {
+      this._accessToken = token;
+    });
+  }
+
+  void _logout() {
+    this.setToken('');
+  }
+
+  void _login() {
+    this._setIndex(0);
+    this.setToken('test');
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
+    return LoginAction(
+      child: LogoutAction(
+      child: Scaffold(
       appBar: AppBar(
-        title: Text(_names[_currentIndex]),
+        title: Text(_isLoggedIn() ? _names[_currentIndex] : 'Login'),
       ),
-      body: _children[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        onTap: onTabTapped,
+      body: _isLoggedIn() ? _children[_currentIndex] : Login(),
+      bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(
+        onTap: _setIndex,
         currentIndex: _currentIndex,
         items: [
           BottomNavigationBarItem(
@@ -67,7 +93,10 @@ class _AppContainerState extends State<AppContainer> {
             title: Text('Extras')
           )
         ],
-      ),
-    );
+      ) : null,
+    ),
+    logout: this._logout,
+    ), login: this._login);
+    
   }
 }
