@@ -25,12 +25,12 @@ class _SubmitPostState extends State<SubmitPost> {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 
-  Future<void> _ensureCancel() async {
+  Future<void> _ensureSubmit() async {
     return showDialog<void>(
       context: context,
       builder: (BuildContext context) {
         return AlertDialog(
-          title: Text('Cancel this post?'),
+          title: Text('Submit this post?'),
           actions: <Widget>[
             FlatButton(
               child: Text('No'),
@@ -40,7 +40,7 @@ class _SubmitPostState extends State<SubmitPost> {
             ),
             RaisedButton(
               textColor: Colors.white,
-              child: Text('Cancel'),
+              child: Text('Submit'),
               onPressed: () {
                 _clear();
                 Navigator.of(context).pop();
@@ -92,7 +92,7 @@ class _SubmitPostState extends State<SubmitPost> {
                     textColor: Colors.blue,
                     child: Text('Cancel'),
                     onPressed: () {
-                      _ensureCancel();
+                      _clear();
                     }
                   ),
                   Spacer(flex: 1),
@@ -101,7 +101,7 @@ class _SubmitPostState extends State<SubmitPost> {
                     color: Colors.lightBlue,
                     child: Text('Submit'),
                     onPressed: () {
-                      _clear();
+                      _ensureSubmit();
                     },
                   ),
                 ]

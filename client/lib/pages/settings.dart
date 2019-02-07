@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import '../actions/user_actions.dart';
 
 class UserSettings extends StatefulWidget {
   UserSettings({Key key}) : super(key: key);
@@ -61,14 +62,20 @@ class ArchiveSettings extends StatelessWidget {
   }
 }
 
-class Settings extends StatelessWidget {
-  Settings({Key key}) : super(key: key);
+class Settings extends StatefulWidget {
 
-  final widgetList = [UserSettings()];
+  Settings({Key key}): super(key: key);
 
+  @override
+  _SettingsState createState() => _SettingsState();
+  
+}
+
+class _SettingsState extends State<Settings> {
   @override
   Widget build(BuildContext context) {
     return ListView(
+      physics: NeverScrollableScrollPhysics(),
       children: <Widget>[
         ListTile(
           leading: Icon(Icons.person),
@@ -80,7 +87,7 @@ class Settings extends StatelessWidget {
             );
           },
         ),
-        const Divider(color: Colors.grey, height: 0.0),
+        Divider(color: Colors.grey, height: 0.0),
         ListTile(
           leading: Icon(Icons.history),
           title: Text('Archive Settings'),
@@ -91,7 +98,12 @@ class Settings extends StatelessWidget {
             );
           },
         ),
-        Divider(color: Colors.grey, height: 0.0)
+        Divider(color: Colors.grey, height: 0.0),
+        ListTile(
+          leading: Icon(Icons.arrow_back_ios),
+          title: Text('Signout'),
+          onTap: LogoutAction.of(context).logout,
+        ),
       ]
     );
   }
