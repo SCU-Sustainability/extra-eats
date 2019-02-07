@@ -202,7 +202,7 @@ db.once('open', function() {
 
   // Start server
   app.listen(port, function() {
-    console.log('Server has been started on port ' + app.address().port);
+    console.log('Server has been started on port ' + port);
   });
 
 });
