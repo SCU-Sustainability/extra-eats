@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import '../actions/user_actions.dart';
 
 class Splash extends StatelessWidget {
   Splash({Key key}): super(key: key);
@@ -11,7 +10,6 @@ class Splash extends StatelessWidget {
         child: Transform.scale(child: IconButton(
           icon: Icon(Icons.phonelink_setup),
           onPressed: () {
-            GoogleLoginAction.of(context).login();
           }
         ), scale: 2.0),
       ),
