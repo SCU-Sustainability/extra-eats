@@ -10,12 +10,86 @@ class Register extends StatefulWidget {
 }
 
 class _RegisterState extends State<Register> {
+
+  
+  TextEditingController usernameController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
+
+  @override
+  void dispose() {
+    usernameController.dispose();
+    passwordController.dispose();
+    emailController.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Register')
-      ),
+    return Column(
+      mainAxisSize: MainAxisSize.min,
+      children: <Widget>[
+        TextField(
+          controller: usernameController,
+          decoration: InputDecoration(
+            hintText: 'Username',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+          height: 0.0
+        ),
+        TextField(
+          controller: passwordController,
+          obscureText: true,
+          decoration: InputDecoration(
+            hintText: 'Password',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+        Divider(
+          color: Colors.grey,
+          height: 0.0
+        ),
+        TextField(
+          controller: emailController,
+          decoration: InputDecoration(
+            hintText: 'Email',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+        Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Row(children: [
+            Transform.scale(scale: 1.3, child: FlatButton(
+              textColor: Colors.blue,
+              child: Text('Login'),
+              onPressed: () {
+                Navigator.pop(context);
+              }
+            )),
+            Spacer(flex: 1),
+            Transform.scale(scale: 1.3, child: RaisedButton(
+              textColor: Colors.white,
+              color: Colors.lightBlue,  
+              child: Text('Register'),
+              onPressed: () {
+                if (usernameController.text == '' 
+                  || passwordController.text == '' 
+                  || emailController.text == '') {
+                  return; // Show a dialog?
+                }
+                ClientAction.of(context).register(usernameController.text, passwordController.text, emailController.text);
+              }
+                
+            )),
+          ]
+        )),
+      ],
     );
   }
 }

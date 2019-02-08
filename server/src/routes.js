@@ -4,11 +4,14 @@ const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 const express = require('express');
 require('dotenv').config();
+const shortid = require('shortid');
 
 const User = require('./models/user');
 const Post = require('./models/post');
+const Mailer = require('./mailer');
 
 const router = express.Router();
+const mailer = new Mailer();
 
 // ============
 // Middleroutes
@@ -89,8 +92,10 @@ router.route('/users').post(function(req, res) {
   let username = req.body.username;
   let password = bcrypt.hashSync(req.body.password, 8);
   let email = req.body.email;
+  let emailToken = shortid.generate();
   let user = new User({ username: username, password: password, email: email, posts: [],
-    emailToken: '' });
+    emailToken: emailToken });
+
   user.save(function(err) {
     if (err) {
       if (err.code === 11000) {
@@ -100,7 +105,11 @@ router.route('/users').post(function(req, res) {
     }
 
     let token = _signJWT(user._id);
-    res.json({ message: 'User created!', token: token, user_id: user._id });
+    res.json({ message: 'User created!', token: token, user_id: user._id, code: 1 });
+    // Send an email here
+    /** mailer.sendMail(email).then(function(info) {
+      console.log('Sent email verify to ' + email);
+    });*/
   });
 }).get(function(req, res) {
   // Get users
@@ -142,9 +151,10 @@ router.route('/users/:user_id').get(function(req, res) {
     }
     user.save(function(err) {
       if (err) return res.send(err);
-      res.json({ message: 'User updated!' });
+      res.json({ message: 'User updated!', code: 1 });
     });
   });
+
 }).delete(function(req, res) {
   // Check: Auth, user can only delete own user
   let token = req.headers['x-access-token'];
@@ -155,8 +165,32 @@ router.route('/users/:user_id').get(function(req, res) {
     _id: req.params.user_id
   }, function(err, user) {
     if (err) return res.json(err);
-    res.json({ message: 'User deleted!' });
+    res.json({ message: 'User deleted!', code: 1 });
   });
+
+});
+
+// Verify email
+router.route('/users/verify/:user_id').post(function(req, res) {
+  // Todo: Validate data
+  let token = req.headers['x-access-token'];
+  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+    if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
+    User.findById(req.params.user_id, function(err, user) {
+      
+      if (!req.body.emailToken) return res.json({ message: 'No email token provided.', code: -1 });
+      if (user.emailToken !== req.body.emailToken) return res.json({ message: 'Wrong email token', code: -2 });
+      if (err) return res.send(err);
+
+      user.emailToken = '*';
+      user.save(function(err) {
+        if (err) return res.send(err);
+        res.json({ message: 'Email verified!', code: 1 });
+      });
+
+    });
+  });
+
 });
 
 // Posts
@@ -172,7 +206,7 @@ router.route('/posts').post(function(req, res) {
     User.findById(decoded.id, function(err, user) {
       post.save(function(err) {
         if (err) return res.json(err);
-        res.json({ messsage: 'Posted!' });
+        res.json({ messsage: 'Posted!', code: 1 });
       });
     });
   });
