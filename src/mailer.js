@@ -25,16 +25,16 @@ class Mailer {
 
   _buildMailOptions(receivers) {
     return {
-      from: '"Taste the Waste SCU" <jonnylin13@gmail.com>',
+      from: '"Taste the Waste SCU" <chorescoresmailer@gmail.com>',
       to: receivers.join(', '),
       subject: 'Confirm your Taste the Waste account!',
-      text: '',
-      html: ''
+      text: 'Test email',
+      html: '<b>Test email</b>'
     };
   }
 
   async sendMail(receiver) {
-    await transporter.sendMail(_buildMailOptions([receiver]));
+    return transporter.sendMail(this._buildMailOptions([receiver]));
   }
 
 }
