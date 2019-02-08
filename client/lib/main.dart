@@ -12,6 +12,7 @@ import './actions.dart';
 void main() => runApp(TasteTheWaste());
 
 class TasteTheWaste extends StatelessWidget {
+
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -33,18 +34,18 @@ class AppContainer extends StatefulWidget {
 }
 
 class _AppContainerState extends State<AppContainer> {
+
   int _currentIndex = 0;
   String _accessToken = '';
+  String _userId = '';
+
   List<Widget> _children = [
     Feed(),
     SubmitPost(),
+    Settings()
   ];
 
-  final _names = ['Home Feed', 'Submit Post', 'Settings'];
-
-  _AppContainerState() {
-    _children.add(Settings());
-  }
+  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
 
   @override
   void initState() {
@@ -93,9 +94,12 @@ class _AppContainerState extends State<AppContainer> {
       try {
 
         Map<String, dynamic> response = convert.json.decode(res.body);
-        if (response.containsKey('token')) {
-          this.setToken(response['token']);
+        if (!response.containsKey('token') || !response.containsKey('user_id')) {
+          // Todo: handle this error
+          return;
         }
+        this.setToken(response['token']);
+        this._userId = response['user_id'];
       } catch (Exception) {
         return;
       }
@@ -138,7 +142,7 @@ class _AppContainerState extends State<AppContainer> {
     return ClientAction(
       child: Scaffold(
       appBar: AppBar(
-        title: Text(_isLoggedIn() ? _names[_currentIndex] : 'Login'),
+        title: Text(_isLoggedIn() ? tabNames[_currentIndex] : 'Login'),
       ),
       body: _handleMainScreen(),
       bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(

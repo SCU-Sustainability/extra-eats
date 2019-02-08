@@ -62,10 +62,11 @@ class _LoginState extends State<Login> {
         ),
         TextField(
           controller: passwordController,
+          obscureText: true,
           decoration: InputDecoration(
             hintText: 'Password',
             contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none
+            border: InputBorder.none,
           ),
         ),
         Divider(
