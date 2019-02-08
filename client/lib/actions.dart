@@ -1,11 +1,18 @@
 import 'package:flutter/material.dart';
 
 class ClientAction extends InheritedWidget {
-  ClientAction({Key key, @required this.login, @required this.logout, @required Widget child}): assert(login != null),
+
+  ClientAction({Key key, @required this.login, 
+    @required this.logout, 
+    @required this.register, 
+    @required Widget child}): 
+    assert(login != null),
     assert(logout != null),
     super(key: key, child: child);
+
   final VoidCallback logout;
   final Function(String, String) login;
+  final Function(String, String, String) register;
 
   static ClientAction of(BuildContext context) {
     return context.inheritFromWidgetOfExactType(ClientAction);

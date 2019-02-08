@@ -101,9 +101,34 @@ class _AppContainerState extends State<AppContainer> {
         this.setToken(response['token']);
         this._userId = response['user_id'];
       } catch (Exception) {
+        // Todo: handle error
         return;
       }
      
+    });
+  }
+
+  Future<http.Response> _register(String username, String password, String email) async {
+    return http.post('https://taste-the-waste.herokuapp.com/api/users', body: {
+      'username': username,
+      'password': password,
+      'email': email
+    }, headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }).then((res) {
+      try {
+        Map<String, dynamic> response = convert.json.decode(res.body);
+        if (!response.containsKey('code') || response['code'] != 1) {
+          // Todo: handle error
+          return ;
+        }
+        this.setToken(response['token']);
+        this._userId = response['user_id'];
+      } catch (Exception) {
+        // Todo: handle exception (API connection error likely)
+        return;
+      }
     });
   }
 
@@ -165,7 +190,8 @@ class _AppContainerState extends State<AppContainer> {
       ) : null,
     ),
     logout: this._logout,
-    login: this._login);
+    login: this._login,
+    register: this._register);
     
   }
 }
