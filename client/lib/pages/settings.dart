@@ -103,7 +103,7 @@ class _SettingsState extends State<Settings> {
         ListTile(
           leading: Icon(Icons.arrow_back_ios),
           title: Text('Signout'),
-          onTap: ClientAction.of(context).logout,
+          onTap: InheritedClient.of(context).logout,
         ),
       ]
     );

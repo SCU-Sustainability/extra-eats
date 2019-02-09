@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 
-class ClientAction extends InheritedWidget {
+class InheritedClient extends InheritedWidget {
 
-  ClientAction({Key key, @required this.login, 
+  InheritedClient({Key key, @required this.login, 
     @required this.logout, 
-    @required this.register, 
+    @required this.register,
+    @required this.accessToken,
+    @required this.userId,
     @required Widget child}): 
     assert(login != null),
     assert(logout != null),
@@ -13,17 +15,21 @@ class ClientAction extends InheritedWidget {
   final VoidCallback logout;
   final Function(String, String) login;
   final Function(String, String, String) register;
+  final String userId;
+  final String accessToken;
 
-  static ClientAction of(BuildContext context) {
-    return context.inheritFromWidgetOfExactType(ClientAction);
+  static InheritedClient of(BuildContext context) {
+    return context.inheritFromWidgetOfExactType(InheritedClient);
   }
 
   @override
-  bool updateShouldNotify(ClientAction old) {
-    return (old.login != login) && (old.logout != logout);
+  bool updateShouldNotify(InheritedClient old) {
+    return (old.login != login) && (old.logout != logout) && (old.register != register)
+      && (old.accessToken != accessToken) && (old.userId != userId);
   }
 }
 
+// Deprecated
 class GoogleLoginAction extends InheritedWidget {
   GoogleLoginAction({Key key, @required this.login, @required Widget child}): assert(login != null), 
     assert(child != null),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
+
 class Register extends StatefulWidget {
+
   Register({Key key}): super(key: key);
 
   @override
@@ -11,14 +13,13 @@ class Register extends StatefulWidget {
 
 class _RegisterState extends State<Register> {
 
-  
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    nameController.dispose();
     passwordController.dispose();
     emailController.dispose();
     super.dispose();
@@ -26,13 +27,17 @@ class _RegisterState extends State<Register> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TextField(
-          controller: usernameController,
+          controller: emailController,
           decoration: InputDecoration(
-            hintText: 'Username',
+            hintText: 'Email',
             contentPadding: EdgeInsets.all(20.0),
             border: InputBorder.none,
           ),
@@ -55,12 +60,16 @@ class _RegisterState extends State<Register> {
           height: 0.0
         ),
         TextField(
-          controller: emailController,
+          controller: nameController,
           decoration: InputDecoration(
-            hintText: 'Email',
+            hintText: 'Name',
             contentPadding: EdgeInsets.all(20.0),
             border: InputBorder.none,
           ),
+        ),
+        Divider(
+          color: Colors.grey,
+          height: 0.0
         ),
         Padding(
           padding: EdgeInsets.all(32.0),
@@ -78,18 +87,19 @@ class _RegisterState extends State<Register> {
               color: Colors.lightBlue,  
               child: Text('Register'),
               onPressed: () {
-                if (usernameController.text == '' 
+                if (nameController.text == '' 
                   || passwordController.text == '' 
                   || emailController.text == '') {
                   return; // Show a dialog?
                 }
-                ClientAction.of(context).register(usernameController.text, passwordController.text, emailController.text);
+                InheritedClient.of(context).register(nameController.text, passwordController.text, emailController.text);
               }
                 
             )),
           ]
         )),
       ],
+    ),
     );
   }
 }
@@ -107,12 +117,12 @@ class Login extends StatefulWidget {
 
 class _LoginState extends State<Login> {
 
-  TextEditingController usernameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   @override
   void dispose() {
-    usernameController.dispose();
+    emailController.dispose();
     passwordController.dispose();
     super.dispose();
   }
@@ -123,9 +133,9 @@ class _LoginState extends State<Login> {
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
         TextField(
-          controller: usernameController,
+          controller: emailController,
           decoration: InputDecoration(
-            hintText: 'Username',
+            hintText: 'Email',
             contentPadding: EdgeInsets.all(20.0),
             border: InputBorder.none,
           ),
@@ -154,7 +164,9 @@ class _LoginState extends State<Login> {
               textColor: Colors.blue,
               child: Text('Register'),
               onPressed: () {
-                Navigator.push(context, MaterialPageRoute(builder: (context) => Register()));
+                Navigator.push(context, MaterialPageRoute(
+                  builder: (context) => Register()
+                ));
               }
             )),
             Spacer(flex: 1),
@@ -163,10 +175,10 @@ class _LoginState extends State<Login> {
               color: Colors.lightBlue,  
               child: Text('Login'),
               onPressed: () {
-                if (usernameController.text == '' || passwordController.text == '') {
+                if (emailController.text == '' || passwordController.text == '') {
                   return; // Show a dialog?
                 }
-                ClientAction.of(context).login(usernameController.text, passwordController.text);
+                InheritedClient.of(context).login(emailController.text, passwordController.text);
               }
                 
             )),
