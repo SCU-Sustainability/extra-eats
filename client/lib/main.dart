@@ -11,41 +11,19 @@ import './actions.dart';
 
 void main() => runApp(TasteTheWaste());
 
-class TasteTheWaste extends StatelessWidget {
-
-  // This widget is the root of your application.
-  @override
-  Widget build(BuildContext context) {
-    return MaterialApp(
-      title: 'Taste the Waste',
-      theme: ThemeData(
-        primarySwatch: Colors.blue,
-      ),
-      home: AppContainer(),
-    );
-  }
-}
-
-class AppContainer extends StatefulWidget {
-  AppContainer({Key key}) : super(key: key);
+class TasteTheWaste extends StatefulWidget {
+  TasteTheWaste({Key key}): super(key: key);
 
   @override
-  _AppContainerState createState() => _AppContainerState();
+  _TasteTheWasteState createState() => _TasteTheWasteState();
+  
 }
 
-class _AppContainerState extends State<AppContainer> {
+class _TasteTheWasteState extends State<TasteTheWaste> {
 
   int _currentIndex = 0;
   String _accessToken = '';
   String _userId = '';
-
-  List<Widget> _children = [
-    Feed(),
-    SubmitPost(),
-    Settings()
-  ];
-
-  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
 
   @override
   void initState() {
@@ -53,28 +31,21 @@ class _AppContainerState extends State<AppContainer> {
     super.initState();
   }
 
+  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
+  final List<Widget> _children = [
+    Feed(),
+    SubmitPost(),
+    Settings()
+  ];
+
   void _setIndex(int index) {
     setState(() {
-      _currentIndex = index;
+      this._currentIndex = index;
     });
-  }
-
-  bool _isLoggedIn() {
-    return this._accessToken.toString() != '';
-  }
-
-  void setToken(String token) {
-    setState(() {
-      this._accessToken = token;
-    });
-  }
-
-  void _logout() {
-    this.setToken('');
   }
 
   Future<http.Response> _wakeApi() async {
-    return http.get('https://taste-the-waste.herokuapp.com/api/', headers: {
+    return http.get('http://10.0.2.2:8080/api/', headers: {
       'Accept': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/x-www-form-urlencoded'
     }).then((res) {
@@ -82,54 +53,8 @@ class _AppContainerState extends State<AppContainer> {
     });
   }
 
-  Future<http.Response> _login(String username, String password) async {
-    this._currentIndex = 0;
-    return http.post('https://taste-the-waste.herokuapp.com/api/login', body: {
-      'username': username,
-      'password': password
-    }, headers: {
-      'Accept': 'application/x-www-form-urlencoded',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }).then((res) {
-      try {
-
-        Map<String, dynamic> response = convert.json.decode(res.body);
-        if (!response.containsKey('token') || !response.containsKey('user_id')) {
-          // Todo: handle this error
-          return;
-        }
-        this.setToken(response['token']);
-        this._userId = response['user_id'];
-      } catch (Exception) {
-        // Todo: handle error
-        return;
-      }
-     
-    });
-  }
-
-  Future<http.Response> _register(String username, String password, String email) async {
-    return http.post('https://taste-the-waste.herokuapp.com/api/users', body: {
-      'username': username,
-      'password': password,
-      'email': email
-    }, headers: {
-      'Accept': 'application/x-www-form-urlencoded',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }).then((res) {
-      try {
-        Map<String, dynamic> response = convert.json.decode(res.body);
-        if (!response.containsKey('code') || response['code'] != 1) {
-          // Todo: handle error
-          return ;
-        }
-        this.setToken(response['token']);
-        this._userId = response['user_id'];
-      } catch (Exception) {
-        // Todo: handle exception (API connection error likely)
-        return;
-      }
-    });
+  bool _isLoggedIn() {
+    return this._accessToken != '';
   }
 
   /*void _loginWithGoogle() async {
@@ -159,20 +84,85 @@ class _AppContainerState extends State<AppContainer> {
         }
       }
     );**/
-    return _isLoggedIn() ? _children[_currentIndex] : Login();
+    return _isLoggedIn() ? _children[this._currentIndex] : Login();
   }
 
+  void _setToken(String token) {
+    setState(() {
+      this._accessToken = token;
+    });
+  }
+
+  void _logout() {
+    this._currentIndex = 0;
+    this._setToken('');
+  }
+
+  Future<http.Response> _login(String email, String password) async {
+    return http.post('http://10.0.2.2:8080/api/login', body: {
+      'email': email,
+      'password': password
+    }, headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }).then((res) {
+      try {
+
+        Map<String, dynamic> response = convert.json.decode(res.body);
+        if (!response.containsKey('token') || !response.containsKey('user_id')) {
+          // Todo: handle this error
+          return;
+        }
+        this._setToken(response['token']);
+        this._userId = response['user_id'];
+      } catch (Exception) {
+        // Todo: handle error
+        return;
+      }
+     
+    });
+  }
+
+  Future<http.Response> _register(String name, String password, String email) async {
+    return http.post('http://10.0.2.2:8080/api/users', body: {
+      'email': email,
+      'password': password,
+      'name': name,
+    }, headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded'
+    }).then((res) {
+      try {
+        Map<String, dynamic> response = convert.json.decode(res.body);
+        if (!response.containsKey('code') || response['code'] != 1) {
+          // Todo: handle error
+          return ;
+        }
+        this._setToken(response['token']);
+        this._userId = response['user_id'];
+      } catch (Exception) {
+        // Todo: handle exception (API connection error likely)
+        return;
+      }
+    });
+  }
+
+  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return ClientAction(
-      child: Scaffold(
+    return InheritedClient(child: MaterialApp(
+      title: 'Taste the Waste',
+      theme: ThemeData(
+        primarySwatch: Colors.blue,
+      ),
+      home: Scaffold(
       appBar: AppBar(
-        title: Text(_isLoggedIn() ? tabNames[_currentIndex] : 'Login'),
+        title: Text(_isLoggedIn() ? tabNames[this._currentIndex] : 'Login'),
       ),
       body: _handleMainScreen(),
       bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(
-        onTap: _setIndex,
-        currentIndex: _currentIndex,
+        onTap: this._setIndex,
+        currentIndex: this._currentIndex,
         items: [
           BottomNavigationBarItem(
             icon: Icon(Icons.home),
@@ -189,9 +179,12 @@ class _AppContainerState extends State<AppContainer> {
         ],
       ) : null,
     ),
-    logout: this._logout,
+    ),
     login: this._login,
-    register: this._register);
-    
+    logout: this._logout,
+    register: this._register,
+    accessToken: this._accessToken,
+    userId: this._userId,
+    );
   }
 }

@@ -68,9 +68,11 @@ router.route('/login').post(function(req, res) {
   User.findOne({ email: req.body.email }, 'password', function(err, user) {
     // Todo: Handle errors
     if (err) return res.send(err);
+    if (!user) return res.json({ message: 'User not found!', code: 0 });
+
     if (!bcrypt.compareSync(req.body.password, user.password)) return res.send({ message: 'Wrong email or password.', code: -1 });
     let token = _signJWT(user._id);
-    return res.json({ message: 'Logged in!', token: token, user_id: user._id });
+    return res.json({ message: 'Logged in!', token: token, user_id: user._id, code: 1 });
   });
 });
 
@@ -78,28 +80,30 @@ router.route('/login').post(function(req, res) {
 router.route('/users').post(function(req, res) {
   // Registration
   // Check: Validation
-  if (!req.body.username || !req.body.password)
+  if (!req.body.email || !req.body.password || !req.body.email)
     return res.send({ message: 'Missing data.', code: -1 });
   
-  if (!req.body.username.match('^([A-Za-z0-9]{1,20})$')) {
-    return res.send({ message: 'Username invalid.', code: -2 });
+  if (!req.body.name.match('^([A-Za-z0-9 ]{1,20})$')) {
+    return res.send({ message: 'Name invalid.', code: -2 });
   }
 
   if (!req.body.password.match('^([A-Za-z0-9\W]{6,20})$')) {
     return res.send({ message: 'Password invalid.', code: -3 });
   }
+
+  // Check email regex
   
-  let username = req.body.username;
+  let name = req.body.name;
   let password = bcrypt.hashSync(req.body.password, 8);
   let email = req.body.email;
   let emailToken = shortid.generate();
-  let user = new User({ username: username, password: password, email: email, posts: [],
+  let user = new User({ name: name, password: password, email: email, posts: [],
     emailToken: emailToken });
 
   user.save(function(err) {
     if (err) {
       if (err.code === 11000) {
-        return res.send({ message: 'Username already exists.', code: -4 });
+        return res.send({ message: 'Email already exists.', code: -4 });
       }
       return res.send(err);
     }
@@ -133,6 +137,7 @@ router.route('/users/:user_id').get(function(req, res) {
 
   User.findById(req.params.user_id, '-password', function(err, user) {
     if (err) return res.send(err);
+    if (!user) return res.json({ message: 'User not found!', code: -1});
     res.json(user);
   });
   
@@ -145,6 +150,7 @@ router.route('/users/:user_id').get(function(req, res) {
 
   User.findById(req.params.user_id, function(err, user) {
     if (err) return res.send(err);
+    if (!user) return res.json({ message: 'User not found!', code: -1 });
     // Check: Which attributes are being updated
     if (req.body.password) {
       user.password = bcrypt.hashSync(req.body.password, 8);
@@ -165,6 +171,7 @@ router.route('/users/:user_id').get(function(req, res) {
     _id: req.params.user_id
   }, function(err, user) {
     if (err) return res.json(err);
+    if (!user) return res.json({ message: 'User not found!', code: -1 });
     res.json({ message: 'User deleted!', code: 1 });
   });
 
@@ -178,8 +185,9 @@ router.route('/users/verify/:user_id').post(function(req, res) {
     if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
     User.findById(req.params.user_id, function(err, user) {
       
-      if (!req.body.emailToken) return res.json({ message: 'No email token provided.', code: -1 });
-      if (user.emailToken !== req.body.emailToken) return res.json({ message: 'Wrong email token', code: -2 });
+      if (!user) return res.json({ message: 'User not found!', code: -1 });
+      if (!req.body.emailToken) return res.json({ message: 'No email token provided.', code: -2 });
+      if (user.emailToken !== req.body.emailToken) return res.json({ message: 'Wrong email token', code: -3 });
       if (err) return res.send(err);
 
       user.emailToken = '*';
@@ -204,8 +212,11 @@ router.route('/posts').post(function(req, res) {
   jwt.verify(token, process.env.SECRET, function(err, decoded) {
     if (err) return _unauthorized(res);
     User.findById(decoded.id, function(err, user) {
+      if (!user) return res.json({ message: 'User not found!', code: -1 });
+      if (err) return res.send(err);
+
       post.save(function(err) {
-        if (err) return res.json(err);
+        if (err) return res.send(err);
         res.json({ messsage: 'Posted!', code: 1 });
       });
     });
