@@ -7,7 +7,8 @@ var ObjectId = mongoose.Schema.Types.ObjectId;
 var UserSchema = new Schema({
   name: {
     type: String,
-    required: true
+    required: true,
+    unique: false
   },
   password: {
     type: String,
@@ -22,7 +23,8 @@ var UserSchema = new Schema({
   },
   emailToken: {
     type: String,
-    required: true
+    required: true,
+    unique: false
   },
   posts: {
     type: [ObjectId],

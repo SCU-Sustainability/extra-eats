@@ -1,8 +1,11 @@
 import 'dart:math';
+import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
 
 import '../models/post.dart';
+import '../actions.dart';
 
 class Feed extends StatefulWidget {
   Feed({Key key}) : super(key: key);
@@ -33,6 +36,21 @@ List<Post> mockArchive = [
 ];
 
 class _FeedState extends State<Feed> {
+
+  Future<List<Post>> _getPosts() async {
+    final response = await http.get('http://10.0.2.2:8080/api/posts', headers: {
+      'Accept': 'application/x-www-form-urlencoded',
+      'Content-Type': 'application/x-www-form-urlencoded',
+      'x-access-token': InheritedClient.of(context).accessToken,
+    });
+    try {
+      var body = convert.json.decode(response.body);
+      // for (var post in body)
+    } catch (Exception) {
+      print('Failed to convert response from _getPosts');
+      return [];
+    }
+  }
 
   Future<Null> _handleRefresh() async {
     await new Future.delayed(new Duration(seconds: 2));
