@@ -14,6 +14,13 @@ void main() => runApp(TasteTheWaste());
 class TasteTheWaste extends StatefulWidget {
   TasteTheWaste({Key key}): super(key: key);
 
+  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
+  final List<Widget> _children = [
+    Feed(),
+    SubmitPost(),
+    Settings()
+  ];
+
   @override
   _TasteTheWasteState createState() => _TasteTheWasteState();
   
@@ -30,13 +37,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     _wakeApi();
     super.initState();
   }
-
-  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
-  final List<Widget> _children = [
-    Feed(),
-    SubmitPost(),
-    Settings()
-  ];
 
   void _setIndex(int index) {
     setState(() {
@@ -84,7 +84,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         }
       }
     );**/
-    return _isLoggedIn() ? _children[this._currentIndex] : Login();
+    return _isLoggedIn() ? widget._children[this._currentIndex] : Login();
   }
 
   void _setToken(String token) {
@@ -111,12 +111,14 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         Map<String, dynamic> response = convert.json.decode(res.body);
         if (!response.containsKey('token') || !response.containsKey('user_id')) {
           // Todo: handle this error
+          print(response);
           return;
         }
         this._setToken(response['token']);
         this._userId = response['user_id'];
       } catch (Exception) {
         // Todo: handle error
+        print(res.body);
         return;
       }
      
@@ -136,12 +138,14 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         Map<String, dynamic> response = convert.json.decode(res.body);
         if (!response.containsKey('code') || response['code'] != 1) {
           // Todo: handle error
+          print(response);
           return ;
         }
         this._setToken(response['token']);
         this._userId = response['user_id'];
       } catch (Exception) {
         // Todo: handle exception (API connection error likely)
+        print(res.body);
         return;
       }
     });
@@ -157,7 +161,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       ),
       home: Scaffold(
       appBar: AppBar(
-        title: Text(_isLoggedIn() ? tabNames[this._currentIndex] : 'Login'),
+        title: Text(_isLoggedIn() ? widget.tabNames[this._currentIndex] : 'Login'),
       ),
       body: _handleMainScreen(),
       bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(

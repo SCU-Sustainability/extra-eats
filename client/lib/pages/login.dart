@@ -93,6 +93,7 @@ class _RegisterState extends State<Register> {
                   return; // Show a dialog?
                 }
                 InheritedClient.of(context).register(nameController.text, passwordController.text, emailController.text);
+                Navigator.pop(context);
               }
                 
             )),

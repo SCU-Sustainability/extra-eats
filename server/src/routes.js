@@ -102,6 +102,7 @@ router.route('/users').post(function(req, res) {
 
   user.save(function(err) {
     if (err) {
+      console.log(err);
       if (err.code === 11000) {
         return res.send({ message: 'Email already exists.', code: -4 });
       }
@@ -109,7 +110,8 @@ router.route('/users').post(function(req, res) {
     }
 
     let token = _signJWT(user._id);
-    res.json({ message: 'User created!', token: token, user_id: user._id, code: 1 });
+    let response = { message: 'User created!', token: token, user_id: user._id, code: 1 };
+    res.json(response);
     // Send an email here
     /** mailer.sendMail(email).then(function(info) {
       console.log('Sent email verify to ' + email);
@@ -221,6 +223,9 @@ router.route('/posts').post(function(req, res) {
       });
     });
   });
+}).get(function(req, res) {
+  // Implement
+  let token = req.headers['x-access-token'];
 });
 
 module.exports = router;

@@ -9,8 +9,8 @@ class SubmitPost extends StatefulWidget {
 
 class _SubmitPostState extends State<SubmitPost> {
 
-  final nameController = TextEditingController();
-  final descriptionController = TextEditingController();
+  TextEditingController nameController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   @override
   void dispose() {
