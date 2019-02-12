@@ -45,7 +45,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Future<http.Response> _wakeApi() async {
-    return http.get('http://10.0.2.2:8080/api/', headers: {
+    return http.get('https://taste-the-waste.herokuapp.com/api/', headers: {
       'Accept': 'application/x-www-form-urlencoded',
       'Content-Type': 'application/x-www-form-urlencoded'
     }).then((res) {
@@ -99,7 +99,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Future<http.Response> _login(String email, String password) async {
-    return http.post('http://10.0.2.2:8080/api/login', body: {
+    return http.post('https://taste-the-waste.herokuapp.com/api/login', body: {
       'email': email,
       'password': password
     }, headers: {
@@ -126,7 +126,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Future<http.Response> _register(String name, String password, String email) async {
-    return http.post('http://10.0.2.2:8080/api/users', body: {
+    return http.post('https://taste-the-waste.herokuapp.com/api/users', body: {
       'email': email,
       'password': password,
       'name': name,
