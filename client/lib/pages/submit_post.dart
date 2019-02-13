@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
+
+import 'dart:io';
 
 class SubmitPost extends StatefulWidget {
   SubmitPost({Key key}) : super(key: key);
@@ -11,6 +14,14 @@ class _SubmitPostState extends State<SubmitPost> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  File _image;
+
+  Future getImage() async {
+    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+    setState(() {
+      this._image = image;
+    });
+  }
 
   @override
   void dispose() {
@@ -22,6 +33,9 @@ class _SubmitPostState extends State<SubmitPost> {
   void _clear() {
     nameController.clear();
     descriptionController.clear();
+    setState(() {
+      _image = null;
+    });
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 
@@ -80,6 +94,14 @@ class _SubmitPostState extends State<SubmitPost> {
         Divider(
           color: Colors.grey,
           height: 0.0
+        ),
+        Padding(child: FlatButton(
+          textColor: Colors.blue,
+          child: Icon(Icons.add_a_photo),
+          onPressed: getImage,
+        ), padding: EdgeInsets.only(top: 15)),
+        Center(
+          child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
         ),
         Expanded(
           child: Align(
