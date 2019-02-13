@@ -1,13 +1,13 @@
 import 'dart:convert' as convert;
 
 import 'package:flutter/material.dart';
-import 'package:http/http.dart' as http;
 
 import './pages/feed.dart';
 import './pages/settings.dart';
 import './pages/submit_post.dart';
 import './pages/login.dart';
 import './actions.dart';
+import './data/repository.dart';
 
 void main() => runApp(TasteTheWaste());
 
@@ -34,8 +34,44 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
 
   @override
   void initState() {
-    _wakeApi();
+    Repository.get().client.ping();
     super.initState();
+  }
+
+  void register(String email, String password, String name) async {
+    await Repository.get().client.register(email, password, name).then(this._login);
+  }
+
+  void login(String email, String password) async {
+    await Repository.get().client.login(email, password).then(this._login);
+  }
+
+  void logout() async {
+    this._currentIndex = 0;
+    this._setToken('');
+  }
+
+  void _login(dynamic res) {
+    try {
+        Map<String, dynamic> response = convert.jsonDecode(res.body);
+        if (!response.containsKey('user_id') || !response.containsKey('token')) {
+          // Handle
+          print(res);
+          return;
+        }
+        this._setToken(response['token']);
+        this._userId = response['user_id'];
+      } catch (Exception) {
+        // Handle
+        print(res);
+        return;
+      }
+  }
+
+  void _setToken(String token) {
+    setState(() {
+      this._accessToken = token;
+    });
   }
 
   void _setIndex(int index) {
@@ -44,32 +80,9 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     });
   }
 
-  Future<http.Response> _wakeApi() async {
-    return http.get('https://taste-the-waste.herokuapp.com/api/', headers: {
-      'Accept': 'application/x-www-form-urlencoded',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }).then((res) {
-      
-    });
-  }
-
   bool _isLoggedIn() {
     return this._accessToken != '';
   }
-
-  /*void _loginWithGoogle() async {
-    GoogleSignInAccount googleUser = await _googleSignIn.signIn();
-    GoogleSignInAuthentication googleAuth = await googleUser.authentication;
-    AuthCredential credential = GoogleAuthProvider.getCredential(
-      accessToken: googleAuth.accessToken,
-      idToken: googleAuth.idToken,
-    );
-    FirebaseUser user = await FirebaseAuth.instance.signInWithCredential(credential);
-    FirebaseUser current = await FirebaseAuth.instance.currentUser();
-    if (user.uid == current.uid) {
-      this.setToken(googleAuth.accessToken);
-    }
-  }**/
 
   Widget _handleMainScreen() {
     /*return new StreamBuilder<FirebaseUser>(
@@ -85,70 +98,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       }
     );**/
     return _isLoggedIn() ? widget._children[this._currentIndex] : Login();
-  }
-
-  void _setToken(String token) {
-    setState(() {
-      this._accessToken = token;
-    });
-  }
-
-  void _logout() {
-    this._currentIndex = 0;
-    this._setToken('');
-  }
-
-  Future<http.Response> _login(String email, String password) async {
-    return http.post('https://taste-the-waste.herokuapp.com/api/login', body: {
-      'email': email,
-      'password': password
-    }, headers: {
-      'Accept': 'application/x-www-form-urlencoded',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }).then((res) {
-      try {
-
-        Map<String, dynamic> response = convert.json.decode(res.body);
-        if (!response.containsKey('token') || !response.containsKey('user_id')) {
-          // Todo: handle this error
-          print(response);
-          return;
-        }
-        this._setToken(response['token']);
-        this._userId = response['user_id'];
-      } catch (Exception) {
-        // Todo: handle error
-        print(res.body);
-        return;
-      }
-     
-    });
-  }
-
-  Future<http.Response> _register(String name, String password, String email) async {
-    return http.post('https://taste-the-waste.herokuapp.com/api/users', body: {
-      'email': email,
-      'password': password,
-      'name': name,
-    }, headers: {
-      'Accept': 'application/x-www-form-urlencoded',
-      'Content-Type': 'application/x-www-form-urlencoded'
-    }).then((res) {
-      try {
-        Map<String, dynamic> response = convert.json.decode(res.body);
-        if (!response.containsKey('code') || response['code'] != 1) {
-          // Todo: handle error
-          print(response);
-          return ;
-        }
-        this._setToken(response['token']);
-        this._userId = response['user_id'];
-      } catch (Exception) {
-        // Todo: handle exception (API connection error likely)
-        print(res.body);
-        return;
-      }
-    });
   }
 
   // This widget is the root of your application.
@@ -184,9 +133,9 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       ) : null,
     ),
     ),
-    login: this._login,
-    logout: this._logout,
-    register: this._register,
+    login: this.login,
+    logout: this.logout,
+    register: this.register,
     accessToken: this._accessToken,
     userId: this._userId,
     );

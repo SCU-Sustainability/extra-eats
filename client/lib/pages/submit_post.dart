@@ -3,6 +3,8 @@ import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
 
+import '../data/repository.dart';
+
 class SubmitPost extends StatefulWidget {
   SubmitPost({Key key}) : super(key: key);
 
@@ -57,6 +59,7 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Text('Submit'),
               onPressed: () {
                 _clear();
+                // Implement Repository.get().client.post() here
                 Navigator.of(context).pop();
               }
             ),

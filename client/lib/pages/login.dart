@@ -179,6 +179,7 @@ class _LoginState extends State<Login> {
                 if (emailController.text == '' || passwordController.text == '') {
                   return; // Show a dialog?
                 }
+                
                 InheritedClient.of(context).login(emailController.text, passwordController.text);
               }
                 
