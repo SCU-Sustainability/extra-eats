@@ -46,11 +46,11 @@ class Client {
     });
   }
 
-  Future<http.Response> post(String token, {String name, String description, File image}) async {
+  Future<http.Response> post(String token, String name, String description, File image) async {
 
-    var bytes = await image.readAsBytes();
+    var imgBytes = await image.readAsBytes();
     return http.post('https://taste-the-waste.herokuapp.com/api/posts', body: {
-      'image': bytes,
+      'image': imgBytes,
       'name': name,
       'description': description
     }, headers: {
