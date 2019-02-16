@@ -3,6 +3,7 @@ import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
 import 'dart:convert' as convert;
+import 'dart:async';
 
 import '../data/repository.dart';
 import '../actions.dart';
@@ -44,24 +45,23 @@ class _SubmitPostState extends State<SubmitPost> {
   }
 
   Future<void> _submitResponse(String response) async {
-    if (result) {
-      return showDialog<void>(
-        context: context,
-        builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text(response),
-            actions: <Widget>[
-              FlatButton(
-                child: Text('OK'),
-                onPressed: () {
-                  Navigator.of(context).pop();
-                }
-              )
-            ],
-          );
-        }
-      );
-    }
+    return showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: Text(response),
+          actions: <Widget>[
+            FlatButton(
+              child: Text('OK'),
+              onPressed: () {
+                Navigator.of(context).pop();
+              }
+            )
+          ],
+        );
+      }
+    );
+
   }
   Future<void> _ensureSubmit() async {
     return showDialog<void>(
@@ -80,12 +80,26 @@ class _SubmitPostState extends State<SubmitPost> {
               textColor: Colors.white,
               child: Text('Submit'),
               onPressed: () {
-                _clear();
                 var accessToken = InheritedClient.of(context).accessToken;
                 Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image).then((res) {
-                  // Todo: Check handle response
-                  var data = convert.jsonDecode(res.body);
-                  this._submitResponse(data.message);
+                  // Todo: fix this POS
+                  // Todo: use ByteBuilder instead
+                  var completer = new Completer();
+                  var contents = new StringBuffer();
+                  res.stream.transform(convert.utf8.decoder).listen((data) {
+                    contents.write(data);
+                  }, 
+                  onError: (err) {
+                    print(err);
+                    Navigator.of(context).pop();
+                    // Todo: handle error
+                  }, onDone: () async {
+                    var jsonString = completer.complete(contents.toString());
+                    var data = convert.jsonDecode(jsonString);
+                    Navigator.of(context).pop();
+                    this._submitResponse(data.message);
+                    if (data.code == 1) this._clear();
+                  });
                 });
               }
             ),

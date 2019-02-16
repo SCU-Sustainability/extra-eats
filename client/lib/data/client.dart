@@ -1,4 +1,5 @@
 import 'package:http/http.dart' as http;
+import 'package:http_parser/http_parser.dart';
 
 import 'dart:io';
 
@@ -46,18 +47,18 @@ class Client {
     });
   }
 
-  Future<http.Response> post(String token, String name, String description, File image) async {
-
+  Future<http.StreamedResponse> post(String token, String name, String description, File image) async {
+    const url = 'https://taste-the-waste.herokuapp.com/api/posts';
+    var request = http.MultipartRequest('POST', Uri.parse(url));
     var imgBytes = await image.readAsBytes();
-    return http.post('https://taste-the-waste.herokuapp.com/api/posts', body: {
-      'image': imgBytes,
-      'name': name,
-      'description': description
-    }, headers: {
-      'Content-Type': 'multipart/form-data',
-      'x-access-token': token
-    }).then((res) {
-      return res;
-    });
+    request.fields['name'] = name;
+    request.fields['description'] = description;
+
+    request.files.add(new http.MultipartFile.fromBytes(
+      'image',
+      imgBytes,
+      contentType: new MediaType('image', 'jpeg')
+    ));
+    return request.send();
   }
 }
