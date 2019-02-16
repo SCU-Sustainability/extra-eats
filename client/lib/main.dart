@@ -85,18 +85,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Widget _handleMainScreen() {
-    /*return new StreamBuilder<FirebaseUser>(
-      stream: FirebaseAuth.instance.onAuthStateChanged,
-      builder: (BuildContext context, snapshot) {
-        if (snapshot.connectionState == ConnectionState.waiting) {
-          return new Splash();
-        } else {
-          if (snapshot.hasData) {
-            return _children[_currentIndex];
-          }
-        }
-      }
-    );**/
     return _isLoggedIn() ? widget._children[this._currentIndex] : Login();
   }
 

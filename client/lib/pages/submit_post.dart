@@ -2,8 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
+import 'dart:convert' as convert;
 
 import '../data/repository.dart';
+import '../actions.dart';
 
 class SubmitPost extends StatefulWidget {
   SubmitPost({Key key}) : super(key: key);
@@ -41,6 +43,26 @@ class _SubmitPostState extends State<SubmitPost> {
     FocusScope.of(context).requestFocus(new FocusNode());
   }
 
+  Future<void> _submitResponse(String response) async {
+    if (result) {
+      return showDialog<void>(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text(response),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('OK'),
+                onPressed: () {
+                  Navigator.of(context).pop();
+                }
+              )
+            ],
+          );
+        }
+      );
+    }
+  }
   Future<void> _ensureSubmit() async {
     return showDialog<void>(
       context: context,
@@ -59,8 +81,12 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Text('Submit'),
               onPressed: () {
                 _clear();
-                // Implement Repository.get().client.post() here
-                Navigator.of(context).pop();
+                var accessToken = InheritedClient.of(context).accessToken;
+                Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image).then((res) {
+                  // Todo: Check handle response
+                  var data = convert.jsonDecode(res.body);
+                  this._submitResponse(data.message);
+                });
               }
             ),
           ],
