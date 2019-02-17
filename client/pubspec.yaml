@@ -26,8 +26,10 @@ dev_dependencies:
     sdk: flutter
   build_runner: ^1.0.0
   json_serializable: ^2.0.0
-  http: ^0.12.0+1
+  dio: ^2.0.5
+  # http: ^0.12.0+1
   image_picker: ^0.5.0+3
+  image: ^2.0.7
   # firebase_auth: ^0.8.0+1
   # google_sign_in: ^4.0.0
 
