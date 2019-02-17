@@ -74,7 +74,6 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Text('No'),
               onPressed: () {
                 Navigator.of(context).pop();
-                print('Testing credentials...');
               }
             ),
             RaisedButton(
