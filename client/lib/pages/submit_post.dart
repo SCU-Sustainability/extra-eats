@@ -83,22 +83,11 @@ class _SubmitPostState extends State<SubmitPost> {
                 var accessToken = InheritedClient.of(context).accessToken;
                 Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image).then((res) {
                   // Todo: fix this POS
-                  // Todo: use ByteBuilder instead
-                  var contents = new StringBuffer();
-                  res.stream.transform(convert.utf8.decoder).listen((data) {
-                    contents.write(data);
-                  }, 
-                  onError: (err) {
-                    print(err);
-                    Navigator.of(context).pop();
-                    // Todo: handle error
-                  }, onDone: () async {
-                    var data = convert.jsonDecode(contents.toString());
-                    print(data);
-                    Navigator.of(context).pop();
-                    this._submitResponse(data.message);
-                    if (data.code == 1) this._clear();
-                  });
+                  Navigator.of(context).pop();
+                  this._submitResponse(res.data['message']);
+                  if (res.data['code'] == 1) {
+                    this._clear();
+                  }
                 });
               }
             ),
