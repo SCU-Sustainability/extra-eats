@@ -84,7 +84,6 @@ class _SubmitPostState extends State<SubmitPost> {
                 Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image).then((res) {
                   // Todo: fix this POS
                   // Todo: use ByteBuilder instead
-                  var completer = new Completer();
                   var contents = new StringBuffer();
                   res.stream.transform(convert.utf8.decoder).listen((data) {
                     contents.write(data);
@@ -94,8 +93,8 @@ class _SubmitPostState extends State<SubmitPost> {
                     Navigator.of(context).pop();
                     // Todo: handle error
                   }, onDone: () async {
-                    var jsonString = completer.complete(contents.toString());
-                    var data = convert.jsonDecode(jsonString);
+                    var data = convert.jsonDecode(contents.toString());
+                    print(data);
                     Navigator.of(context).pop();
                     this._submitResponse(data.message);
                     if (data.code == 1) this._clear();
