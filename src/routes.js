@@ -13,7 +13,6 @@ const Mailer = require('./mailer');
 const router = express.Router();
 const mailer = new Mailer();
 const upload = require('./multer/upload');
-const singleUpload = upload.single('image');
 
 // ============
 // Middleroutes
@@ -32,7 +31,7 @@ router.use(function(req, res, next) {
 
     let token = req.headers['x-access-token'];
     if (!token) {
-      return res.status(401).send({ error: 'No token provided.' });
+      return res.json({ code: -99, message: 'No token provided.' });
     }
   }
   next();
@@ -206,7 +205,7 @@ router.route('/users/verify/:user_id').post(function(req, res) {
 });
 
 // Posts
-router.route('/posts').post(function(req, res) {
+router.route('/posts').post(upload.single('post-image'), function(req, res) {
   // Check: Auth
 
   let token = req.headers['x-access-token'];
@@ -216,32 +215,31 @@ router.route('/posts').post(function(req, res) {
       if (!user) return res.json({ message: 'User not found!', code: -1 });
       if (err) return res.send(err);
       // Upload to s3 bucket
-      singleUpload(req, res, function(err, some) {
+      if (req.body['post-image']) {
+        req.body['post-image'] = '';
+      }
 
-        if (!req.body.name || !req.body.description) {
-          return res.json({ message: 'Missing a field.', code: -2});
-        }
+      if (!req.body.name || !req.body.description) {
+        return res.json({ message: 'Missing a field.', code: -2});
+      }
 
-        if (err) {
-          return res.json({ message: 'Could not upload image!', code: -3});
-        }
+      if (err || !req.file) {
+        return res.json({ message: 'Could not upload image!', code: -3});
+      }
 
-        let post = new Post({
-          name: req.body.name,
-          description: req.body.description,
-          image: req.file.location
-        });
-
-        post.save(function(err) {
-          if (err) return res.send(err);
-          // Implement update user in database
-          return res.json({ messsage: 'Posted!', code: 1 });
-        });
-
+      let post = new Post({
+        name: req.body.name,
+        description: req.body.description,
+        image: req.file.location
       });
 
-      
-    });
+      post.save(function(err) {
+        if (err) return res.send(err);
+        // Implement update user in database
+        return res.json({ message: 'Posted!', code: 1 });
+      });
+
+      });
   });
 }).get(function(req, res) {
   // Implement

@@ -5,8 +5,8 @@ const aws = require('aws-sdk');
 
 aws.config.update(
   {
-    secretAccessKey: process.env.AWS_ACCESS_KEY,
-    accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+    secretAccessKey: process.env.S3_ACCESS_KEY,
+    accessKeyId: process.env.S3_ACCESS_KEY_ID,
     region: 'us-west-2'
   }
 );
@@ -24,7 +24,6 @@ const upload = multer({
       callback(null, Date.now().toString() + '.jpg');
     }
   }), fileFilter: function(req, file, callback) {
-    console.log(req.body);
     if (!req.body.description || !req.body.name) {
       callback(null, false);
       return;
