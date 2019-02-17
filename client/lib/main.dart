@@ -51,16 +51,15 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     this._setToken('');
   }
 
-  void _login(dynamic res) {
+  void _login(res) {
     try {
-        Map<String, dynamic> response = convert.jsonDecode(res.body);
-        if (!response.containsKey('user_id') || !response.containsKey('token')) {
+        if (!res.data.containsKey('user_id') || !res.data.containsKey('token')) {
           // Handle
           print(res);
           return;
         }
-        this._setToken(response['token']);
-        this._userId = response['user_id'];
+        this._setToken(res.data['token']);
+        this._userId = res.data['user_id'];
       } catch (Exception) {
         // Handle
         print(res);
