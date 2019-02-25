@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 
 import 'dart:io';
-import 'dart:convert' as convert;
 import 'dart:async';
 
 import '../data/repository.dart';
@@ -19,7 +18,8 @@ class _SubmitPostState extends State<SubmitPost> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
-  List<int> _tagIndices = new List<int>();
+  List<int> _selectedTags = new List<int>();
+  List<String> _tags = ['Breakfast', 'Lunch', 'Dinner'];
   File _image;
 
   Future getImage() async {
@@ -139,17 +139,17 @@ class _SubmitPostState extends State<SubmitPost> {
           child: Row(
           children: 
             List<Widget>.generate(
-              1,
+              this._tags.length,
               (int index) {
                 return ChoiceChip(
-                  label: Text('Lunch'),
-                  selected: this._tagIndices.contains(index),
+                  label: Text(this._tags[index]),
+                  selected: this._selectedTags.contains(index),
                   onSelected: (bool selected) {
                     setState(() {
-                      if (!this._tagIndices.contains(index)) {
-                        this._tagIndices.add(index);
+                      if (!this._selectedTags.contains(index)) {
+                        this._selectedTags.add(index);
                       } else {
-                        this._tagIndices.remove(index);
+                        this._selectedTags.remove(index);
                       }
                     });
                   }
