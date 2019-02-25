@@ -19,6 +19,7 @@ class _SubmitPostState extends State<SubmitPost> {
 
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
+  List<int> _tagIndices = new List<int>();
   File _image;
 
   Future getImage() async {
@@ -144,6 +145,29 @@ class _SubmitPostState extends State<SubmitPost> {
         ), padding: EdgeInsets.only(top: 15)),
         Center(
           child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
+        ),
+        Container(
+          child: Row(
+          children: 
+            List<Widget>.generate(
+              1,
+              (int index) {
+                return ChoiceChip(
+                  label: Text('Lunch'),
+                  selected: this._tagIndices.contains(index),
+                  onSelected: (bool selected) {
+                    setState(() {
+                      if (!this._tagIndices.contains(index)) {
+                        this._tagIndices.add(index);
+                      } else {
+                        this._tagIndices.remove(index);
+                      }
+                    });
+                  }
+                );
+              }
+            )
+          )
         ),
         Expanded(
           child: Align(

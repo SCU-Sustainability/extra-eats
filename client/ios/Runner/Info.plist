@@ -2,16 +2,10 @@
 <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
 <plist version="1.0">
 <dict>
-	<!--For image_picker-->
-	<key>NSPhotoLibraryUsageDescription</key>
-	<string>Upload images in your TTW posts.</string>
-	<key>NSCameraUsageDescription</key>
-	<string>Take pictures for upload on TTW.</string>
-	<key>NSMicrophoneUsageDescription</key>
-	<string>For testing only, this should be removed!</string>
-	<!--END-->
 	<key>CFBundleDevelopmentRegion</key>
 	<string>en</string>
+	<key>CFBundleDisplayName</key>
+	<string>Taste The Waste</string>
 	<key>CFBundleExecutable</key>
 	<string>$(EXECUTABLE_NAME)</string>
 	<key>CFBundleIdentifier</key>
@@ -30,6 +24,12 @@
 	<string>$(FLUTTER_BUILD_NUMBER)</string>
 	<key>LSRequiresIPhoneOS</key>
 	<true/>
+	<key>NSCameraUsageDescription</key>
+	<string>Take pictures for upload on TTW.</string>
+	<key>NSMicrophoneUsageDescription</key>
+	<string>For testing only, this should be removed!</string>
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>Upload images in your TTW posts.</string>
 	<key>UILaunchStoryboardName</key>
 	<string>LaunchScreen</string>
 	<key>UIMainStoryboardFile</key>
