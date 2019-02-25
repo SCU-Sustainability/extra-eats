@@ -16,24 +16,24 @@ class Feed extends StatefulWidget {
 }
 
 List<Post> seed = [
-  new Post('H4H Leftovers', 'Leftover snacks...'),
-  new Post('Free food at Locatelli', 'Food and water...'),
-  new Post('Fake event post!', 'This is mock data...'),
+  new Post('H4H Leftovers', 'Leftover snacks...', ''),
+  new Post('Free food at Locatelli', 'Food and water...', ''),
+  new Post('Fake event post!', 'This is mock data...', ''),
 ];
 
 List<Post> mockFeed = [
-  new Post('Leftover food', 'Some leftover food here...'),
-  new Post('Broncdasfdsaohacks', 'Leftover perishables...'),
-  new Post('H4H Leftdsafdsaovers', 'Leftover snacks...'),
-  new Post('Free food sdafat Locatelli', 'Food and water...'),
-  new Post('Fake evedsafsadnt post!', 'This is mock data...'),
-  new Post('H4fdsafdaH Leftovers', 'Leftover snacks...'),
-  new Post('Free dsafdsaffood at Locatelli', 'Food and water...'),
-  new Post('Fakedsafdsa event post!', 'This is mock data...'),
+  new Post('Leftover food', 'Some leftover food here...', ''),
+  new Post('Broncdasfdsaohacks', 'Leftover perishables...', ''),
+  new Post('H4H Leftdsafdsaovers', 'Leftover snacks...', ''),
+  new Post('Free food sdafat Locatelli', 'Food and water...', ''),
+  new Post('Fake evedsafsadnt post!', 'This is mock data...', ''),
+  new Post('H4fdsafdaH Leftovers', 'Leftover snacks...', ''),
+  new Post('Free dsafdsaffood at Locatelli', 'Food and water...', ''),
+  new Post('Fakedsafdsa event post!', 'This is mock data...', ''),
 ];
 
 List<Post> mockArchive = [
-  new Post('Broncohacks', 'Leftover perishables...')
+  new Post('Broncohacks', 'Leftover perishables...', '')
 ];
 
 class _FeedState extends State<Feed> {
