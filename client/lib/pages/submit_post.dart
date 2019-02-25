@@ -19,7 +19,7 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   List<int> _selectedTags = new List<int>();
-  List<String> _tags = ['Breakfast', 'Lunch', 'Dinner'];
+  List<String> _tags = ['gluten-free', 'peanut-free', 'vegetarian', 'vegan', 'pork', 'beef', 'chicken'];
   File _image;
 
   Future getImage() async {
@@ -39,6 +39,7 @@ class _SubmitPostState extends State<SubmitPost> {
   void _clear() {
     nameController.clear();
     descriptionController.clear();
+    this._selectedTags.clear();
     setState(() {
       _image = null;
     });
@@ -134,28 +135,27 @@ class _SubmitPostState extends State<SubmitPost> {
         ), padding: EdgeInsets.only(top: 15)),
         Center(
           child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
-        ),
-        Container(
-          child: Row(
-          children: 
-            List<Widget>.generate(
-              this._tags.length,
-              (int index) {
-                return ChoiceChip(
-                  label: Text(this._tags[index]),
-                  selected: this._selectedTags.contains(index),
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (!this._selectedTags.contains(index)) {
-                        this._selectedTags.add(index);
-                      } else {
-                        this._selectedTags.remove(index);
-                      }
-                    });
-                  }
-                );
-              }
-            )
+        ), 
+        Wrap(
+          spacing: 2.0,
+          runSpacing: 0.0,
+          children: List<Widget>.generate(
+            this._tags.length,
+            (int index) {
+              return ChoiceChip(
+                label: Text(this._tags[index]),
+                selected: this._selectedTags.contains(index),
+                onSelected: (bool selected) {
+                  setState(() {
+                    if (!this._selectedTags.contains(index)) {
+                      this._selectedTags.add(index);
+                    } else {
+                      this._selectedTags.remove(index);
+                    }
+                  });
+                }
+              );
+            }
           )
         ),
         Expanded(
