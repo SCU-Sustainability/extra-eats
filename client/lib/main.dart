@@ -57,9 +57,12 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   void logout() async {
     this._currentIndex = 0;
     this._setToken('');
-    this._items.removeAt(1);
-    this._children.removeAt(1);
-    this._tabNames.removeAt(1);
+    if (this._items.length == 3) {
+      this._items.removeAt(1);
+      this._children.removeAt(1);
+      this._tabNames.removeAt(1);
+      this._provider = false;
+    }
   }
 
   void _login(res) {
@@ -73,7 +76,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         this._userId = res.data['user_id'];
         this._provider = res.data['provider'];
         // Todo: change _children and _items
-        if (this._provider) {
+        if (this._provider && this._items.length == 2) {
           this._items.insert(1, BottomNavigationBarItem(
             icon: Icon(Icons.add_a_photo),
             title: Text('Post'),
