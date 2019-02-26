@@ -122,7 +122,7 @@ router.route('/users').post(function(req, res) {
     });*/
   });
 }).get(function(req, res) {
-  // Get users
+  // Get users (required?)
   let token = req.headers['x-access-token'];
   jwt.verify(token, process.env.SECRET, function(err, decoded) {
     if (err) return _unauthorized(res);
