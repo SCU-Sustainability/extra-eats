@@ -14,7 +14,7 @@ class InheritedClient extends InheritedWidget {
 
   final VoidCallback logout;
   final Function(String, String) login;
-  final Function(String, String, String) register;
+  final Function(String, String, String, bool) register;
   final String userId;
   final String accessToken;
 

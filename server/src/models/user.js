@@ -30,6 +30,10 @@ var UserSchema = new Schema({
     type: [ObjectId],
     required: true,
     unique: false
+  },
+  provider: {
+    type: Boolean,
+    required: true
   }
 });
 
