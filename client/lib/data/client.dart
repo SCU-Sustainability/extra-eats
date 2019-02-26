@@ -39,12 +39,13 @@ class Client {
     return response;
   }
 
-  Future<Response> post(String token, String name, String description, File imgFile) async {
+  Future<Response> post(String token, String name, String description, File imgFile, List tags) async {
     
     FormData formData = new FormData.from({
       'name': name,
       'description': description,
-      'post-image': new UploadFileInfo(imgFile, name)
+      'post-image': new UploadFileInfo(imgFile, name),
+      'tags': tags
     });
     var response = await Dio().post(_url + 'posts', data: formData, options: Options(
       headers: {

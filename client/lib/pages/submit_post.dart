@@ -83,7 +83,11 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Text('Submit'),
               onPressed: () {
                 var accessToken = InheritedClient.of(context).accessToken;
-                Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image).then((res) {
+                List<String> tags = [];
+                for (int tagIndex  in this._selectedTags) {
+                  tags.add(this._tags[tagIndex]);
+                }
+                Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image, tags).then((res) {
                   // Todo: fix this POS
                   Navigator.of(context).pop();
                   this._submitResponse(res.data['message']);
