@@ -24,7 +24,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     Feed(),
     Settings()
   ];
-  List _items = [
+  List<BottomNavigationBarItem> _items = [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       title: Text('Home'),
@@ -46,8 +46,8 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     super.initState();
   }
 
-  void register(String email, String password, String name) async {
-    await Repository.get().client.register(email, password, name).then(this._login);
+  void register(String email, String password, String name, bool provider) async {
+    await Repository.get().client.register(email, password, name, provider).then(this._login);
   }
 
   void login(String email, String password) async {
@@ -57,11 +57,14 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   void logout() async {
     this._currentIndex = 0;
     this._setToken('');
+    this._items.removeAt(1);
+    this._children.removeAt(1);
+    this._tabNames.removeAt(1);
   }
 
   void _login(res) {
     try {
-        if (!res.data.containsKey('user_id') || !res.data.containsKey('token')) {
+        if (!res.data.containsKey('user_id') || !res.data.containsKey('token') || !res.data.containsKey('provider')) {
           // Handle
           print(res);
           return;

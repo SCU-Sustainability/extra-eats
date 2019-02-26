@@ -65,7 +65,7 @@ router.get('/', function(req, res) {
 router.route('/login').post(function(req, res) {
   // Todo: Validate
   // Todo: Handle max attempts
-  User.findOne({ email: req.body.email }, 'password', function(err, user) {
+  User.findOne({ email: req.body.email }, '+password', function(err, user) {
     // Todo: Handle errors
     if (err) return res.send(err);
     if (!user) return res.json({ message: 'User not found!', code: 0 });
@@ -114,7 +114,7 @@ router.route('/users').post(function(req, res) {
     }
 
     let token = _signJWT(user._id);
-    let response = { message: 'User created!', token: token, user_id: user._id, code: 1 };
+    let response = { message: 'User created!', token: token, user_id: user._id, provider: provider, code: 1 };
     res.json(response);
     // Send an email here
     /** mailer.sendMail(email).then(function(info) {
