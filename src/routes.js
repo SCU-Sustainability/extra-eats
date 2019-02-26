@@ -224,7 +224,7 @@ router.route('/posts').post(function(req, res) {
   // Check: Auth
   // Post-upload
 
-  if (!req.body.name || !req.body.description) {
+  if (!req.body.name || !req.body.description || !req.body.tags) {
     return res.json({ message: 'Missing a field.', code: -3});
   }
 
@@ -235,7 +235,8 @@ router.route('/posts').post(function(req, res) {
   let post = new Post({
     name: req.body.name,
     description: req.body.description,
-    image: req.file.location
+    image: req.file.location,
+    tags: req.body.tags
   });
 
   post.save(function(err) {
