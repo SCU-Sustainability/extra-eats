@@ -1,5 +1,3 @@
-import 'dart:convert' as convert;
-
 import 'package:flutter/material.dart';
 
 import './pages/feed.dart';
@@ -31,6 +29,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   int _currentIndex = 0;
   String _accessToken = '';
   String _userId = '';
+  bool _provider = false;
 
   @override
   void initState() {
@@ -60,6 +59,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         }
         this._setToken(res.data['token']);
         this._userId = res.data['user_id'];
+        this._provider = res.data['provider'];
       } catch (Exception) {
         // Handle
         print(res);
@@ -70,6 +70,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   void _setToken(String token) {
     setState(() {
       this._accessToken = token;
+      // Update _children?
     });
   }
 
