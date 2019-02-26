@@ -11,7 +11,6 @@ const Post = require('./models/post');
 const Mailer = require('./mailer');
 
 const router = express.Router();
-const mailer = new Mailer();
 const upload = require('./multer/upload');
 
 // ============
@@ -73,7 +72,7 @@ router.route('/login').post(function(req, res) {
 
     if (!bcrypt.compareSync(req.body.password, user.password)) return res.send({ message: 'Wrong email or password.', code: -1 });
     let token = _signJWT(user._id);
-    return res.json({ message: 'Logged in!', token: token, user_id: user._id, code: 1 });
+    return res.json({ message: 'Logged in!', token: token, user_id: user._id, provider: user.provider, code: 1 });
   });
 });
 
@@ -91,15 +90,19 @@ router.route('/users').post(function(req, res) {
   if (!req.body.password.match('^([A-Za-z0-9\W]{6,20})$')) {
     return res.send({ message: 'Password invalid.', code: -3 });
   }
-
   // Check email regex
-  
+
+  let provider = false;
+  if (req.body.provider) {
+    provider = true;
+  }
+
   let name = req.body.name;
   let password = bcrypt.hashSync(req.body.password, 8);
   let email = req.body.email;
   let emailToken = shortid.generate();
   let user = new User({ name: name, password: password, email: email, posts: [],
-    emailToken: emailToken });
+    emailToken: emailToken, provider: provider });
 
   user.save(function(err) {
     if (err) {
@@ -205,41 +208,52 @@ router.route('/users/verify/:user_id').post(function(req, res) {
 });
 
 // Posts
-router.route('/posts').post(upload.single('post-image'), function(req, res) {
-  // Check: Auth
-
+router.route('/posts').post(function(req, res) {
   let token = req.headers['x-access-token'];
   jwt.verify(token, process.env.SECRET, function(err, decoded) {
     if (err) return _unauthorized(res);
     User.findById(decoded.id, function(err, user) {
       if (!user) return res.json({ message: 'User not found!', code: -1 });
       if (err) return res.send(err);
-      // Upload to s3 bucket
-      if (req.body['post-image']) {
-        req.body['post-image'] = '';
-      }
-
-      if (!req.body.name || !req.body.description) {
-        return res.json({ message: 'Missing a field.', code: -2});
-      }
-
-      if (err || !req.file) {
-        return res.json({ message: 'Could not upload image!', code: -3});
-      }
-
-      let post = new Post({
-        name: req.body.name,
-        description: req.body.description,
-        image: req.file.location
+      if (!user.provider) return res.json({ message: 'You are not a provider!', code: -2});
+      req.user = user;
       });
+  });
+  
+}, upload.single('post-image'), function(req, res) {
+  // Check: Auth
+  // Post-upload
 
-      post.save(function(err) {
-        if (err) return res.send(err);
-        // Implement update user in database
-        return res.json({ message: 'Posted!', code: 1 });
-      });
+  if (!req.body.name || !req.body.description) {
+    return res.json({ message: 'Missing a field.', code: -3});
+  }
 
-      });
+  if (err || !req.file) {
+    return res.json({ message: 'Could not upload image!', code: -4});
+  }
+
+  let post = new Post({
+    name: req.body.name,
+    description: req.body.description,
+    image: req.file.location
+  });
+
+  post.save(function(err) {
+    if (err) {
+      console.log(err);
+      return res.json({ message:'Unknown save error', code: -202 });
+    }
+    // Implement update user in database
+    let user = req.user;
+    let posts = user.posts;
+    posts.push(post._id);
+    user.save(function(err) {
+      if (err) {
+        console.log(err);
+        return res.json({ message:'Unknown save error user', code: -203});
+      }
+      return res.json({ message: 'Posted!', code: 1 });
+    });
   });
 }).get(function(req, res) {
   // Implement
