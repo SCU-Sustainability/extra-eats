@@ -16,6 +16,8 @@ class _RegisterState extends State<Register> {
   TextEditingController nameController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   TextEditingController emailController = TextEditingController();
+  int _index = 0;
+  bool _provider = false;
 
   @override
   void dispose() {
@@ -25,8 +27,13 @@ class _RegisterState extends State<Register> {
     super.dispose();
   }
 
-  @override
-  Widget build(BuildContext context) {
+  void setIndex(int index) {
+    setState(() {
+      this._index = index;
+    });
+  }
+
+  Widget registerForm() {
     return Scaffold(
       appBar: AppBar(
         title: Text('Register'),
@@ -62,7 +69,7 @@ class _RegisterState extends State<Register> {
         TextField(
           controller: nameController,
           decoration: InputDecoration(
-            hintText: 'Name',
+            hintText: 'Name (optional)',
             contentPadding: EdgeInsets.all(20.0),
             border: InputBorder.none,
           ),
@@ -76,9 +83,9 @@ class _RegisterState extends State<Register> {
           child: Row(children: [
             Transform.scale(scale: 1.3, child: FlatButton(
               textColor: Colors.blue,
-              child: Text('Login'),
+              child: Text('Go back'),
               onPressed: () {
-                Navigator.pop(context);
+                this.setIndex(0);
               }
             )),
             Spacer(flex: 1),
@@ -92,7 +99,7 @@ class _RegisterState extends State<Register> {
                   || emailController.text == '') {
                   return; // Show a dialog?
                 }
-                InheritedClient.of(context).register(nameController.text, passwordController.text, emailController.text);
+                InheritedClient.of(context).register(nameController.text, passwordController.text, emailController.text, this._provider);
                 Navigator.pop(context);
               }
                 
@@ -102,6 +109,40 @@ class _RegisterState extends State<Register> {
       ],
     ),
     );
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return this._index == 1 ? registerForm() : Scaffold(
+      appBar: AppBar(
+        title: Text('Select an account type')
+      ),
+      body: Container(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            FlatButton(
+              textColor: Colors.blue,
+              child: Text('I\'m a regular user'),
+              onPressed: () {
+                this.setIndex(1);
+                this._provider = false;
+              }
+            ),
+            RaisedButton(
+              textColor: Colors.white,
+              color: Colors.lightBlue,
+              child: Text('I\'m a food provider'),
+              onPressed: () {
+                this.setIndex(1);
+                this._provider = true;
+              }
+            )
+          ]
+        )
+      )
+    ));
   }
 }
 

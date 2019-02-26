@@ -29,11 +29,12 @@ class Client {
     return response;
   }
 
-   Future<Response> register(String name, String password, String email) async {
+   Future<Response> register(String name, String password, String email, bool provider) async {
     var response = await Dio().postUri(Uri.parse(Client._url + 'users'), data: {
       'email': email,
       'password': password,
-      'name': name
+      'name': name,
+      'provider': provider
     });
     return response;
   }
