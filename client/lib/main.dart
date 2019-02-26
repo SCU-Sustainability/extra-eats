@@ -12,19 +12,28 @@ void main() => runApp(TasteTheWaste());
 class TasteTheWaste extends StatefulWidget {
   TasteTheWaste({Key key}): super(key: key);
 
-  final tabNames = ['Home Feed', 'Submit Post', 'Settings'];
-  final List<Widget> _children = [
-    Feed(),
-    SubmitPost(),
-    Settings()
-  ];
-
   @override
   _TasteTheWasteState createState() => _TasteTheWasteState();
   
 }
 
 class _TasteTheWasteState extends State<TasteTheWaste> {
+
+  List _tabNames = ['Home Feed', 'Settings'];
+  List<Widget> _children = [
+    Feed(),
+    Settings()
+  ];
+  List _items = [
+    BottomNavigationBarItem(
+      icon: Icon(Icons.home),
+      title: Text('Home'),
+    ),
+    BottomNavigationBarItem(
+      icon: Icon(Icons.settings),
+      title: Text('Extras')
+    )
+  ];
 
   int _currentIndex = 0;
   String _accessToken = '';
@@ -60,6 +69,16 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         this._setToken(res.data['token']);
         this._userId = res.data['user_id'];
         this._provider = res.data['provider'];
+        // Todo: change _children and _items
+        if (this._provider) {
+          this._items.insert(1, BottomNavigationBarItem(
+            icon: Icon(Icons.add_a_photo),
+            title: Text('Post'),
+          ));
+          this._children.insert(1, SubmitPost());
+          this._tabNames.insert(1, 'Submit Post');
+        }
+
       } catch (Exception) {
         // Handle
         print(res);
@@ -70,7 +89,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   void _setToken(String token) {
     setState(() {
       this._accessToken = token;
-      // Update _children?
     });
   }
 
@@ -85,7 +103,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Widget _handleMainScreen() {
-    return _isLoggedIn() ? widget._children[this._currentIndex] : Login();
+    return _isLoggedIn() ? _children[this._currentIndex] : Login();
   }
 
   // This widget is the root of your application.
@@ -98,26 +116,13 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       ),
       home: Scaffold(
       appBar: AppBar(
-        title: Text(_isLoggedIn() ? widget.tabNames[this._currentIndex] : 'Login'),
+        title: Text(_isLoggedIn() ? _tabNames[this._currentIndex] : 'Login'),
       ),
       body: _handleMainScreen(),
       bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(
         onTap: this._setIndex,
         currentIndex: this._currentIndex,
-        items: [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            title: Text('Home'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.add_a_photo),
-            title: Text('Post'),
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.settings),
-            title: Text('Extras')
-          )
-        ],
+        items: _items,
       ) : null,
     ),
     ),
