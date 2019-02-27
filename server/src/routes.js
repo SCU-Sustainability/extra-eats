@@ -17,7 +17,7 @@ const upload = require('./multer/upload');
 // Middleroutes
 // ============
 // Make sure x-access-token is present for certain endpoints
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
   let rootPath = req.path.split('/')[1];
   console.log('Receiving request to path: /' + rootPath);
   if (rootPath && (rootPath === 'users' || rootPath === 'posts')) {
@@ -37,7 +37,7 @@ router.use(function(req, res, next) {
 });
 
 // Rate limiter for non-device API end-users
-router.use(function(req, res, next) {
+router.use(function (req, res, next) {
   // Todo: Implement
   next();
 });
@@ -50,22 +50,22 @@ function _unauthorized(res) {
 }
 
 function _signJWT(id) {
-  return jwt.sign({id: id}, process.env.SECRET, {expiresIn: 86400});
+  return jwt.sign({ id: id }, process.env.SECRET, { expiresIn: 86400 });
 }
 
 // ==========
 // API Routes
 // ==========
 // Ping route
-router.get('/', function(req, res) {
+router.get('/', function (req, res) {
   return res.json({ message: 'Welcome to our API!' });
 });
 
 // Login route
-router.route('/login').post(function(req, res) {
+router.route('/login').post(function (req, res) {
   // Todo: Validate
   // Todo: Handle max attempts
-  User.findOne({ email: req.body.email }, '+password', function(err, user) {
+  User.findOne({ email: req.body.email }, '+password', function (err, user) {
     // Todo: Handle errors
     if (err) return res.send(err);
     if (!user) return res.json({ message: 'User not found!', code: 0 });
@@ -77,12 +77,12 @@ router.route('/login').post(function(req, res) {
 });
 
 // Users
-router.route('/users').post(function(req, res) {
+router.route('/users').post(function (req, res) {
   // Registration
   // Check: Validation
   if (!req.body.email || !req.body.password || !req.body.email)
     return res.send({ message: 'Missing data.', code: -1 });
-  
+
   if (!req.body.name.match('^([A-Za-z0-9 ]{1,20})$')) {
     return res.send({ message: 'Name invalid.', code: -2 });
   }
@@ -101,10 +101,12 @@ router.route('/users').post(function(req, res) {
   let password = bcrypt.hashSync(req.body.password, 8);
   let email = req.body.email;
   let emailToken = shortid.generate();
-  let user = new User({ name: name, password: password, email: email, posts: [],
-    emailToken: emailToken, provider: provider });
+  let user = new User({
+    name: name, password: password, email: email, posts: [],
+    emailToken: emailToken, provider: provider
+  });
 
-  user.save(function(err) {
+  user.save(function (err) {
     if (err) {
       console.log(err);
       if (err.code === 11000) {
@@ -121,61 +123,61 @@ router.route('/users').post(function(req, res) {
       console.log('Sent email verify to ' + email);
     });*/
   });
-}).get(function(req, res) {
+}).get(function (req, res) {
   // Get users (required?)
   let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err) return _unauthorized(res);
   });
-  User.find(function(err, users) {
+  User.find(function (err, users) {
     if (err) return res.send(err);
     res.json(users);
   }, '-password');
 });
 
 // User by ID
-router.route('/users/:user_id').get(function(req, res) {
+router.route('/users/:user_id').get(function (req, res) {
   // Check: Auth
   let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err) return _unauthorized(res);
   });
 
-  User.findById(req.params.user_id, '-password', function(err, user) {
+  User.findById(req.params.user_id, '-password', function (err, user) {
     if (err) return res.send(err);
-    if (!user) return res.json({ message: 'User not found!', code: -1});
+    if (!user) return res.json({ message: 'User not found!', code: -1 });
     res.json(user);
   });
-  
-}).put(function(req, res) {
+
+}).put(function (req, res) {
   // Check: Auth, user can only update own user
   let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
   });
 
-  User.findById(req.params.user_id, function(err, user) {
+  User.findById(req.params.user_id, function (err, user) {
     if (err) return res.send(err);
     if (!user) return res.json({ message: 'User not found!', code: -1 });
     // Check: Which attributes are being updated
     if (req.body.password) {
       user.password = bcrypt.hashSync(req.body.password, 8);
     }
-    user.save(function(err) {
+    user.save(function (err) {
       if (err) return res.send(err);
       res.json({ message: 'User updated!', code: 1 });
     });
   });
 
-}).delete(function(req, res) {
+}).delete(function (req, res) {
   // Check: Auth, user can only delete own user
   let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
   });
   User.deleteOne({
     _id: req.params.user_id
-  }, function(err, user) {
+  }, function (err, user) {
     if (err) return res.json(err);
     if (!user) return res.json({ message: 'User not found!', code: -1 });
     res.json({ message: 'User deleted!', code: 1 });
@@ -184,20 +186,20 @@ router.route('/users/:user_id').get(function(req, res) {
 });
 
 // Verify email
-router.route('/users/verify/:user_id').post(function(req, res) {
+router.route('/users/verify/:user_id').post(function (req, res) {
   // Todo: Validate data
   let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
-    User.findById(req.params.user_id, function(err, user) {
-      
+    User.findById(req.params.user_id, function (err, user) {
+
       if (!user) return res.json({ message: 'User not found!', code: -1 });
       if (!req.body.emailToken) return res.json({ message: 'No email token provided.', code: -2 });
       if (user.emailToken !== req.body.emailToken) return res.json({ message: 'Wrong email token', code: -3 });
       if (err) return res.send(err);
 
       user.emailToken = '*';
-      user.save(function(err) {
+      user.save(function (err) {
         if (err) return res.send(err);
         res.json({ message: 'Email verified!', code: 1 });
       });
@@ -208,72 +210,72 @@ router.route('/users/verify/:user_id').post(function(req, res) {
 });
 
 // Posts
-router.route('/posts').post(/*upload.single('post-image'), */function(req, res) {
+router.route('/posts').post(/*upload.single('post-image'), */function (req, res) {
   // Check: Auth
   // Post-upload
 
   let token = req.headers['x-access-token'];
   console.log(req.body);
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err) return _unauthorized(res);
-    User.findById(decoded.id, function(err, user) {
+    User.findById(decoded.id, function (err, user) {
 
       // Todo: do we have to delete the post from S3 if the post fails?
 
       if (err /*|| !req.file*/) {
-        return res.json({ message: 'Could not upload image!', code: -4});
+        return res.json({ message: 'Could not upload image!', code: -4 });
       }
 
       if (!user) return res.json({ message: 'User not found!', code: -1 });
-      if (!user.provider) return res.json({ message: 'You are not a provider!', code: -2});
+      if (!user.provider) return res.json({ message: 'You are not a provider!', code: -2 });
 
       if (!req.body.name || !req.body.description || !req.body.tags) {
         // Never reached?
-        return res.json({ message: 'Missing a field.', code: -3});
+        return res.json({ message: 'Missing a field.', code: -3 });
       }
-    
+
       let post = new Post({
         name: req.body.name,
         description: req.body.description,
         image: 'testing',
         tags: req.body.tags
       });
-    
-      post.save(function(err) {
+
+      post.save(function (err) {
         if (err) {
           console.log(err);
-          return res.json({ message:'Unknown save error', code: -202 });
+          return res.json({ message: 'Unknown save error', code: -202 });
         }
         // Implement update user in database
         let posts = user.posts;
         posts.push(post._id);
-    
-        user.save(function(err) {
+
+        user.save(function (err) {
           if (err) {
             console.log(err);
-            return res.json({ message:'Unknown save error user', code: -203});
+            return res.json({ message: 'Unknown save error user', code: -203 });
           }
           return res.json({ message: 'Posted!', code: 1 });
         });
       });
-      });
+    });
   });
 
-  
-}).get(function(req, res) {
+
+}).get(function (req, res) {
   // Implement
   let token = req.headers['x-access-token'];
   jwt.verify(token, process.env.SECRET, function (err, decoded) {
     if (err) return _unauthorized(res);
     let tags = [];
     if (req.body.tags) tags = req.body.tags;
-    let filter = (tags.length === 0) ? {} : {tags: tags};
+    let filter = (tags.length === 0) ? {} : { tags: tags };
     Post.find(filter, (err, posts) => {
       if (err) {
         console.log(err);
-        return res.json({ message: 'Could not get posts', code: -199});
+        return res.json({ message: 'Could not get posts', code: -199 });
       }
-      return res.json({code: 1, posts: posts});
+      return res.json({ code: 1, posts: posts });
     });
   });
 });
