@@ -4,7 +4,7 @@ import 'package:image_picker/image_picker.dart';
 import 'dart:io';
 import 'dart:async';
 
-import '../data/repository.dart';
+import '../data/client.dart';
 import '../actions.dart';
 
 class SubmitPost extends StatefulWidget {
@@ -84,11 +84,12 @@ class _SubmitPostState extends State<SubmitPost> {
               onPressed: () {
                 var accessToken = InheritedClient.of(context).accessToken;
                 List<String> tags = [];
-                for (int tagIndex  in this._selectedTags) {
+                for (int tagIndex in this._selectedTags) {
                   tags.add(this._tags[tagIndex]);
                 }
-                Repository.get().client.post(accessToken, this.nameController.text, this.descriptionController.text, this._image, tags).then((res) {
+                Client.get().post(accessToken, this.nameController.text, this.descriptionController.text/**, this._image*/, tags).then((res) {
                   // Todo: fix this POS
+                  print(res);
                   Navigator.of(context).pop();
                   this._submitResponse(res.data['message']);
                   if (res.data['code'] == 1) {
@@ -132,14 +133,14 @@ class _SubmitPostState extends State<SubmitPost> {
           color: Colors.grey,
           height: 0.0
         ),
-        Padding(child: FlatButton(
+        /* Padding(child: FlatButton(
           textColor: Colors.blue,
           child: Icon(Icons.add_a_photo),
           onPressed: getImage,
         ), padding: EdgeInsets.only(top: 15)),
         Center(
           child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
-        ), 
+        ), */
         Wrap(
           spacing: 2.0,
           runSpacing: 0.0,

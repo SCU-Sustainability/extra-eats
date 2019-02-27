@@ -26,7 +26,7 @@ class _UserSettingsState extends State<UserSettings> {
             Row(
               mainAxisAlignment: MainAxisAlignment.start,
               children: <Widget>[
-                Text('Push notifications: ', style: TextStyle(fontSize: 18)),
+                Text('Push notifications: '),
                 Spacer(flex: 1),
                 Transform.scale(scale: 1.5, child: Switch(
                   value: _pushNotifications,

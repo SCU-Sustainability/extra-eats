@@ -5,7 +5,7 @@ import './pages/settings.dart';
 import './pages/submit_post.dart';
 import './pages/login.dart';
 import './actions.dart';
-import './data/repository.dart';
+import './data/client.dart';
 
 void main() => runApp(TasteTheWaste());
 
@@ -42,16 +42,16 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
 
   @override
   void initState() {
-    Repository.get().client.ping();
+    Client.get().ping();
     super.initState();
   }
 
   void register(String email, String password, String name, bool provider) async {
-    await Repository.get().client.register(email, password, name, provider).then(this._login);
+    await Client.get().register(email, password, name, provider).then(this._login);
   }
 
   void login(String email, String password) async {
-    await Repository.get().client.login(email, password).then(this._login);
+    await Client.get().login(email, password).then(this._login);
   }
 
   void logout() async {
