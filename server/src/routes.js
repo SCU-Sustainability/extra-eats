@@ -173,7 +173,7 @@ router.route('/users/:user_id').get(function(req, res) {
   jwt.verify(token, process.env.SECRET, function(err, decoded) {
     if (err || req.params.user_id !== decoded.id) return _unauthorized(res);
   });
-  User.deleteOne({ 
+  User.deleteOne({
     _id: req.params.user_id
   }, function(err, user) {
     if (err) return res.json(err);
@@ -248,6 +248,7 @@ router.route('/posts').post(function(req, res) {
     let user = req.user;
     let posts = user.posts;
     posts.push(post._id);
+
     user.save(function(err) {
       if (err) {
         console.log(err);
@@ -259,6 +260,19 @@ router.route('/posts').post(function(req, res) {
 }).get(function(req, res) {
   // Implement
   let token = req.headers['x-access-token'];
+  jwt.verify(token, process.env.SECRET, function (err, decoded) {
+    if (err) return _unauthorized(res);
+    let tags = [];
+    if (req.body.tags) tags = req.body.tags;
+    let filter = tags === [] ? {} : {tags: tags};
+    Post.find(filter, (err, posts) => {
+      if (err) {
+        console.log(err);
+        return res.json({ message: 'Could not get posts', code: -199});
+      }
+      return res.json({code: 1, posts: posts});
+    });
+  });
 });
 
 module.exports = router;
