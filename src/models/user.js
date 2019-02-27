@@ -1,6 +1,6 @@
-'use strict';
+"use strict";
 
-var mongoose = require('mongoose');
+var mongoose = require("mongoose");
 var Schema = mongoose.Schema;
 var ObjectId = mongoose.Schema.Types.ObjectId;
 
@@ -37,4 +37,4 @@ var UserSchema = new Schema({
   }
 });
 
-module.exports = mongoose.model('User', UserSchema);
+module.exports = mongoose.model("User", UserSchema);
