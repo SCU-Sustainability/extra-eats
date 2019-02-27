@@ -1,7 +1,6 @@
-import 'dart:math';
-
-import 'package:dio/dio.dart';
 import 'package:flutter/material.dart';
+
+import 'dart:async';
 
 import '../models/post.dart';
 import '../data/client.dart';
@@ -14,62 +13,31 @@ class Feed extends StatefulWidget {
   _FeedState createState() => _FeedState();
 }
 
-List<Post> seed = [
-  new Post('H4H Leftovers', 'Leftover snacks...', ''),
-  new Post('Free food at Locatelli', 'Food and water...', ''),
-  new Post('Fake event post!', 'This is mock data...', ''),
-];
-
-List<Post> mockFeed = [
-  new Post('Leftover food', 'Some leftover food here...', ''),
-  new Post('Broncdasfdsaohacks', 'Leftover perishables...', ''),
-  new Post('H4H Leftdsafdsaovers', 'Leftover snacks...', ''),
-  new Post('Free food sdafat Locatelli', 'Food and water...', ''),
-  new Post('Fake evedsafsadnt post!', 'This is mock data...', ''),
-  new Post('H4fdsafdaH Leftovers', 'Leftover snacks...', ''),
-  new Post('Free dsafdsaffood at Locatelli', 'Food and water...', ''),
-  new Post('Fakedsafdsa event post!', 'This is mock data...', ''),
-];
-
-List<Post> mockArchive = [
-  new Post('Broncohacks', 'Leftover perishables...', '')
-];
-
 class _FeedState extends State<Feed> {
 
-  Future<Response> _getPosts() async {
-    try {
-      var response = await Dio().get(Client.url() + 'posts', options: Options(
-      headers: {
-        'x-access-token': InheritedClient.of(context).accessToken
+  Future<List<Post>> _getPosts(BuildContext context) async {
+    var res = await Client.get().getPosts(InheritedClient.of(context).accessToken);
+    if (res.data['code'] == 1) {
+      List<Post> posts = [];
+      for (var post in res.data['posts']) {
+        posts.add(Post.fromJson(post));
       }
-    ));
-    return response;
-    } catch (e) {
-      print(e);
-    }
+      return posts;
+    } else return [];
   }
 
-  Future<Null> _handleRefresh() async {
-    await new Future.delayed(new Duration(seconds: 2));
-    mockFeed.add(seed[(new Random()).nextInt(seed.length)]);
-    setState(() {
-
-    });
-    return null;  
-  }
-
-  Widget _postCards(List<Post> posts) {
+  Widget _listPosts(List<Post> posts) {
     Widget listView = ListView.builder(
       physics: BouncingScrollPhysics(),
       shrinkWrap: true,
       itemCount: posts.length,
       itemBuilder: (context, index) {
+        var currentPost = posts[posts.length - index - 1];
         return Padding(padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0), child: Card(
           child: ListTile(
             leading: Icon(Icons.fastfood),
-            title: Text(posts[posts.length - index - 1].name),
-            subtitle: Text(posts[posts.length - index - 1].description)
+            title: Text(currentPost.name),
+            subtitle: Text(currentPost.description)
           )
         ));
       }
@@ -77,35 +45,45 @@ class _FeedState extends State<Feed> {
     return listView;
   }
 
+  Widget _postBuilder(BuildContext context) {
+    return FutureBuilder<List<Post>>(
+      future: this._getPosts(context),
+      builder: (context, snapshot) {
+        if (snapshot.connectionState == ConnectionState.done) {
+          if (snapshot.hasData) {
+            if (snapshot.data.length == 0) {
+              return Center(child: Text('No posts currently, check back later!'));
+            }
+            return _listPosts(snapshot.data);
+          } else if (snapshot.hasError) {
+            return Text('Something went wrong!');
+          }
+        } else {
+          return CircularProgressIndicator();
+        }
+        
+      }
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return DefaultTabController(
-      length: 2,
-      child: Column(
+    return Column(
         children: <Widget>[
-          Container(child: TabBar(
-              
-              tabs: [
-                Tab(icon: Icon(Icons.trending_up), text: 'Feed'),
-                Tab(icon: Icon(Icons.history), text: 'Archive'),
-              ],
-              labelColor: Colors.blueGrey,
-            )),
-          Expanded(
+          Container(child: Expanded(
             child: Container(padding: EdgeInsets.all(9.0), decoration: BoxDecoration(
               color: Colors.black12,
-            ), child: TabBarView(
-              children: <Widget>[
-                RefreshIndicator(
-                  child: _postCards(mockFeed),
-                  onRefresh: _handleRefresh,
-                ),
-                _postCards(mockArchive),
-              ]
-            ))
-          ),
+            ), child: RefreshIndicator(
+                  child: _postBuilder(context),
+                  onRefresh: () {
+                    setState(() {});
+                  },
+                )
+              
+            )
+          )),
+          
         ],
-      ),
-    );
+      );
   }
 }

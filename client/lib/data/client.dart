@@ -1,6 +1,7 @@
 import 'package:dio/dio.dart';
 
 import 'dart:io';
+import 'dart:async';
 
 class Client {
   static final Client _client = new Client._internal();
@@ -52,6 +53,14 @@ class Client {
         'x-access-token': token
       }
     ));
+    return response;
+  }
+
+  Future<Response> getPosts(String token) async {
+    var response =  await Dio().get(Client.url() + 'posts', options: Options(
+    headers: {
+      'x-access-token': token
+    }));
     return response;
   }
 }
