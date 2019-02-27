@@ -59,7 +59,7 @@ class _FeedState extends State<Feed> {
             return Text('Something went wrong!');
           }
         } else {
-          return CircularProgressIndicator();
+          return Center(child: CircularProgressIndicator());
         }
         
       }
@@ -73,12 +73,7 @@ class _FeedState extends State<Feed> {
           Container(child: Expanded(
             child: Container(padding: EdgeInsets.all(9.0), decoration: BoxDecoration(
               color: Colors.black12,
-            ), child: RefreshIndicator(
-                  child: _postBuilder(context),
-                  onRefresh: () {
-                    setState(() {});
-                  },
-                )
+            ), child: _postBuilder(context),
               
             )
           )),
