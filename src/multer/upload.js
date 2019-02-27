@@ -24,7 +24,7 @@ const upload = multer({
       callback(null, Date.now().toString() + '.jpg');
     }
   }), fileFilter: function(req, file, callback) {
-    if (!req.body.description || !req.body.name) {
+    if (!req.body.description || !req.body.name || !req.body.tags) {
       callback(null, false);
       return;
     }

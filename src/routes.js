@@ -208,55 +208,58 @@ router.route('/users/verify/:user_id').post(function(req, res) {
 });
 
 // Posts
-router.route('/posts').post(function(req, res) {
-  let token = req.headers['x-access-token'];
-  jwt.verify(token, process.env.SECRET, function(err, decoded) {
-    if (err) return _unauthorized(res);
-    User.findById(decoded.id, function(err, user) {
-      if (!user) return res.json({ message: 'User not found!', code: -1 });
-      if (err) return res.send(err);
-      if (!user.provider) return res.json({ message: 'You are not a provider!', code: -2});
-      req.user = user;
-      });
-  });
-  
-}, upload.single('post-image'), function(req, res) {
+router.route('/posts').post(/*upload.single('post-image'), */function(req, res) {
   // Check: Auth
   // Post-upload
 
-  if (!req.body.name || !req.body.description || !req.body.tags) {
-    return res.json({ message: 'Missing a field.', code: -3});
-  }
+  let token = req.headers['x-access-token'];
+  console.log(req.body);
+  jwt.verify(token, process.env.SECRET, function(err, decoded) {
+    if (err) return _unauthorized(res);
+    User.findById(decoded.id, function(err, user) {
 
-  if (err || !req.file) {
-    return res.json({ message: 'Could not upload image!', code: -4});
-  }
+      // Todo: do we have to delete the post from S3 if the post fails?
 
-  let post = new Post({
-    name: req.body.name,
-    description: req.body.description,
-    image: req.file.location,
-    tags: req.body.tags
-  });
-
-  post.save(function(err) {
-    if (err) {
-      console.log(err);
-      return res.json({ message:'Unknown save error', code: -202 });
-    }
-    // Implement update user in database
-    let user = req.user;
-    let posts = user.posts;
-    posts.push(post._id);
-
-    user.save(function(err) {
-      if (err) {
-        console.log(err);
-        return res.json({ message:'Unknown save error user', code: -203});
+      if (err /*|| !req.file*/) {
+        return res.json({ message: 'Could not upload image!', code: -4});
       }
-      return res.json({ message: 'Posted!', code: 1 });
-    });
+
+      if (!user) return res.json({ message: 'User not found!', code: -1 });
+      if (!user.provider) return res.json({ message: 'You are not a provider!', code: -2});
+
+      if (!req.body.name || !req.body.description || !req.body.tags) {
+        // Never reached?
+        return res.json({ message: 'Missing a field.', code: -3});
+      }
+    
+      let post = new Post({
+        name: req.body.name,
+        description: req.body.description,
+        image: 'testing',
+        tags: req.body.tags
+      });
+    
+      post.save(function(err) {
+        if (err) {
+          console.log(err);
+          return res.json({ message:'Unknown save error', code: -202 });
+        }
+        // Implement update user in database
+        let posts = user.posts;
+        posts.push(post._id);
+    
+        user.save(function(err) {
+          if (err) {
+            console.log(err);
+            return res.json({ message:'Unknown save error user', code: -203});
+          }
+          return res.json({ message: 'Posted!', code: 1 });
+        });
+      });
+      });
   });
+
+  
 }).get(function(req, res) {
   // Implement
   let token = req.headers['x-access-token'];
@@ -264,7 +267,7 @@ router.route('/posts').post(function(req, res) {
     if (err) return _unauthorized(res);
     let tags = [];
     if (req.body.tags) tags = req.body.tags;
-    let filter = tags === [] ? {} : {tags: tags};
+    let filter = (tags.length === 0) ? {} : {tags: tags};
     Post.find(filter, (err, posts) => {
       if (err) {
         console.log(err);
