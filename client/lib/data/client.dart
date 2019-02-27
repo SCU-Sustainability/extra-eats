@@ -22,14 +22,13 @@ class Client {
   }
 
   Future<Response> login(String email, String password) async {
-    var response = await Dio().postUri(Uri.parse(_url + 'login'), data: {
-      'email': email,
-      'password': password
-    });
+    var response = await Dio().postUri(Uri.parse(_url + 'login'),
+        data: {'email': email, 'password': password});
     return response;
   }
 
-   Future<Response> register(String name, String password, String email, bool provider) async {
+  Future<Response> register(
+      String name, String password, String email, bool provider) async {
     var response = await Dio().postUri(Uri.parse(_url + 'users'), data: {
       'email': email,
       'password': password,
@@ -39,8 +38,8 @@ class Client {
     return response;
   }
 
-  Future<Response> post(String token, String name, String description/**, File imgFile*/, List tags) async {
-    
+  Future<Response> post(String token, String name,
+      String description /**, File imgFile*/, List tags) async {
     /*FormData formData = new FormData.from({
       'name': name,
       'description': description,
@@ -52,23 +51,15 @@ class Client {
         'x-access-token': token
       }
     ));*/
-    var response = await Dio().postUri(Uri.parse(_url + 'posts'), options: Options(
-      headers: {
-        'x-access-token': token
-      }
-    ), data: {
-      'name': name,
-      'description': description,
-      'tags': tags
-    });
+    var response = await Dio().postUri(Uri.parse(_url + 'posts'),
+        options: Options(headers: {'x-access-token': token}),
+        data: {'name': name, 'description': description, 'tags': tags});
     return response;
   }
 
   Future<Response> getPosts(String token) async {
-    var response =  await Dio().get(_url + 'posts', options: Options(
-    headers: {
-      'x-access-token': token
-    }));
+    var response = await Dio().get(_url + 'posts',
+        options: Options(headers: {'x-access-token': token}));
     return response;
   }
 }
