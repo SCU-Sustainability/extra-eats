@@ -94,8 +94,7 @@ class _RegisterState extends State<Register> {
               color: Colors.lightBlue,  
               child: Text('Register'),
               onPressed: () {
-                if (nameController.text == '' 
-                  || passwordController.text == '' 
+                if (passwordController.text == '' 
                   || emailController.text == '') {
                   return; // Show a dialog?
                 }
