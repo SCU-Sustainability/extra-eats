@@ -47,9 +47,15 @@ describe('Auth check middleware', function() {
     });
   });
   describe('Auth check without token', function() {
+    next = false;
     it('Should return code -99', function() {
-      authCheck(authRoutes, exclusions, req2, res, () => {});
+      authCheck(authRoutes, exclusions, req2, res, () => {
+        next = true;
+      });
       expect(res.code).to.equal(-99);
+    });
+    it('Should not call next()', function() {
+      expect(next).to.equal(false);
     });
   });
   describe('Auth check without token to exclusion', function() {
