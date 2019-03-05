@@ -11,10 +11,10 @@ const Post = require('./models/post');
 const Mailer = require('./mailer');
 
 const router = express.Router();
-const upload = require('./multer/upload');
+const upload = require('./upload');
 
 // Middleware
-const authCheck = require('./middle/auth-check');
+const authCheck = require('./routes/middle/auth-check');
 // Routes
 const ping = require('./routes/ping');
 
