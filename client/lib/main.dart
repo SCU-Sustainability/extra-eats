@@ -113,11 +113,12 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
+
     return InheritedClient(
       child: MaterialApp(
         title: 'Taste the Waste',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          primarySwatch: Colors.blueGrey,
         ),
         home: Scaffold(
           appBar: AppBar(
@@ -133,6 +134,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
                 )
               : null,
         ),
+
       ),
       login: this.login,
       logout: this.logout,
