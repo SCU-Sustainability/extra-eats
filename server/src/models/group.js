@@ -5,12 +5,12 @@ var Schema = mongoose.Schema;
 
 var GroupSchema = new Schema({
   name: {
-      type: String,
-      required: true
+    type: String,
+    required: true
   },
   posts: {
-      type: [ObjectId],
-      required: true
+    type: [ObjectId],
+    required: true
   }
   // Todo: maybe add users in the future if needed
 });
