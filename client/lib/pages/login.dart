@@ -39,7 +39,8 @@ class _RegisterState extends State<Register> {
         title: Text('Register'),
       ),
       body: Column(
-      mainAxisSize: MainAxisSize.min,
+      //mainAxisSize: MainAxisSize.min,
+      //mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextField(
           controller: emailController,
@@ -149,8 +150,6 @@ class Login extends StatefulWidget {
 
   Login({Key key}): super(key: key);
 
-
-
   @override
   _LoginState createState() => _LoginState();
 
@@ -171,8 +170,10 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      mainAxisSize: MainAxisSize.min,
+      //mainAxisSize: MainAxisSize.min,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        
         TextField(
           controller: emailController,
           decoration: InputDecoration(
@@ -214,7 +215,7 @@ class _LoginState extends State<Login> {
             Transform.scale(scale: 1.3, child: RaisedButton(
               textColor: Colors.white,
               color: Colors.lightBlue,  
-              child: Text('Login'),
+              child: Text('Login!!'),
               onPressed: () {
                 if (emailController.text == '' || passwordController.text == '') {
                   return; // Show a dialog?
