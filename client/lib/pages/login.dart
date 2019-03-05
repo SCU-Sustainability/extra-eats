@@ -40,7 +40,7 @@ class _RegisterState extends State<Register> {
       ),
       body: Column(
       //mainAxisSize: MainAxisSize.min,
-      //mainAxisAlignment: MainAxisAlignment.center,
+      mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         TextField(
           controller: emailController,
@@ -173,7 +173,6 @@ class _LoginState extends State<Login> {
       //mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
-        
         TextField(
           controller: emailController,
           decoration: InputDecoration(
@@ -215,7 +214,7 @@ class _LoginState extends State<Login> {
             Transform.scale(scale: 1.3, child: RaisedButton(
               textColor: Colors.white,
               color: Colors.lightBlue,  
-              child: Text('Login!!'),
+              child: Text('Login'),
               onPressed: () {
                 if (emailController.text == '' || passwordController.text == '') {
                   return; // Show a dialog?
