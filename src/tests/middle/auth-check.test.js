@@ -1,5 +1,5 @@
 const expect = require('chai').expect;
-const authCheck = require('../../middle/auth-check');
+const authCheck = require('../../routes/middle/auth-check');
 
 let req = {
   headers: {
