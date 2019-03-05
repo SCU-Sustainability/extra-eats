@@ -117,24 +117,41 @@ class _SubmitPostState extends State<SubmitPost> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
+
+        Padding(child: FlatButton(
+          textColor: Colors.blueGrey,
+          child: Icon(Icons.add_a_photo),
+          onPressed: getImage,
+        ), padding: EdgeInsets.only(top: 15)),
+        Center(
+          child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
+        ), 
+        
         TextField(
           controller: nameController,
           decoration: InputDecoration(
-            hintText: 'Name',
-            contentPadding: EdgeInsets.all(20.0),
+            hintText: 'Add a title',
+            hintStyle: TextStyle(fontWeight: FontWeight.bold),
+            contentPadding: EdgeInsetsDirectional.only(start: 20.0, top: 20.0, end: 20.0),
             border: InputBorder.none,
           ),
         ),
-        Divider(color: Colors.grey, height: 0.0),
+        // Divider(color: Colors.grey, height: 0.0),
         TextField(
           controller: descriptionController,
           decoration: InputDecoration(
-            hintText: 'Description',
+            hintText: 'Add a description',
             contentPadding: EdgeInsets.all(20.0),
             border: InputBorder.none,
           ),
         ),
-        Divider(color: Colors.grey, height: 0.0),
+        
+        Text(
+          'Categories:',
+          textAlign: TextAlign.right,
+          
+        ),
+        // Divider(color: Colors.grey, height: 0.0),
         /* Padding(child: FlatButton(
           textColor: Colors.blue,
           child: Icon(Icons.add_a_photo),
@@ -167,15 +184,17 @@ class _SubmitPostState extends State<SubmitPost> {
                 padding: EdgeInsets.all(32.0),
                 child: Row(children: [
                   FlatButton(
-                      textColor: Colors.blue,
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        _clear();
-                      }),
+
+                    textColor: Colors.blueGrey,
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      _clear();
+                    }
+                  ),
                   Spacer(flex: 1),
                   RaisedButton(
                     textColor: Colors.white,
-                    color: Colors.lightBlue,
+                    color: Colors.blueGrey,
                     child: Text('Submit'),
                     onPressed: () {
                       _ensureSubmit();
