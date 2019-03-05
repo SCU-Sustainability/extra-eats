@@ -170,9 +170,17 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     return Column(
-      //mainAxisSize: MainAxisSize.min,
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
+        Image(
+          image: AssetImage('assets/ttw-logo.jpg'), 
+          width: 150.0, 
+          height: 150.0
+        ),
+        Divider(
+          color: Colors.white,
+          height: 15.0
+        ),
         TextField(
           controller: emailController,
           decoration: InputDecoration(
