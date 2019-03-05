@@ -59,9 +59,11 @@ router.get('/', ping);
 router.route('/login').post(function(req, res) {
   // Todo: Validate
   // Todo: Handle max attempts
+  if (!req.body.email || !req.body.password) {
+  }
   User.findOne({ email: req.body.email }, '+password', function(err, user) {
     // Todo: Handle errors
-    if (err) return res.send(err);
+    if (err) return res.json(err);
     if (!user) return res.json({ message: 'User not found!', code: 0 });
 
     if (!bcrypt.compareSync(req.body.password, user.password))
@@ -83,7 +85,7 @@ router
   .post(function(req, res) {
     // Registration
     // Check: Validation
-    if (!req.body.email || !req.body.password || !req.body.email)
+    if (!req.body.email || !req.body.password)
       return res.send({ message: 'Missing data.', code: -1 });
 
     if (req.body.name) {
