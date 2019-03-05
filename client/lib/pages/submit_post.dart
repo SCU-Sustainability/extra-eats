@@ -108,38 +108,43 @@ class _SubmitPostState extends State<SubmitPost> {
     return Column(
       mainAxisSize: MainAxisSize.min,
       children: <Widget>[
-        TextField(
-          controller: nameController,
-          decoration: InputDecoration(
-            hintText: 'Name',
-            contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none,
-          ),
-        ),
-        Divider(
-          color: Colors.grey,
-          height: 0.0
-        ),
-        TextField(
-          controller: descriptionController,
-          decoration: InputDecoration(
-            hintText: 'Description',
-            contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none,
-          ),
-        ),
-        Divider(
-          color: Colors.grey,
-          height: 0.0
-        ),
+
         Padding(child: FlatButton(
-          textColor: Colors.blue,
+          textColor: Colors.blueGrey,
           child: Icon(Icons.add_a_photo),
           onPressed: getImage,
         ), padding: EdgeInsets.only(top: 15)),
         Center(
           child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
         ), 
+        
+        TextField(
+          controller: nameController,
+          decoration: InputDecoration(
+            hintText: 'Add a title',
+            hintStyle: TextStyle(fontWeight: FontWeight.bold),
+            contentPadding: EdgeInsetsDirectional.only(start: 20.0, top: 20.0, end: 20.0),
+            border: InputBorder.none,
+          ),
+        ),
+
+        TextField(
+          controller: descriptionController,
+          decoration: InputDecoration(
+            hintText: 'Add a description',
+            contentPadding: EdgeInsets.all(20.0),
+            border: InputBorder.none,
+          ),
+        ),
+
+
+        
+        Text(
+          'Categories:',
+          textAlign: TextAlign.right,
+          
+        ),
+   
         Wrap(
           spacing: 2.0,
           runSpacing: 0.0,
@@ -170,7 +175,7 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Row(
                 children: [
                   FlatButton(
-                    textColor: Colors.blue,
+                    textColor: Colors.blueGrey,
                     child: Text('Cancel'),
                     onPressed: () {
                       _clear();
@@ -179,7 +184,7 @@ class _SubmitPostState extends State<SubmitPost> {
                   Spacer(flex: 1),
                   RaisedButton(
                     textColor: Colors.white,
-                    color: Colors.lightBlue,
+                    color: Colors.blueGrey,
                     child: Text('Submit'),
                     onPressed: () {
                       _ensureSubmit();

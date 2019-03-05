@@ -118,7 +118,8 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     return InheritedClient(child: MaterialApp(
       title: 'Taste the Waste',
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.grey,
+
       ),
       home: Scaffold(
       appBar: AppBar(
