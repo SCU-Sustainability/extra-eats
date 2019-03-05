@@ -5,34 +5,26 @@ import './pages/settings.dart';
 import './pages/submit_post.dart';
 import './pages/login.dart';
 import './actions.dart';
-import './data/repository.dart';
+import './data/client.dart';
 
 void main() => runApp(TasteTheWaste());
 
 class TasteTheWaste extends StatefulWidget {
-  TasteTheWaste({Key key}): super(key: key);
+  TasteTheWaste({Key key}) : super(key: key);
 
   @override
   _TasteTheWasteState createState() => _TasteTheWasteState();
-  
 }
 
 class _TasteTheWasteState extends State<TasteTheWaste> {
-
   List _tabNames = ['Home Feed', 'Settings'];
-  List<Widget> _children = [
-    Feed(),
-    Settings()
-  ];
+  List<Widget> _children = [Feed(), Settings()];
   List<BottomNavigationBarItem> _items = [
     BottomNavigationBarItem(
       icon: Icon(Icons.home),
       title: Text('Home'),
     ),
-    BottomNavigationBarItem(
-      icon: Icon(Icons.settings),
-      title: Text('Extras')
-    )
+    BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Extras'))
   ];
 
   int _currentIndex = 0;
@@ -42,16 +34,19 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
 
   @override
   void initState() {
-    Repository.get().client.ping();
+    Client.get().ping();
     super.initState();
   }
 
-  void register(String email, String password, String name, bool provider) async {
-    await Repository.get().client.register(email, password, name, provider).then(this._login);
+  void register(
+      String email, String password, String name, bool provider) async {
+    await Client.get()
+        .register(email, password, name, provider)
+        .then(this._login);
   }
 
   void login(String email, String password) async {
-    await Repository.get().client.login(email, password).then(this._login);
+    await Client.get().login(email, password).then(this._login);
   }
 
   void logout() async {
@@ -67,29 +62,32 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
 
   void _login(res) {
     try {
-        if (!res.data.containsKey('user_id') || !res.data.containsKey('token') || !res.data.containsKey('provider')) {
-          // Handle
-          print(res);
-          return;
-        }
-        this._setToken(res.data['token']);
-        this._userId = res.data['user_id'];
-        this._provider = res.data['provider'];
-        // Todo: change _children and _items
-        if (this._provider && this._items.length == 2) {
-          this._items.insert(1, BottomNavigationBarItem(
-            icon: Icon(Icons.add_a_photo),
-            title: Text('Post'),
-          ));
-          this._children.insert(1, SubmitPost());
-          this._tabNames.insert(1, 'Submit Post');
-        }
-
-      } catch (Exception) {
+      if (!res.data.containsKey('user_id') ||
+          !res.data.containsKey('token') ||
+          !res.data.containsKey('provider')) {
         // Handle
         print(res);
         return;
       }
+      this._setToken(res.data['token']);
+      this._userId = res.data['user_id'];
+      this._provider = res.data['provider'];
+      // Todo: change _children and _items
+      if (this._provider && this._items.length == 2) {
+        this._items.insert(
+            1,
+            BottomNavigationBarItem(
+              icon: Icon(Icons.add_a_photo),
+              title: Text('Post'),
+            ));
+        this._children.insert(1, SubmitPost());
+        this._tabNames.insert(1, 'Submit Post');
+      }
+    } catch (Exception) {
+      // Handle
+      print(res);
+      return;
+    }
   }
 
   void _setToken(String token) {
@@ -115,29 +113,34 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    return InheritedClient(child: MaterialApp(
-      title: 'Taste the Waste',
-      theme: ThemeData(
-        primarySwatch: Colors.grey,
+
+    return InheritedClient(
+      child: MaterialApp(
+        title: 'Taste the Waste',
+        theme: ThemeData(
+          primarySwatch: Colors.blueGrey,
+        ),
+        home: Scaffold(
+          appBar: AppBar(
+            title:
+                Text(_isLoggedIn() ? _tabNames[this._currentIndex] : 'Login'),
+          ),
+          body: _handleMainScreen(),
+          bottomNavigationBar: _isLoggedIn()
+              ? BottomNavigationBar(
+                  onTap: this._setIndex,
+                  currentIndex: this._currentIndex,
+                  items: _items,
+                )
+              : null,
+        ),
 
       ),
-      home: Scaffold(
-      appBar: AppBar(
-        title: Text(_isLoggedIn() ? _tabNames[this._currentIndex] : 'Login'),
-      ),
-      body: _handleMainScreen(),
-      bottomNavigationBar: _isLoggedIn() ? BottomNavigationBar(
-        onTap: this._setIndex,
-        currentIndex: this._currentIndex,
-        items: _items,
-      ) : null,
-    ),
-    ),
-    login: this.login,
-    logout: this.logout,
-    register: this.register,
-    accessToken: this._accessToken,
-    userId: this._userId,
+      login: this.login,
+      logout: this.logout,
+      register: this.register,
+      accessToken: this._accessToken,
+      userId: this._userId,
     );
   }
 }
