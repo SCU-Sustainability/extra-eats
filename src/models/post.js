@@ -1,6 +1,6 @@
-"use strict";
+'use strict';
 
-var mongoose = require("mongoose");
+var mongoose = require('mongoose');
 var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
@@ -16,10 +16,14 @@ var PostSchema = new Schema({
     type: String,
     required: true
   },
+  location: {
+    type: String,
+    required: true
+  },
   tags: {
     type: [String],
     required: true
   }
 });
 
-module.exports = mongoose.model("Post", PostSchema);
+module.exports = mongoose.model('Post', PostSchema);
