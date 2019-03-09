@@ -24,7 +24,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       icon: Icon(Icons.home),
       title: Text('Home'),
     ),
-    BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Extras'))
+    BottomNavigationBarItem(icon: Icon(Icons.settings), title: Text('Settings'))
   ];
 
   int _currentIndex = 0;
@@ -113,7 +113,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-
     return InheritedClient(
       child: MaterialApp(
         title: 'Taste the Waste',
@@ -134,7 +133,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
                 )
               : null,
         ),
-
       ),
       login: this.login,
       logout: this.logout,

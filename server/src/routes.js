@@ -273,7 +273,12 @@ router
               code: -2
             });
 
-          if (!req.body.name || !req.body.description || !req.body.tags) {
+          if (
+            !req.body.name ||
+            !req.body.description ||
+            !req.body.tags ||
+            !req.body.location
+          ) {
             // Never reached?
             return res.json({
               message: 'Missing a field.',
@@ -281,11 +286,14 @@ router
             });
           }
 
+          // Todo: validate data (location)
+
           let post = new Post({
             name: req.body.name,
             description: req.body.description,
             image: 'testing',
-            tags: req.body.tags
+            tags: req.body.tags,
+            location: req.body.location
           });
 
           post.save(function(err) {
