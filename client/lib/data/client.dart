@@ -38,8 +38,12 @@ class Client {
     return response;
   }
 
-  Future<Response> post(String token, String name,
-      String description /**, File imgFile*/, List tags) async {
+  Future<Response> post(
+      String token,
+      String name,
+      String description /**, File imgFile*/,
+      String location,
+      List tags) async {
     /*FormData formData = new FormData.from({
       'name': name,
       'description': description,
@@ -53,7 +57,12 @@ class Client {
     ));*/
     var response = await Dio().postUri(Uri.parse(_url + 'posts'),
         options: Options(headers: {'x-access-token': token}),
-        data: {'name': name, 'description': description, 'tags': tags});
+        data: {
+          'name': name,
+          'description': description,
+          'location': location,
+          'tags': tags
+        });
     return response;
   }
 

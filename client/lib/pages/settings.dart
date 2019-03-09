@@ -38,23 +38,8 @@ class _UserSettingsState extends State<UserSettings> {
                   )),
             ],
           ),
-          Divider(color: Colors.grey, height: 16.0),
         ]),
       ),
-    );
-  }
-}
-
-class ArchiveSettings extends StatelessWidget {
-  ArchiveSettings({Key key}) : super(key: key);
-
-  @override
-  Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('Archive Settings'),
-      ),
-      body: Column(),
     );
   }
 }
@@ -80,18 +65,6 @@ class _SettingsState extends State<Settings> {
           );
         },
       ),
-      Divider(color: Colors.grey, height: 0.0),
-      ListTile(
-        leading: Icon(Icons.history),
-        title: Text('Archive Settings'),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => ArchiveSettings()),
-          );
-        },
-      ),
-      Divider(color: Colors.grey, height: 0.0),
       ListTile(
         leading: Icon(Icons.arrow_back_ios),
         title: Text('Signout'),
