@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -18,15 +19,17 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  List<int> _selectedTags = new List<int>();
-  List<String> _tags = [
-    'gluten-free',
-    'peanut-free',
-    'vegetarian',
-    'vegan',
-    'pork',
-    'beef',
-    'chicken'
+  DateTime expiration = DateTime.now().add(Duration(hours: 1));
+  List<int> _selectedAllergens = new List<int>();
+  List<String> _allergens = [
+    'gluten',
+    'peanuts',
+    'dairy',
+    'fish',
+    'mixed nuts',
+    'wheat',
+    'shellfish',
+    'soy'
   ];
   File _image;
 
@@ -34,6 +37,15 @@ class _SubmitPostState extends State<SubmitPost> {
     var image = await ImagePicker.pickImage(source: ImageSource.camera);
     setState(() {
       this._image = image;
+    });
+  }
+
+  Future selectExpiration(BuildContext context) async {
+    DatePicker.showDateTimePicker(context, showTitleActions: true,
+        onConfirm: (date) {
+      setState(() {
+        expiration = date;
+      });
     });
   }
 
@@ -49,7 +61,7 @@ class _SubmitPostState extends State<SubmitPost> {
     nameController.clear();
     descriptionController.clear();
     locationController.clear();
-    this._selectedTags.clear();
+    this._selectedAllergens.clear();
     setState(() {
       _image = null;
     });
@@ -91,8 +103,8 @@ class _SubmitPostState extends State<SubmitPost> {
                   onPressed: () {
                     var accessToken = InheritedClient.of(context).accessToken;
                     List<String> tags = [];
-                    for (int tagIndex in this._selectedTags) {
-                      tags.add(this._tags[tagIndex]);
+                    for (int tagIndex in this._selectedAllergens) {
+                      tags.add(this._allergens[tagIndex]);
                     }
                     Client.get()
                         .post(
@@ -131,8 +143,10 @@ class _SubmitPostState extends State<SubmitPost> {
         Padding(
           child: Center(
               child: _image == null
-                  ? Text('No image selected.')
-                  : Text('Image confirmed.')),
+                  ? Text('No image selected.',
+                      style:
+                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                  : Text('Image confirmed.', style: TextStyle(fontSize: 16))),
           padding: EdgeInsets.only(bottom: 20),
         ),
 
@@ -166,11 +180,24 @@ class _SubmitPostState extends State<SubmitPost> {
         ),
 
         Padding(
+            child: Column(children: [
+              Text('Expires on ${expiration.month}/${expiration.day}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+              Text('@ ${expiration.hour}:${expiration.minute}',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))
+            ]),
+            padding: EdgeInsets.all(15.0)),
+        Padding(
+            child: RaisedButton(
+                onPressed: () => selectExpiration(context), child: Text('Set')),
+            padding: EdgeInsets.all(15.0)),
+
+        Padding(
           child: Text(
-            'Categories:',
-            textAlign: TextAlign.right,
+            'Allergens',
+            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
           ),
-          padding: EdgeInsets.only(bottom: 15.0, top: 15.0),
+          padding: EdgeInsets.all(15),
         ),
 
         // Divider(color: Colors.grey, height: 0.0),
@@ -185,16 +212,17 @@ class _SubmitPostState extends State<SubmitPost> {
         Wrap(
             spacing: 2.0,
             runSpacing: 0.0,
-            children: List<Widget>.generate(this._tags.length, (int index) {
+            children:
+                List<Widget>.generate(this._allergens.length, (int index) {
               return ChoiceChip(
-                  label: Text(this._tags[index]),
-                  selected: this._selectedTags.contains(index),
+                  label: Text(this._allergens[index]),
+                  selected: this._selectedAllergens.contains(index),
                   onSelected: (bool selected) {
                     setState(() {
-                      if (!this._selectedTags.contains(index)) {
-                        this._selectedTags.add(index);
+                      if (!this._selectedAllergens.contains(index)) {
+                        this._selectedAllergens.add(index);
                       } else {
-                        this._selectedTags.remove(index);
+                        this._selectedAllergens.remove(index);
                       }
                     });
                   });
