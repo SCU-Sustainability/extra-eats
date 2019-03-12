@@ -5,13 +5,15 @@ const jwt = require('jsonwebtoken');
 const express = require('express');
 require('dotenv').config();
 const shortid = require('shortid');
+const upload = require('./upload');
+const cloudinary = require('cloudinary').v2;
 
 const User = require('./models/user');
 const Post = require('./models/post');
 const Mailer = require('./mailer');
+const push = require('./push');
 
 const router = express.Router();
-const upload = require('./upload');
 
 // Middleware
 const authCheck = require('./routes/middle/auth-check');
@@ -290,6 +292,7 @@ router
           name: req.body.name,
           description: req.body.description,
           image: req.file.url,
+          public_id: req.file.public_id,
           tags: req.body.tags,
           location: req.body.location,
           expiration: req.body.expiration,
@@ -316,6 +319,7 @@ router
                 code: -203
               });
             }
+            push(req.body.name);
             return res.json({ message: 'Posted!', code: 1 });
           });
         });
@@ -335,11 +339,28 @@ router
         $gte: now
       };
 
-      Post.deleteMany({ expiration: { $lt: now } }, function(err) {
+      Post.find({ expiration: { $lt: now } }, function(err, posts) {
         if (err) {
           console.log(err);
           return;
         }
+        for (const post of posts) {
+          cloudinary.uploader.destroy(post.public_id, (err, result) => {
+            if (err) {
+              console.log(err);
+              return;
+            }
+          });
+        }
+        Post.deleteMany({
+          expiration: { $lt: now },
+          function(err) {
+            if (err) {
+              console.log(err);
+              return;
+            }
+          }
+        });
       });
       Post.find(filter, (err, posts) => {
         if (err) {
@@ -357,15 +378,16 @@ router
     let token = req.headers['x-access-token'];
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
       if (err) return _unauthorized(res);
-      Post.deleteOne({ _id: req.headers['id'] }, function(err) {
+      Post.findOneAndDelete({ _id: req.headers['id'] }, (err, post) => {
         if (err) {
           return res.json({ code: 0 });
         }
-        Post.find({}, (err, posts) => {
+
+        cloudinary.uploader.destroy(post.public_id, (err, result) => {
           if (err) {
             return res.json({ code: -1 });
           }
-          return res.json({ code: 1, posts: posts });
+          return res.json({ code: 1 });
         });
       });
     });

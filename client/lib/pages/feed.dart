@@ -20,7 +20,8 @@ class PostView extends StatelessWidget {
           style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
       Text(this.post.location, style: TextStyle(fontWeight: FontWeight.w200)),
       Center(
-        child: Padding(child: Text('Filler'), padding: EdgeInsets.all(50)),
+        child: Padding(
+            child: Image.network(post.image), padding: EdgeInsets.all(15)),
       ),
       Text(this.post.description,
           style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16)),
@@ -108,15 +109,15 @@ class _FeedState extends State<Feed> {
                 }));
           }
           return Padding(
-              padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0),
+              padding: EdgeInsets.all(15),
               child: Card(
                   child: Column(children: [
                 ListTile(
-                    title: Text(currentPost.name),
+                    title: Text(currentPost.name,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w300, fontSize: 20)),
                     subtitle: Text(currentPost.location)),
-                Padding(
-                    child: Text(currentPost.description),
-                    padding: EdgeInsets.all(15)),
+                Image.network(currentPost.image),
                 ButtonTheme.bar(child: ButtonBar(children: buttons))
               ])));
         });

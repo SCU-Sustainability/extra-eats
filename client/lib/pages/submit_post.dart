@@ -86,47 +86,35 @@ class _SubmitPostState extends State<SubmitPost> {
   }
 
   Future<void> _ensureSubmit() async {
+    var accessToken = InheritedClient.of(context).accessToken;
+    List<String> tags = [];
+    for (int tagIndex in this._selectedAllergens) {
+      tags.add(this._allergens[tagIndex]);
+    }
+    Client.get()
+        .post(
+            accessToken,
+            this.nameController.text,
+            this.descriptionController.text,
+            this._image,
+            this.locationController.text,
+            this.expiration,
+            tags)
+        .then((res) {
+      // Todo: fix this POS
+      this
+          ._submitResponse(res.data['message'])
+          .then((void next) => {Navigator.of(context).pop()});
+      if (res.data['code'] == 1) {
+        this._clear();
+      }
+    });
     return showDialog<void>(
         context: context,
         builder: (BuildContext context) {
-          return AlertDialog(
-            title: Text('Submit this post?'),
-            actions: <Widget>[
-              FlatButton(
-                  child: Text('No'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  }),
-              RaisedButton(
-                  textColor: Colors.white,
-                  child: Text('Submit'),
-                  onPressed: () {
-                    var accessToken = InheritedClient.of(context).accessToken;
-                    List<String> tags = [];
-                    for (int tagIndex in this._selectedAllergens) {
-                      tags.add(this._allergens[tagIndex]);
-                    }
-                    Client.get()
-                        .post(
-                            accessToken,
-                            this.nameController.text,
-                            this.descriptionController.text,
-                            this._image,
-                            this.locationController.text,
-                            this.expiration,
-                            tags)
-                        .then((res) {
-                      // Todo: fix this POS
-                      print(res);
-                      Navigator.of(context).pop();
-                      this._submitResponse(res.data['message']);
-                      if (res.data['code'] == 1) {
-                        this._clear();
-                      }
-                    });
-                  }),
-            ],
-          );
+          return SimpleDialog(
+              title: LinearProgressIndicator(value: null),
+              titlePadding: EdgeInsets.all(30));
         });
   }
 
@@ -136,13 +124,10 @@ class _SubmitPostState extends State<SubmitPost> {
       Padding(
         child: Center(
             child: _image == null
-                ? Padding(
-                    child: FlatButton(
-                      textColor: Colors.brown[300],
-                      child: Icon(Icons.add_a_photo),
-                      onPressed: getImage,
-                    ),
-                    padding: EdgeInsets.all(20))
+                ? FlatButton(
+                    textColor: Colors.brown[300],
+                    child: Icon(Icons.add_a_photo),
+                    onPressed: getImage)
                 : new Image.file(this._image, fit: BoxFit.fitWidth)),
         padding: EdgeInsets.all(20),
       ),
