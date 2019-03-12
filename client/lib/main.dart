@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:onesignal/onesignal.dart';
+import 'dart:io' show Platform;
 
 import './pages/feed.dart';
 import './pages/settings.dart';
@@ -73,6 +75,11 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       this._userId = res.data['user_id'];
       this._provider = res.data['provider'];
       // Todo: change _children and _items
+      if (Platform.isAndroid) {
+        OneSignal.shared.init('6d50216a-231d-4cf5-9abd-7928d4f020fb');
+        OneSignal.shared
+            .setInFocusDisplayType(OSNotificationDisplayType.notification);
+      }
       if (this._provider && this._items.length == 2) {
         this._items.insert(
             1,
