@@ -249,7 +249,6 @@ router
       // Post-upload
 
       let token = req.headers['x-access-token'];
-      console.log(req.body);
       jwt.verify(token, process.env.SECRET, function(err, decoded) {
         if (err) return _unauthorized(res);
         User.findById(decoded.id, function(err, user) {
@@ -354,6 +353,23 @@ router
           });
         }
         return res.json({ code: 1, posts: posts });
+      });
+    });
+  })
+  .delete(function(req, res) {
+    let token = req.headers['x-access-token'];
+    jwt.verify(token, process.env.SECRET, function(err, decoded) {
+      if (err) return _unauthorized(res);
+      Post.deleteOne({ _id: req.headers['id'] }, function(err) {
+        if (err) {
+          return res.json({ code: 0 });
+        }
+        Post.find({}, (err, posts) => {
+          if (err) {
+            return res.json({ code: -1 });
+          }
+          return res.json({ code: 1, posts: posts });
+        });
       });
     });
   });
