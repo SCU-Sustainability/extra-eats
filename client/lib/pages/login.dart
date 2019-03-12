@@ -31,76 +31,79 @@ class _RegisterState extends State<Register> {
   }
 
   Widget registerForm() {
+    var items = [
+      TextField(
+        controller: emailController,
+        decoration: InputDecoration(
+          hintText: 'Email',
+          contentPadding: EdgeInsets.all(20.0),
+          border: InputBorder.none,
+        ),
+      ),
+      Divider(color: Colors.grey, height: 0.0),
+      TextField(
+        controller: passwordController,
+        obscureText: true,
+        decoration: InputDecoration(
+          hintText: 'Password',
+          contentPadding: EdgeInsets.all(20.0),
+          border: InputBorder.none,
+        ),
+      ),
+      Divider(color: Colors.grey, height: 0.0),
+      TextField(
+        controller: nameController,
+        decoration: InputDecoration(
+          hintText: 'Name (optional)',
+          contentPadding: EdgeInsets.all(20.0),
+          border: InputBorder.none,
+        ),
+      ),
+      Divider(color: Colors.grey, height: 0.0),
+      Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Row(children: [
+            Transform.scale(
+                scale: 1.3,
+                child: FlatButton(
+                    textColor: Colors.blue,
+                    child: Text('Go back'),
+                    onPressed: () {
+                      this.setIndex(0);
+                    })),
+            Spacer(flex: 1),
+            Transform.scale(
+                scale: 1.3,
+                child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.lightBlue,
+                    child: Text('Register'),
+                    onPressed: () {
+                      if (passwordController.text == '' ||
+                          emailController.text == '') {
+                        return; // Show a dialog?
+                      }
+                      InheritedClient.of(context).register(
+                          nameController.text,
+                          passwordController.text,
+                          emailController.text,
+                          this._provider);
+                      Navigator.pop(context);
+                    })),
+          ])),
+    ];
+
     return Scaffold(
-      appBar: AppBar(
-        title: Text('Register'),
-      ),
-      body: Column(
-        //mainAxisSize: MainAxisSize.min,
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          TextField(
-            controller: emailController,
-            decoration: InputDecoration(
-              hintText: 'Email',
-              contentPadding: EdgeInsets.all(20.0),
-              border: InputBorder.none,
-            ),
-          ),
-          Divider(color: Colors.grey, height: 0.0),
-          TextField(
-            controller: passwordController,
-            obscureText: true,
-            decoration: InputDecoration(
-              hintText: 'Password',
-              contentPadding: EdgeInsets.all(20.0),
-              border: InputBorder.none,
-            ),
-          ),
-          Divider(color: Colors.grey, height: 0.0),
-          TextField(
-            controller: nameController,
-            decoration: InputDecoration(
-              hintText: 'Name (optional)',
-              contentPadding: EdgeInsets.all(20.0),
-              border: InputBorder.none,
-            ),
-          ),
-          Divider(color: Colors.grey, height: 0.0),
-          Padding(
-              padding: EdgeInsets.all(32.0),
-              child: Row(children: [
-                Transform.scale(
-                    scale: 1.3,
-                    child: FlatButton(
-                        textColor: Colors.blue,
-                        child: Text('Go back'),
-                        onPressed: () {
-                          this.setIndex(0);
-                        })),
-                Spacer(flex: 1),
-                Transform.scale(
-                    scale: 1.3,
-                    child: RaisedButton(
-                        textColor: Colors.white,
-                        color: Colors.lightBlue,
-                        child: Text('Register'),
-                        onPressed: () {
-                          if (passwordController.text == '' ||
-                              emailController.text == '') {
-                            return; // Show a dialog?
-                          }
-                          InheritedClient.of(context).register(
-                              nameController.text,
-                              passwordController.text,
-                              emailController.text,
-                              this._provider);
-                          Navigator.pop(context);
-                        })),
-              ])),
-        ],
-      ),
-    );
+        appBar: AppBar(
+          title: Text('Register'),
+        ),
+        body: Padding(
+            child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return items[index];
+                }),
+            padding: EdgeInsets.only(top: 50)));
   }
 
   @override
@@ -159,65 +162,68 @@ class _LoginState extends State<Login> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisAlignment: MainAxisAlignment.center,
-      children: <Widget>[
-        Image(
-            image: AssetImage('assets/ttw-logo.jpg'),
-            width: 150.0,
-            height: 150.0),
-        Divider(color: Colors.white, height: 15.0),
-        TextField(
-          controller: emailController,
-          decoration: InputDecoration(
-            hintText: 'Email',
-            contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none,
-          ),
+    var items = [
+      Image(
+          image: AssetImage('assets/ttw-logo.jpg'),
+          width: 150.0,
+          height: 150.0),
+      Divider(color: Colors.white, height: 15.0),
+      TextField(
+        controller: emailController,
+        decoration: InputDecoration(
+          hintText: 'Email',
+          contentPadding: EdgeInsets.all(20.0),
+          border: InputBorder.none,
         ),
-        Divider(color: Colors.grey, height: 0.0),
-        TextField(
-          controller: passwordController,
-          obscureText: true,
-          decoration: InputDecoration(
-            hintText: 'Password',
-            contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none,
-          ),
+      ),
+      Divider(color: Colors.grey, height: 0.0),
+      TextField(
+        controller: passwordController,
+        obscureText: true,
+        decoration: InputDecoration(
+          hintText: 'Password',
+          contentPadding: EdgeInsets.all(20.0),
+          border: InputBorder.none,
         ),
-        Divider(color: Colors.grey, height: 0.0),
-        Padding(
-            padding: EdgeInsets.all(32.0),
-            child: Row(children: [
-              Transform.scale(
-                  scale: 1.3,
-                  child: FlatButton(
-                      textColor: Colors.blue,
-                      child: Text('Register'),
-                      onPressed: () {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (context) => Register()));
-                      })),
-              Spacer(flex: 1),
-              Transform.scale(
-                  scale: 1.3,
-                  child: RaisedButton(
-                      textColor: Colors.white,
-                      color: Colors.lightBlue,
-                      child: Text('Login'),
-                      onPressed: () {
-                        if (emailController.text == '' ||
-                            passwordController.text == '') {
-                          return; // Show a dialog?
-                        }
+      ),
+      Divider(color: Colors.grey, height: 0.0),
+      Padding(
+          padding: EdgeInsets.all(32.0),
+          child: Row(children: [
+            Transform.scale(
+                scale: 1.3,
+                child: FlatButton(
+                    textColor: Colors.blue,
+                    child: Text('Register'),
+                    onPressed: () {
+                      Navigator.push(context,
+                          MaterialPageRoute(builder: (context) => Register()));
+                    })),
+            Spacer(flex: 1),
+            Transform.scale(
+                scale: 1.3,
+                child: RaisedButton(
+                    textColor: Colors.white,
+                    color: Colors.lightBlue,
+                    child: Text('Login'),
+                    onPressed: () {
+                      if (emailController.text == '' ||
+                          passwordController.text == '') {
+                        return; // Show a dialog?
+                      }
 
-                        InheritedClient.of(context).login(
-                            emailController.text, passwordController.text);
-                      })),
-            ])),
-      ],
-    );
+                      InheritedClient.of(context)
+                          .login(emailController.text, passwordController.text);
+                    })),
+          ])),
+    ];
+
+    return Padding(
+        child: ListView.builder(
+            itemCount: items.length,
+            itemBuilder: (BuildContext context, int index) {
+              return items[index];
+            }),
+        padding: EdgeInsets.only(top: 50));
   }
 }

@@ -117,16 +117,6 @@ class _FeedState extends State<Feed> {
                 Padding(
                     child: Text(currentPost.description),
                     padding: EdgeInsets.all(15)),
-                Text(
-                    'Expires on ' +
-                        currentPost.expiration.toLocal().month.toString() +
-                        '/' +
-                        currentPost.expiration.toLocal().day.toString(),
-                    style: TextStyle(fontWeight: FontWeight.bold)),
-                Text('at ' +
-                    currentPost.expiration.toLocal().hour.toString() +
-                    ':' +
-                    currentPost.expiration.toLocal().minute.toString()),
                 ButtonTheme.bar(child: ButtonBar(children: buttons))
               ])));
         });
