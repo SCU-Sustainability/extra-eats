@@ -16,7 +16,8 @@ Post _$PostFromJson(Map<String, dynamic> json) {
       json['expiration'] == null
           ? null
           : DateTime.parse(json['expiration'] as String),
-      json['creator'] as String);
+      json['creator'] as String,
+      json['_id'] as String);
 }
 
 Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
@@ -25,6 +26,7 @@ Map<String, dynamic> _$PostToJson(Post instance) => <String, dynamic>{
       'image': instance.image,
       'location': instance.location,
       'creator': instance.creator,
+      '_id': instance.id,
       'expiration': instance.expiration?.toIso8601String(),
       'tags': instance.tags
     };

@@ -8,7 +8,7 @@ class Client {
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://192.168.0.12:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _localhost;
+  static final String _url = _external;
 
   static Client get() {
     return _client;
@@ -49,6 +49,8 @@ class Client {
       'name': name,
       'description': description,
       'post-image': new UploadFileInfo(imgFile, name),
+      'location': location,
+      'expiration': expiration.toUtc().toIso8601String(),
       'tags': tags
     });
     var response = await Dio().post(_url + 'posts', data: formData, options: Options(
@@ -71,6 +73,12 @@ class Client {
   Future<Response> getPosts(String token) async {
     var response = await Dio().get(_url + 'posts',
         options: Options(headers: {'x-access-token': token}));
+    return response;
+  }
+
+  Future<Response> deletePost(String token, String postId) async {
+    var response = await Dio().delete(_url + 'posts',
+        options: Options(headers: {'x-access-token': token, 'id': postId}));
     return response;
   }
 }
