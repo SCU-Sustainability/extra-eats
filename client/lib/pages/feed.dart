@@ -35,6 +35,12 @@ class _FeedState extends State<Feed> {
         itemCount: posts.length,
         itemBuilder: (context, index) {
           var currentPost = posts[posts.length - index - 1];
+          var buttons = [
+            FlatButton(child: Text('More Info'), onPressed: () {}),
+          ];
+          if (userId == currentPost.creator) {
+            buttons.add(FlatButton(child: Text('Delete'), onPressed: () {}));
+          }
           return Padding(
               padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0),
               child: Card(
@@ -42,14 +48,20 @@ class _FeedState extends State<Feed> {
                 ListTile(
                     title: Text(currentPost.name),
                     subtitle: Text(currentPost.location)),
-                Text(currentPost.description),
-                ButtonTheme.bar(
-                    child: ButtonBar(children: [
-                  FlatButton(child: Text('More Info'), onPressed: () {}),
-                  userId == currentPost.creator
-                      ? FlatButton(child: Text('Delete'), onPressed: () {})
-                      : null,
-                ]))
+                Padding(
+                    child: Text(currentPost.description),
+                    padding: EdgeInsets.all(15)),
+                Text(
+                    'Expires on ' +
+                        currentPost.expiration.month.toString() +
+                        '/' +
+                        currentPost.expiration.day.toString(),
+                    style: TextStyle(fontWeight: FontWeight.bold)),
+                Text('at ' +
+                    currentPost.expiration.hour.toString() +
+                    ':' +
+                    currentPost.expiration.minute.toString()),
+                ButtonTheme.bar(child: ButtonBar(children: buttons))
               ])));
         });
     return listView;

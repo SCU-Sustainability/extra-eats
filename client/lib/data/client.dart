@@ -62,7 +62,7 @@ class Client {
           'name': name,
           'description': description,
           'location': location,
-          'expiration': expiration.toIso8601String(),
+          'expiration': expiration.toUtc().toIso8601String(),
           'tags': tags
         });
     return response;

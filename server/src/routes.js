@@ -334,6 +334,17 @@ router
       let tags = [];
       if (req.body.tags) tags = req.body.tags;
       let filter = tags.length === 0 ? {} : { tags: tags };
+      let now = new Date();
+      filter['expiration'] = {
+        $gte: now
+      };
+
+      Post.deleteMany({ expiration: { $lt: now } }, function(err) {
+        if (err) {
+          console.log(err);
+          return;
+        }
+      });
       Post.find(filter, (err, posts) => {
         if (err) {
           console.log(err);
