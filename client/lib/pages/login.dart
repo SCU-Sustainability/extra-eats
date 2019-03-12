@@ -121,7 +121,9 @@ class _RegisterState extends State<Register> {
                         children: [
                   FlatButton(
                       textColor: Colors.brown,
-                      child: Text('I want food'),
+                      child: Text('I want food',
+                          style: TextStyle(
+                              fontSize: 20, fontWeight: FontWeight.w300)),
                       onPressed: () {
                         this.setIndex(1);
                         this._provider = false;
@@ -129,7 +131,11 @@ class _RegisterState extends State<Register> {
                   RaisedButton(
                       textColor: Colors.white,
                       color: Colors.brown[300],
-                      child: Text('I\'m an event planner'),
+                      child: Padding(
+                          child: Text('I\'m an event planner',
+                              style: TextStyle(
+                                  fontSize: 20, fontWeight: FontWeight.w300)),
+                          padding: EdgeInsets.all(15)),
                       onPressed: () {
                         this.setIndex(1);
                         this._provider = true;
