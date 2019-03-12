@@ -8,7 +8,7 @@ class Client {
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://192.168.0.12:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _localhost;
+  static final String _url = _external;
 
   static Client get() {
     return _client;
