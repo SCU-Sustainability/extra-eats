@@ -21,6 +21,10 @@ var PostSchema = new Schema({
     type: String,
     required: true
   },
+  public_id: {
+    type: String,
+    required: true
+  },
   location: {
     type: String,
     required: true
