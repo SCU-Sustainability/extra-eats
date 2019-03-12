@@ -134,7 +134,7 @@ class _SubmitPostState extends State<SubmitPost> {
     var items = [
       Padding(
           child: FlatButton(
-            textColor: Colors.blueGrey,
+            textColor: Colors.brown[300],
             child: Icon(Icons.add_a_photo),
             onPressed: getImage,
           ),
@@ -227,14 +227,14 @@ class _SubmitPostState extends State<SubmitPost> {
         child: Row(
           children: [
             FlatButton(
-                textColor: Colors.blueGrey,
+                textColor: Colors.brown,
                 child: Text('Cancel'),
                 onPressed: () {
                   _clear();
                 }),
             RaisedButton(
               textColor: Colors.white,
-              color: Colors.blueGrey,
+              color: Colors.brown[300],
               child: Text('Submit'),
               onPressed: () {
                 _ensureSubmit();

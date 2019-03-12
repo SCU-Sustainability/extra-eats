@@ -117,7 +117,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       child: MaterialApp(
         title: 'Taste the Waste',
         theme: ThemeData(
-          primarySwatch: Colors.blueGrey,
+          primarySwatch: Colors.brown,
         ),
         home: Scaffold(
           appBar: AppBar(
