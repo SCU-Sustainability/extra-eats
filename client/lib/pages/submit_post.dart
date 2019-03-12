@@ -110,7 +110,8 @@ class _SubmitPostState extends State<SubmitPost> {
                         .post(
                             accessToken,
                             this.nameController.text,
-                            this.descriptionController.text /**, this._image*/,
+                            this.descriptionController.text,
+                            this._image,
                             this.locationController.text,
                             this.expiration,
                             tags)
@@ -133,21 +134,17 @@ class _SubmitPostState extends State<SubmitPost> {
   Widget build(BuildContext context) {
     var items = [
       Padding(
-          child: FlatButton(
-            textColor: Colors.brown[300],
-            child: Icon(Icons.add_a_photo),
-            onPressed: getImage,
-          ),
-          padding: EdgeInsets.all(20)),
-      Padding(
         child: Center(
             child: _image == null
-                ? Text('No image selected.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
-                : Text('Image confirmed.',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w300))),
-        padding: EdgeInsets.only(bottom: 20),
+                ? Padding(
+                    child: FlatButton(
+                      textColor: Colors.brown[300],
+                      child: Icon(Icons.add_a_photo),
+                      onPressed: getImage,
+                    ),
+                    padding: EdgeInsets.all(20))
+                : new Image.file(this._image, fit: BoxFit.fitWidth)),
+        padding: EdgeInsets.all(20),
       ),
 
       TextField(
@@ -224,25 +221,27 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
 
       Center(
-        child: Row(
-          children: [
-            FlatButton(
-                textColor: Colors.brown,
-                child: Text('Cancel'),
-                onPressed: () {
-                  _clear();
-                }),
-            RaisedButton(
-              textColor: Colors.white,
-              color: Colors.brown[300],
-              child: Text('Submit'),
-              onPressed: () {
-                _ensureSubmit();
-              },
+        child: Padding(
+            child: Row(
+              children: [
+                FlatButton(
+                    textColor: Colors.brown,
+                    child: Text('Cancel'),
+                    onPressed: () {
+                      _clear();
+                    }),
+                RaisedButton(
+                  textColor: Colors.white,
+                  color: Colors.brown[300],
+                  child: Text('Submit'),
+                  onPressed: () {
+                    _ensureSubmit();
+                  },
+                ),
+              ],
+              mainAxisAlignment: MainAxisAlignment.center,
             ),
-          ],
-          mainAxisAlignment: MainAxisAlignment.center,
-        ),
+            padding: EdgeInsets.only(bottom: 32)),
       ),
     ];
     return ListView.builder(

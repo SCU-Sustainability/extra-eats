@@ -8,7 +8,7 @@ class Client {
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://192.168.0.12:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _external;
+  static final String _url = _local;
 
   static Client get() {
     return _client;
@@ -38,35 +38,18 @@ class Client {
     return response;
   }
 
-  Future<Response> post(
-      String token,
-      String name,
-      String description /**, File imgFile*/,
-      String location,
-      DateTime expiration,
-      List tags) async {
-    /*FormData formData = new FormData.from({
+  Future<Response> post(String token, String name, String description,
+      File imgFile, String location, DateTime expiration, List tags) async {
+    FormData formData = new FormData.from({
       'name': name,
       'description': description,
-      'post-image': new UploadFileInfo(imgFile, name),
+      'image': new UploadFileInfo(imgFile, DateTime.now().toIso8601String()),
       'location': location,
       'expiration': expiration.toUtc().toIso8601String(),
       'tags': tags
     });
-    var response = await Dio().post(_url + 'posts', data: formData, options: Options(
-      headers: {
-        'x-access-token': token
-      }
-    ));*/
-    var response = await Dio().postUri(Uri.parse(_url + 'posts'),
-        options: Options(headers: {'x-access-token': token}),
-        data: {
-          'name': name,
-          'description': description,
-          'location': location,
-          'expiration': expiration.toUtc().toIso8601String(),
-          'tags': tags
-        });
+    var response = await Dio().post(_url + 'posts',
+        data: formData, options: Options(headers: {'x-access-token': token}));
     return response;
   }
 
