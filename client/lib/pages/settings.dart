@@ -24,7 +24,8 @@ class _UserSettingsState extends State<UserSettings> {
           Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
-              Text('Push notifications: '),
+              Text('Push notifications: ',
+                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16)),
               Spacer(flex: 1),
               Transform.scale(
                   scale: 1.5,
@@ -57,7 +58,8 @@ class _SettingsState extends State<Settings> {
     return ListView(physics: NeverScrollableScrollPhysics(), children: <Widget>[
       ListTile(
         leading: Icon(Icons.person),
-        title: Text('User Settings'),
+        title: Text('User Settings',
+            style: TextStyle(fontWeight: FontWeight.w300)),
         onTap: () {
           Navigator.push(
             context,
@@ -67,7 +69,7 @@ class _SettingsState extends State<Settings> {
       ),
       ListTile(
         leading: Icon(Icons.arrow_back_ios),
-        title: Text('Signout'),
+        title: Text('Signout', style: TextStyle(fontWeight: FontWeight.w300)),
         onTap: InheritedClient.of(context).logout,
       ),
     ]);

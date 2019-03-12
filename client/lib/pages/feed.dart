@@ -6,6 +6,50 @@ import '../models/post.dart';
 import '../data/client.dart';
 import '../actions.dart';
 
+class PostView extends StatelessWidget {
+  Post post;
+
+  PostView({Key key, Post post}) : super(key: key) {
+    this.post = post;
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    var items = [
+      Text(this.post.name,
+          style: TextStyle(fontSize: 20, fontWeight: FontWeight.w300)),
+      Text(this.post.location, style: TextStyle(fontWeight: FontWeight.w200)),
+      Center(
+        child: Padding(child: Text('Filler'), padding: EdgeInsets.all(50)),
+      ),
+      Text(this.post.description, textAlign: TextAlign.center),
+      Text(
+          'Expires on ' +
+              this.post.expiration.month.toString() +
+              '/' +
+              this.post.expiration.day.toString(),
+          textAlign: TextAlign.center),
+      Center(
+        child: Wrap(
+            spacing: 2.0,
+            runSpacing: 0.0,
+            children: List<Widget>.generate(this.post.tags.length, (int index) {
+              return Chip(label: Text(this.post.tags[index]));
+            })),
+      ),
+    ];
+    return Scaffold(
+        appBar: AppBar(title: Text(this.post.name)),
+        body: Padding(
+            child: ListView.builder(
+                itemCount: items.length,
+                itemBuilder: (BuildContext context, int index) {
+                  return items[index];
+                }),
+            padding: EdgeInsets.all(30)));
+  }
+}
+
 class Feed extends StatefulWidget {
   Feed({Key key}) : super(key: key);
 
@@ -27,6 +71,11 @@ class _FeedState extends State<Feed> {
       return [];
   }
 
+  _openPost(Post post, BuildContext context) {
+    Navigator.push(
+        context, MaterialPageRoute(builder: (context) => PostView(post: post)));
+  }
+
   Widget _listPosts(List<Post> posts, BuildContext context) {
     String userId = InheritedClient.of(context).userId;
     Widget listView = ListView.builder(
@@ -36,10 +85,16 @@ class _FeedState extends State<Feed> {
         itemBuilder: (context, index) {
           var currentPost = posts[posts.length - index - 1];
           var buttons = [
-            FlatButton(child: Text('More Info'), onPressed: () {}),
+            FlatButton(
+                child: Text('More Info'),
+                onPressed: () {
+                  this._openPost(currentPost, context);
+                }),
           ];
           if (userId == currentPost.creator) {
-            buttons.add(FlatButton(child: Text('Delete'), onPressed: () {}));
+            buttons.add(FlatButton(
+                child: Text('Delete', style: TextStyle(color: Colors.red)),
+                onPressed: () {}));
           }
           return Padding(
               padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0),

@@ -143,8 +143,10 @@ class _SubmitPostState extends State<SubmitPost> {
         child: Center(
             child: _image == null
                 ? Text('No image selected.',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
-                : Text('Image confirmed.', style: TextStyle(fontSize: 16))),
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300))
+                : Text('Image confirmed.',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w300))),
         padding: EdgeInsets.only(bottom: 20),
       ),
 
@@ -171,7 +173,7 @@ class _SubmitPostState extends State<SubmitPost> {
         controller: locationController,
         decoration: InputDecoration(
           hintText: 'Location',
-          hintStyle: TextStyle(fontWeight: FontWeight.bold),
+          hintStyle: TextStyle(fontWeight: FontWeight.w300),
           contentPadding: EdgeInsets.all(15.0),
           border: InputBorder.none,
         ),
@@ -181,9 +183,9 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Column(children: [
                 Text('Expires on ${expiration.month}/${expiration.day}',
                     style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
                 Text('@ ${expiration.hour}:${expiration.minute}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w200))
               ]),
               padding: EdgeInsets.all(15.0)),
           onTap: () => selectExpiration(context)),
@@ -193,7 +195,7 @@ class _SubmitPostState extends State<SubmitPost> {
               child: Padding(
                 child: Text(
                   'Allergens',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                 ),
                 padding: EdgeInsets.all(15),
               ),
