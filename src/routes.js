@@ -287,13 +287,16 @@ router
           }
 
           // Todo: validate data (location)
+          // Todo: validate expiration
 
           let post = new Post({
             name: req.body.name,
             description: req.body.description,
             image: 'testing',
             tags: req.body.tags,
-            location: req.body.location
+            location: req.body.location,
+            expiration: req.body.expiration,
+            creator: user._id
           });
 
           post.save(function(err) {
