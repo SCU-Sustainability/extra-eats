@@ -11,9 +11,11 @@ const pushClient = new OneSignal.Client({
 const push = (name, description) => {
   let notif = new OneSignal.Notification({
     contents: {
-      en: name
-    }
+      en: name + '\n' + description
+    },
+    included_segments: ['Active Users', 'Inactive Users']
   });
+
   return pushClient.sendNotification(notif);
 };
 

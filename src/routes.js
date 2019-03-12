@@ -319,8 +319,9 @@ router
                 code: -203
               });
             }
-            push(req.body.name);
-            return res.json({ message: 'Posted!', code: 1 });
+            push(req.body.name, req.body.description).then(response => {
+              return res.json({ message: 'Posted!', code: 1 });
+            });
           });
         });
       });
