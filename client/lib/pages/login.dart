@@ -39,6 +39,11 @@ class _RegisterState extends State<Register> {
         //mainAxisSize: MainAxisSize.min,
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
+          Image(
+            image: AssetImage('assets/ttw-logo.png'),
+            width: 200.0,
+            height: 200.0),
+          Divider(color: Colors.white, height: 5.0),
           TextField(
             controller: emailController,
             decoration: InputDecoration(
@@ -73,7 +78,7 @@ class _RegisterState extends State<Register> {
                 Transform.scale(
                     scale: 1.3,
                     child: FlatButton(
-                        textColor: Colors.blue,
+                        textColor: Colors.brown[300],
                         child: Text('Go back'),
                         onPressed: () {
                           this.setIndex(0);
@@ -83,7 +88,7 @@ class _RegisterState extends State<Register> {
                     scale: 1.3,
                     child: RaisedButton(
                         textColor: Colors.white,
-                        color: Colors.lightBlue,
+                        color: Colors.brown[300],
                         child: Text('Register'),
                         onPressed: () {
                           if (passwordController.text == '' ||
@@ -115,7 +120,7 @@ class _RegisterState extends State<Register> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                   FlatButton(
-                      textColor: Colors.blue,
+                      textColor: Colors.brown,
                       child: Text('I want food',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w300)),
@@ -125,7 +130,7 @@ class _RegisterState extends State<Register> {
                       }),
                   RaisedButton(
                       textColor: Colors.white,
-                      color: Colors.lightBlue,
+                      color: Colors.brown[300],
                       child: Padding(
                           child: Text('I\'m an event planner',
                               style: TextStyle(
@@ -163,10 +168,10 @@ class _LoginState extends State<Login> {
       mainAxisAlignment: MainAxisAlignment.center,
       children: <Widget>[
         Image(
-            image: AssetImage('assets/ttw-logo.jpg'),
-            width: 150.0,
-            height: 150.0),
-        Divider(color: Colors.white, height: 15.0),
+            image: AssetImage('assets/ttw-logo.png'),
+            width: 200.0,
+            height: 200.0),
+        Divider(color: Colors.white, height: 5.0),
         TextField(
           controller: emailController,
           decoration: InputDecoration(
@@ -192,7 +197,7 @@ class _LoginState extends State<Login> {
               Transform.scale(
                   scale: 1.3,
                   child: FlatButton(
-                      textColor: Colors.blue,
+                      textColor: Colors.brown[300],
                       child: Text('Register'),
                       onPressed: () {
                         Navigator.push(
@@ -205,7 +210,7 @@ class _LoginState extends State<Login> {
                   scale: 1.3,
                   child: RaisedButton(
                       textColor: Colors.white,
-                      color: Colors.lightBlue,
+                      color: Colors.brown[300],
                       child: Text('Login'),
                       onPressed: () {
                         if (emailController.text == '' ||
