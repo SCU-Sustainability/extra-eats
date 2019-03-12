@@ -112,6 +112,7 @@ class _SubmitPostState extends State<SubmitPost> {
                             this.nameController.text,
                             this.descriptionController.text /**, this._image*/,
                             this.locationController.text,
+                            this.expiration,
                             tags)
                         .then((res) {
                       // Todo: fix this POS
@@ -130,128 +131,122 @@ class _SubmitPostState extends State<SubmitPost> {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
-      mainAxisSize: MainAxisSize.min,
-      children: <Widget>[
-        Padding(
-            child: FlatButton(
-              textColor: Colors.blueGrey,
-              child: Icon(Icons.add_a_photo),
-              onPressed: getImage,
+    var items = [
+      Padding(
+          child: FlatButton(
+            textColor: Colors.blueGrey,
+            child: Icon(Icons.add_a_photo),
+            onPressed: getImage,
+          ),
+          padding: EdgeInsets.all(20)),
+      Padding(
+        child: Center(
+            child: _image == null
+                ? Text('No image selected.',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
+                : Text('Image confirmed.', style: TextStyle(fontSize: 16))),
+        padding: EdgeInsets.only(bottom: 20),
+      ),
+
+      TextField(
+        controller: nameController,
+        decoration: InputDecoration(
+          hintText: 'Event name',
+          hintStyle: TextStyle(fontWeight: FontWeight.bold),
+          contentPadding: EdgeInsets.all(15.0),
+          border: InputBorder.none,
+        ),
+      ),
+      // Divider(color: Colors.grey, height: 0.0),
+      TextField(
+        controller: descriptionController,
+        decoration: InputDecoration(
+          hintText: 'Event description',
+          contentPadding: EdgeInsets.all(15.0),
+          border: InputBorder.none,
+        ),
+      ),
+
+      TextField(
+        controller: locationController,
+        decoration: InputDecoration(
+          hintText: 'Location',
+          hintStyle: TextStyle(fontWeight: FontWeight.bold),
+          contentPadding: EdgeInsets.all(15.0),
+          border: InputBorder.none,
+        ),
+      ),
+      InkWell(
+          child: Padding(
+              child: Column(children: [
+                Text('Expires on ${expiration.month}/${expiration.day}',
+                    style:
+                        TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
+                Text('@ ${expiration.hour}:${expiration.minute}',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))
+              ]),
+              padding: EdgeInsets.all(15.0)),
+          onTap: () => selectExpiration(context)),
+      Padding(
+          child: Column(children: [
+            Center(
+              child: Padding(
+                child: Text(
+                  'Allergens',
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
+                ),
+                padding: EdgeInsets.all(15),
+              ),
             ),
-            padding: EdgeInsets.all(20)),
-        Padding(
-          child: Center(
-              child: _image == null
-                  ? Text('No image selected.',
-                      style:
-                          TextStyle(fontSize: 16, fontWeight: FontWeight.bold))
-                  : Text('Image confirmed.', style: TextStyle(fontSize: 16))),
-          padding: EdgeInsets.only(bottom: 20),
-        ),
+            Center(
+              child: Wrap(
+                  spacing: 2.0,
+                  runSpacing: 0.0,
+                  children: List<Widget>.generate(this._allergens.length,
+                      (int index) {
+                    return ChoiceChip(
+                        label: Text(this._allergens[index]),
+                        selected: this._selectedAllergens.contains(index),
+                        onSelected: (bool selected) {
+                          setState(() {
+                            if (!this._selectedAllergens.contains(index)) {
+                              this._selectedAllergens.add(index);
+                            } else {
+                              this._selectedAllergens.remove(index);
+                            }
+                          });
+                        });
+                  })),
+            ),
+          ]),
+          padding: EdgeInsets.all(15)),
 
-        TextField(
-          controller: nameController,
-          decoration: InputDecoration(
-            hintText: 'Event name',
-            hintStyle: TextStyle(fontWeight: FontWeight.bold),
-            contentPadding: EdgeInsets.all(15.0),
-            border: InputBorder.none,
-          ),
+      Center(
+        child: Row(
+          children: [
+            FlatButton(
+                textColor: Colors.blueGrey,
+                child: Text('Cancel'),
+                onPressed: () {
+                  _clear();
+                }),
+            RaisedButton(
+              textColor: Colors.white,
+              color: Colors.blueGrey,
+              child: Text('Submit'),
+              onPressed: () {
+                _ensureSubmit();
+              },
+            ),
+          ],
+          mainAxisAlignment: MainAxisAlignment.center,
         ),
-        // Divider(color: Colors.grey, height: 0.0),
-        TextField(
-          controller: descriptionController,
-          decoration: InputDecoration(
-            hintText: 'Event description',
-            contentPadding: EdgeInsets.all(15.0),
-            border: InputBorder.none,
-          ),
-        ),
-
-        TextField(
-          controller: locationController,
-          decoration: InputDecoration(
-            hintText: 'Location',
-            hintStyle: TextStyle(fontWeight: FontWeight.bold),
-            contentPadding: EdgeInsets.all(15.0),
-            border: InputBorder.none,
-          ),
-        ),
-
-        Padding(
-            child: Column(children: [
-              Text('Expires on ${expiration.month}/${expiration.day}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold)),
-              Text('@ ${expiration.hour}:${expiration.minute}',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w400))
-            ]),
-            padding: EdgeInsets.all(15.0)),
-        Padding(
-            child: RaisedButton(
-                onPressed: () => selectExpiration(context), child: Text('Set')),
-            padding: EdgeInsets.all(15.0)),
-
-        Padding(
-          child: Text(
-            'Allergens',
-            style: TextStyle(fontSize: 16, fontWeight: FontWeight.bold),
-          ),
-          padding: EdgeInsets.all(15),
-        ),
-
-        // Divider(color: Colors.grey, height: 0.0),
-        /* Padding(child: FlatButton(
-          textColor: Colors.blue,
-          child: Icon(Icons.add_a_photo),
-          onPressed: getImage,
-        ), padding: EdgeInsets.only(top: 15)),
-        Center(
-          child: _image == null ? Text('No image selected.') : Text('Image confirmed.')
-        ), */
-        Wrap(
-            spacing: 2.0,
-            runSpacing: 0.0,
-            children:
-                List<Widget>.generate(this._allergens.length, (int index) {
-              return ChoiceChip(
-                  label: Text(this._allergens[index]),
-                  selected: this._selectedAllergens.contains(index),
-                  onSelected: (bool selected) {
-                    setState(() {
-                      if (!this._selectedAllergens.contains(index)) {
-                        this._selectedAllergens.add(index);
-                      } else {
-                        this._selectedAllergens.remove(index);
-                      }
-                    });
-                  });
-            })),
-        Expanded(
-          child: Align(
-            alignment: FractionalOffset.bottomRight,
-            child: Padding(
-                padding: EdgeInsets.all(32.0),
-                child: Row(children: [
-                  FlatButton(
-                      textColor: Colors.blueGrey,
-                      child: Text('Cancel'),
-                      onPressed: () {
-                        _clear();
-                      }),
-                  Spacer(flex: 1),
-                  RaisedButton(
-                    textColor: Colors.white,
-                    color: Colors.blueGrey,
-                    child: Text('Submit'),
-                    onPressed: () {
-                      _ensureSubmit();
-                    },
-                  ),
-                ])),
-          ),
-        ),
-      ],
-    );
+      ),
+    ];
+    return ListView.builder(
+        itemCount: items.length,
+        itemBuilder: (BuildContext context, int index) {
+          return items[index];
+        });
   }
 }

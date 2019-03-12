@@ -1,11 +1,16 @@
 'use strict';
 
 var mongoose = require('mongoose');
+var ObjectId = mongoose.ObjectId;
 var Schema = mongoose.Schema;
 
 var PostSchema = new Schema({
   name: {
     type: String,
+    required: true
+  },
+  creator: {
+    type: ObjectId,
     required: true
   },
   description: {
@@ -22,6 +27,10 @@ var PostSchema = new Schema({
   },
   tags: {
     type: [String],
+    required: true
+  },
+  expiration: {
+    type: Date,
     required: true
   }
 });

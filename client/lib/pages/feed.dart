@@ -27,7 +27,8 @@ class _FeedState extends State<Feed> {
       return [];
   }
 
-  Widget _listPosts(List<Post> posts) {
+  Widget _listPosts(List<Post> posts, BuildContext context) {
+    String userId = InheritedClient.of(context).userId;
     Widget listView = ListView.builder(
         physics: BouncingScrollPhysics(),
         shrinkWrap: true,
@@ -37,10 +38,19 @@ class _FeedState extends State<Feed> {
           return Padding(
               padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0),
               child: Card(
-                  child: ListTile(
-                      leading: Icon(Icons.fastfood),
-                      title: Text(currentPost.name),
-                      subtitle: Text(currentPost.description))));
+                  child: Column(children: [
+                ListTile(
+                    title: Text(currentPost.name),
+                    subtitle: Text(currentPost.location)),
+                Text(currentPost.description),
+                ButtonTheme.bar(
+                    child: ButtonBar(children: [
+                  FlatButton(child: Text('More Info'), onPressed: () {}),
+                  userId == currentPost.creator
+                      ? FlatButton(child: Text('Delete'), onPressed: () {})
+                      : null,
+                ]))
+              ])));
         });
     return listView;
   }
@@ -55,7 +65,7 @@ class _FeedState extends State<Feed> {
                 return Center(
                     child: Text('No posts currently, check back later!'));
               }
-              return _listPosts(snapshot.data);
+              return _listPosts(snapshot.data, context);
             } else if (snapshot.hasError) {
               return Text('Something went wrong!');
             }
