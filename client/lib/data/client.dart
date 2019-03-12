@@ -8,7 +8,7 @@ class Client {
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://192.168.0.12:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _external;
+  static final String _url = _localhost;
 
   static Client get() {
     return _client;
@@ -43,6 +43,7 @@ class Client {
       String name,
       String description /**, File imgFile*/,
       String location,
+      DateTime expiration,
       List tags) async {
     /*FormData formData = new FormData.from({
       'name': name,
@@ -61,6 +62,7 @@ class Client {
           'name': name,
           'description': description,
           'location': location,
+          'expiration': expiration.toIso8601String(),
           'tags': tags
         });
     return response;
