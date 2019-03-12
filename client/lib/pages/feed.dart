@@ -22,21 +22,25 @@ class PostView extends StatelessWidget {
       Center(
         child: Padding(child: Text('Filler'), padding: EdgeInsets.all(50)),
       ),
-      Text(this.post.description, textAlign: TextAlign.center),
-      Text(
-          'Expires on ' +
-              this.post.expiration.month.toString() +
-              '/' +
-              this.post.expiration.day.toString(),
-          textAlign: TextAlign.center),
-      Center(
-        child: Wrap(
-            spacing: 2.0,
-            runSpacing: 0.0,
-            children: List<Widget>.generate(this.post.tags.length, (int index) {
-              return Chip(label: Text(this.post.tags[index]));
-            })),
-      ),
+      Text(this.post.description,
+          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16)),
+      Text('Expires on ' +
+          this.post.expiration.toLocal().month.toString() +
+          '/' +
+          this.post.expiration.toLocal().day.toString() +
+          ' at ' +
+          this.post.expiration.toLocal().hour.toString() +
+          ':' +
+          this.post.expiration.toLocal().minute.toString()),
+      Padding(
+          child: Wrap(
+              spacing: 2.0,
+              runSpacing: 0.0,
+              children:
+                  List<Widget>.generate(this.post.tags.length, (int index) {
+                return Chip(label: Text(this.post.tags[index]));
+              })),
+          padding: EdgeInsets.only(top: 15)),
     ];
     return Scaffold(
         appBar: AppBar(title: Text(this.post.name)),
@@ -94,7 +98,14 @@ class _FeedState extends State<Feed> {
           if (userId == currentPost.creator) {
             buttons.add(FlatButton(
                 child: Text('Delete', style: TextStyle(color: Colors.red)),
-                onPressed: () {}));
+                onPressed: () {
+                  Client.get()
+                      .deletePost(InheritedClient.of(context).accessToken,
+                          currentPost.id)
+                      .then((res) {
+                    setState(() {});
+                  });
+                }));
           }
           return Padding(
               padding: EdgeInsets.fromLTRB(9.0, 9.0, 9.0, 0),
@@ -108,14 +119,14 @@ class _FeedState extends State<Feed> {
                     padding: EdgeInsets.all(15)),
                 Text(
                     'Expires on ' +
-                        currentPost.expiration.month.toString() +
+                        currentPost.expiration.toLocal().month.toString() +
                         '/' +
-                        currentPost.expiration.day.toString(),
+                        currentPost.expiration.toLocal().day.toString(),
                     style: TextStyle(fontWeight: FontWeight.bold)),
                 Text('at ' +
-                    currentPost.expiration.hour.toString() +
+                    currentPost.expiration.toLocal().hour.toString() +
                     ':' +
-                    currentPost.expiration.minute.toString()),
+                    currentPost.expiration.toLocal().minute.toString()),
                 ButtonTheme.bar(child: ButtonBar(children: buttons))
               ])));
         });
