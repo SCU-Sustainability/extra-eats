@@ -32,10 +32,7 @@ class _RegisterState extends State<Register> {
 
   Widget registerForm() {
     var items = [
-      Image(
-          image: AssetImage('assets/ttw-logo.png'),
-          width: 200.0,
-          height: 200.0),
+      Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
       Divider(color: Colors.white, height: 5.0),
       TextField(
         controller: emailController,
