@@ -122,7 +122,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   Widget build(BuildContext context) {
     return InheritedClient(
       child: MaterialApp(
-        title: 'Taste the Waste',
+        title: 'Extra Eats',
         theme: ThemeData(
           primarySwatch: Colors.brown,
         ),
