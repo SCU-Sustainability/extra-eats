@@ -33,8 +33,8 @@ class _SubmitPostState extends State<SubmitPost> {
   ];
   File _image;
 
-  Future getImage() async {
-    var image = await ImagePicker.pickImage(source: ImageSource.camera);
+  Future getImage(ImageSource src) async {
+    var image = await ImagePicker.pickImage(source: src);
     setState(() {
       this._image = image;
     });
@@ -123,12 +123,24 @@ class _SubmitPostState extends State<SubmitPost> {
     var items = [
       Padding(
         child: Center(
-            child: _image == null
-                ? FlatButton(
-                    textColor: Colors.brown[300],
-                    child: Icon(Icons.add_a_photo),
-                    onPressed: getImage)
-                : new Image.file(this._image, fit: BoxFit.fitWidth)),
+            //if no image yet then show upload buttons, otherwise show image.
+            child:
+            _image == null 
+            ? Row(  
+                children: <Widget> [
+                    FlatButton(
+                        textColor: Colors.brown[300],
+                        child: Icon(Icons.add_a_photo),
+                        onPressed: () => getImage(ImageSource.camera)),
+                    FlatButton(
+                        textColor: Colors.brown[300],
+                        child: Icon(Icons.add_photo_alternate),
+                        onPressed: () => getImage(ImageSource.gallery))  
+                ],
+                mainAxisAlignment: MainAxisAlignment.center
+            )
+            : new Image.file(this._image, fit: BoxFit.fitWidth)
+        ),
         padding: EdgeInsets.all(20),
       ),
 
