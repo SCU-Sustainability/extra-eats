@@ -124,10 +124,8 @@ class _SubmitPostState extends State<SubmitPost> {
       Padding(
         child: Center(
             //if no image yet then show upload buttons, otherwise show image.
-            child:
-            _image == null 
-            ? Row(  
-                children: <Widget> [
+            child: _image == null
+                ? Row(children: <Widget>[
                     FlatButton(
                         textColor: Colors.brown[300],
                         child: Icon(Icons.add_a_photo),
@@ -135,12 +133,9 @@ class _SubmitPostState extends State<SubmitPost> {
                     FlatButton(
                         textColor: Colors.brown[300],
                         child: Icon(Icons.add_photo_alternate),
-                        onPressed: () => getImage(ImageSource.gallery))  
-                ],
-                mainAxisAlignment: MainAxisAlignment.center
-            )
-            : new Image.file(this._image, fit: BoxFit.fitWidth)
-        ),
+                        onPressed: () => getImage(ImageSource.gallery))
+                  ], mainAxisAlignment: MainAxisAlignment.center)
+                : new Image.file(this._image, fit: BoxFit.fitWidth)),
         padding: EdgeInsets.all(20),
       ),
 
