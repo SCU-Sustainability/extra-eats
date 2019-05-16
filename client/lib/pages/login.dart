@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
+import '../data/alerts.dart';
+
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
 
@@ -71,7 +73,7 @@ class _RegisterState extends State<Register> {
                     textColor: Colors.brown[300],
                     child: Text('Go back'),
                     onPressed: () {
-                      this.setIndex(0);
+               this.setIndex(0);
                     })),
             Spacer(flex: 1),
             Transform.scale(
@@ -81,11 +83,23 @@ class _RegisterState extends State<Register> {
                     color: Colors.brown[300],
                     child: Text('Register'),
                     onPressed: () {
-                      if (passwordController.text == '' ||
-                          emailController.text == '') {
-                        return; // Show a dialog?
+                     //alert msgs
+		     if(emailController.text == '' && passwordController.text.length <= 5){
+			String alert_msg = "Please enter your email and a password with 6 characters or more";
+			alertDialog(context, alert_msg);
+			return;
+			}
+		     if(emailController.text == '') {
+			String alert_msg = "Please enter your email.";
+			alertDialog(context, alert_msg);
+                        return; 
                       }
-                      InheritedClient.of(context).register(
+       
+                      if (passwordController.text.length <= 5){
+				String alert_msg = "Please enter a password with 6 characters or more.";
+				alertDialog(context, alert_msg);
+				return;
+			}  InheritedClient.of(context).register(
                           nameController.text,
                           passwordController.text,
                           emailController.text,
@@ -205,12 +219,25 @@ class _LoginState extends State<Login> {
                     color: Colors.brown[300],
                     child: Text('Login'),
                     onPressed: () {
-                      if (emailController.text == '' ||
-                          passwordController.text == '') {
-                        return; // Show a dialog?
+             	    
+		    //alert msgs
+		    if (emailController.text == '' && passwordController.text == ''){
+				String alert_msg = "Please enter your registered email and password";
+				alertDialog(context, alert_msg);
+				return;
+			}
+                      if (emailController.text == ''){
+				String alert_msg = "Please enter your email.";
+				alertDialog(context, alert_msg);
+				return;
+			}
+                      if (passwordController.text == '') {
+                        	String alert_msg = "Please enter your password.";
+				alertDialog(context, alert_msg);
+				return; 
                       }
 
-                      InheritedClient.of(context)
+                       InheritedClient.of(context)
                           .login(emailController.text, passwordController.text);
                     })),
           ])),
@@ -225,3 +252,28 @@ class _LoginState extends State<Login> {
         padding: EdgeInsets.only(top: 50));
   }
 }
+
+
+// alerts func
+  void alertDialog(BuildContext context, String alert_msg) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(alert_msg),
+          //content: new Text("Alert Dialog body"), //used for a body in the msg
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
