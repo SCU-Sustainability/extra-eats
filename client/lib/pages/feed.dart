@@ -98,7 +98,8 @@ class _FeedState extends State<Feed> {
           ];
           if (userId == currentPost.creator) {
             buttons.add(FlatButton(
-                child: Text('Delete', style: TextStyle(color: Colors.red)),
+                child: Text('Delete',
+                    style: TextStyle(color: Theme.of(context).errorColor)),
                 onPressed: () {
                   Client.get()
                       .deletePost(InheritedClient.of(context).accessToken,

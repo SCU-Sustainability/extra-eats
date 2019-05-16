@@ -34,6 +34,12 @@ class _RegisterState extends State<Register> {
     var items = [
       Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
       Divider(color: Colors.white, height: 5.0),
+      Text(
+        'Extra Eats',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 45),
+      ),
+      Divider(color: Colors.white, height: 5.0),
       TextField(
         controller: emailController,
         decoration: InputDecoration(
@@ -68,7 +74,7 @@ class _RegisterState extends State<Register> {
             Transform.scale(
                 scale: 1.3,
                 child: FlatButton(
-                    textColor: Colors.brown[300],
+                    textColor: Theme.of(context).errorColor,
                     child: Text('Go back'),
                     onPressed: () {
                       this.setIndex(0);
@@ -78,7 +84,6 @@ class _RegisterState extends State<Register> {
                 scale: 1.3,
                 child: RaisedButton(
                     textColor: Colors.white,
-                    color: Colors.brown[300],
                     child: Text('Register'),
                     onPressed: () {
                       if (passwordController.text == '' ||
@@ -120,7 +125,7 @@ class _RegisterState extends State<Register> {
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                   FlatButton(
-                      textColor: Colors.brown,
+                      textColor: Theme.of(context).primaryColor,
                       child: Text('I want food',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w300)),
@@ -130,7 +135,6 @@ class _RegisterState extends State<Register> {
                       }),
                   RaisedButton(
                       textColor: Colors.white,
-                      color: Colors.brown[300],
                       child: Padding(
                           child: Text('I\'m an event planner',
                               style: TextStyle(
@@ -167,6 +171,12 @@ class _LoginState extends State<Login> {
     var items = [
       Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
       Divider(color: Colors.white, height: 5.0),
+      Text(
+        'Extra Eats',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 45),
+      ),
+      Divider(color: Colors.white, height: 5.0),
       TextField(
         controller: emailController,
         decoration: InputDecoration(
@@ -190,8 +200,8 @@ class _LoginState extends State<Login> {
           child: Row(children: [
             Transform.scale(
                 scale: 1.3,
-                child: FlatButton(
-                    textColor: Colors.brown[300],
+                child: OutlineButton(
+                    textColor: Theme.of(context).primaryColor,
                     child: Text('Register'),
                     onPressed: () {
                       Navigator.push(context,
@@ -202,7 +212,6 @@ class _LoginState extends State<Login> {
                 scale: 1.3,
                 child: RaisedButton(
                     textColor: Colors.white,
-                    color: Colors.brown[300],
                     child: Text('Login'),
                     onPressed: () {
                       if (emailController.text == '' ||

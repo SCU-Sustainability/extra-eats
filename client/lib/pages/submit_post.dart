@@ -127,11 +127,11 @@ class _SubmitPostState extends State<SubmitPost> {
             child: _image == null
                 ? Row(children: <Widget>[
                     FlatButton(
-                        textColor: Colors.brown[300],
+                        textColor: Theme.of(context).primaryColor,
                         child: Icon(Icons.add_a_photo),
                         onPressed: () => getImage(ImageSource.camera)),
                     FlatButton(
-                        textColor: Colors.brown[300],
+                        textColor: Theme.of(context).primaryColor,
                         child: Icon(Icons.add_photo_alternate),
                         onPressed: () => getImage(ImageSource.gallery))
                   ], mainAxisAlignment: MainAxisAlignment.center)
@@ -217,14 +217,13 @@ class _SubmitPostState extends State<SubmitPost> {
             child: Row(
               children: [
                 FlatButton(
-                    textColor: Colors.brown,
+                    textColor: Theme.of(context).errorColor,
                     child: Text('Cancel'),
                     onPressed: () {
                       _clear();
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  color: Colors.brown[300],
                   child: Text('Submit'),
                   onPressed: () {
                     _ensureSubmit();
