@@ -6,7 +6,7 @@ import 'dart:async';
 class Client {
   static final Client _client = new Client._internal();
   static final String _localhost = 'http://localhost:8080/api/';
-  static final String _local = 'http://192.168.0.12:8080/api/';
+  static final String _local = 'http://129.210.115.240:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
   static final String _url = _external;
 
