@@ -124,9 +124,10 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       child: MaterialApp(
         title: 'Extra Eats',
         theme: ThemeData(
+            //green
+            primaryColor: const Color(0xFF489835), //App bar
+            buttonColor: const Color(0xFF489835), //buttons
             //light green
-            primaryColor: const Color(0xFF9BCF31), //App bar
-            buttonColor: const Color(0xFF9BCF31), //buttons
             accentColor: const Color(0xFF9BCF31), //reload, option slider
             //yellow is not used - Color(0xFFF6D709)
             //red

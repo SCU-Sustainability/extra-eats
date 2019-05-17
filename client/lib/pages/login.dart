@@ -124,26 +124,35 @@ class _RegisterState extends State<Register> {
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                  FlatButton(
-                      textColor: Theme.of(context).primaryColor,
-                      child: Text('I want food',
-                          style: TextStyle(
-                              fontSize: 20, fontWeight: FontWeight.w300)),
-                      onPressed: () {
-                        this.setIndex(1);
-                        this._provider = false;
-                      }),
-                  RaisedButton(
-                      textColor: Colors.white,
-                      child: Padding(
-                          child: Text('I\'m an event planner',
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                        textColor: Colors.white,
+                        child: Padding(
+                          child: Text('I just want food',
                               style: TextStyle(
-                                  fontSize: 20, fontWeight: FontWeight.w300)),
-                          padding: EdgeInsets.all(15)),
-                      onPressed: () {
-                        this.setIndex(1);
-                        this._provider = true;
-                      })
+                                  fontSize: 25, fontWeight: FontWeight.w300)),
+                          padding: const EdgeInsets.all(15),
+                        ),
+                        onPressed: () {
+                          this.setIndex(1);
+                          this._provider = false;
+                        }),
+                  ),
+                  Padding(
+                    padding: const EdgeInsets.all(8.0),
+                    child: RaisedButton(
+                        textColor: Colors.white,
+                        child: Padding(
+                            child: Text('I\'m an event planner',
+                                style: TextStyle(
+                                    fontSize: 25, fontWeight: FontWeight.w300)),
+                            padding: EdgeInsets.all(15)),
+                        onPressed: () {
+                          this.setIndex(1);
+                          this._provider = true;
+                        }),
+                  )
                 ]))));
   }
 }
