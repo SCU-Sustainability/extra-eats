@@ -1,7 +1,7 @@
 {
   "name": "ttw-server",
   "version": "0.0.2",
-  "description": "Taste the Waste API Server",
+  "description": "Extra Eats API Server",
   "main": "server.js",
   "scripts": {
     "test": "mocha ./src/tests --recursive"
