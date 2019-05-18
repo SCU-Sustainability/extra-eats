@@ -26,10 +26,12 @@ class _SubmitPostState extends State<SubmitPost> {
     'peanuts',
     'dairy',
     'fish',
-    'mixed nuts',
+    'peanuts',
+    'treenuts',
     'wheat',
     'shellfish',
-    'soy'
+    'soy',
+    'egg'
   ];
   File _image;
 
