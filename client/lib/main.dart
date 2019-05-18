@@ -123,10 +123,18 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   Widget build(BuildContext context) {
     return InheritedClient(
       child: MaterialApp(
-        title: 'Taste the Waste',
+        title: 'Extra Eats',
         theme: ThemeData(
-          primarySwatch: Colors.brown,
-        ),
+            //light green
+            primaryColor: const Color(0xFF9BCF31), //App bar
+            buttonColor: const Color(0xFF9BCF31), //buttons
+            accentColor: const Color(0xFF9BCF31), //reload, option slider
+            //yellow is not used - Color(0xFFF6D709)
+            //red
+            errorColor: const Color(0xFFCE0000), //Cancel, Go Back
+            //off white
+            backgroundColor: const Color(0xFFF7F7ED), //not used
+            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white))),
         home: Scaffold(
           appBar: AppBar(
             title:

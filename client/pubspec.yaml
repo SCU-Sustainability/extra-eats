@@ -1,5 +1,5 @@
 name: ttw_client
-description: Client for Taste the Waste mobile application.
+description: Client for Extra Eats mobile application.
 
 # The following defines the version and build number for your application.
 # A version number is three numbers separated by dots, like 1.2.43
@@ -17,8 +17,8 @@ dependencies:
     sdk: flutter
   json_annotation: ^2.2.0
   onesignal: ^1.1.0
-  image_picker: ^0.5.4+3
-  flutter_datetime_picker: ^1.1.6
+  image_picker: ^0.6.0+2
+  flutter_datetime_picker: ^1.2.0
   image: ^2.0.7
   dio: ^2.1.2
   # http: ^0.12.0+1

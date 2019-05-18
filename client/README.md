@@ -1,4 +1,4 @@
-# Client for Taste the Waste
+# Client for Extra Eats
 
 Created with Flutter.
 

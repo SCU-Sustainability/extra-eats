@@ -24,9 +24,9 @@ class Mailer {
 
   _buildMailOptions(receivers) {
     return {
-      from: '"Taste the Waste SCU" <chorescoresmailer@gmail.com>',
+      from: '"Extra Eats SCU" <chorescoresmailer@gmail.com>',
       to: receivers.join(', '),
-      subject: 'Confirm your Taste the Waste account!',
+      subject: 'Confirm your Extra Eats account!',
       text: 'Test email',
       html: '<b>Test email</b>'
     };
