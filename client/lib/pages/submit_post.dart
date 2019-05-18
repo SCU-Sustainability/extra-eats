@@ -23,13 +23,14 @@ class _SubmitPostState extends State<SubmitPost> {
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
     'gluten',
-    'peanuts',
     'dairy',
     'fish',
-    'mixed nuts',
+    'peanuts',
+    'treenuts',
     'wheat',
     'shellfish',
-    'soy'
+    'soy',
+    'egg'
   ];
   File _image;
 
