@@ -111,6 +111,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
 
   bool _isLoggedIn() {
     return this._accessToken != '';
+    //return true;
   }
 
   Widget _handleMainScreen() {
