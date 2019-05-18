@@ -110,7 +110,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   bool _isLoggedIn() {
-    return this._accessToken != '';
+    return this._accessToken != ''; //changed to make the project run for the first time 
   }
 
   Widget _handleMainScreen() {
