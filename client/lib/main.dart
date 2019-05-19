@@ -110,7 +110,8 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   bool _isLoggedIn() {
-    return this._accessToken != '';
+    return this._accessToken != ''; //changed to make the project run for the first time 
+    //return true;
   }
 
   Widget _handleMainScreen() {
@@ -122,7 +123,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   Widget build(BuildContext context) {
     return InheritedClient(
       child: MaterialApp(
-        title: 'Extra Eats',
+        title: 'ExtraEats',
         theme: ThemeData(
             //green
             primaryColor: const Color(0xFF489835), //App bar

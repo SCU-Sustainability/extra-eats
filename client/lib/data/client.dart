@@ -8,14 +8,13 @@ class Client {
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://129.210.115.240:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _external;
+  static final String _url = _localhost;
 
   static Client get() {
     return _client;
   }
 
   Client._internal();
-
   Future<Response> ping() async {
     var response = await Dio().get(_url);
     return response;
