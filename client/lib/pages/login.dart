@@ -255,8 +255,20 @@ class _LoginState extends State<Login> {
 				return; 
                       }
 
-                       InheritedClient.of(context)
-                          .login(emailController.text, passwordController.text);
+		      // dart has some pretty subpar async future types
+		      // so this is me dealing with that
+
+		      // in main.dart there's a login func and _login func 
+		      // which i changed to return false when there's a login error
+		      // use .then because login func is async, so you have to wait until 
+		      // a value is returned, then you can call alertDialog
+			InheritedClient.of(context).login(emailController.text, 
+				passwordController.text).then((value){
+					if(!value){
+						String alert_msg = "Invalid password/email combination.";
+						alertDialog(context, alert_msg);
+					}
+			        });
                     })),
           ])),
     ];
