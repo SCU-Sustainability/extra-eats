@@ -110,7 +110,8 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   bool _isLoggedIn() {
-    return this._accessToken != '';
+    return this._accessToken != ''; //changed to make the project run for the first time 
+    //return true;
   }
 
   Widget _handleMainScreen() {
@@ -122,10 +123,19 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   Widget build(BuildContext context) {
     return InheritedClient(
       child: MaterialApp(
-        title: 'Extra Eats',
+        title: 'ExtraEats',
         theme: ThemeData(
-          primarySwatch: Colors.brown,
-        ),
+            //green
+            primaryColor: const Color(0xFF489835), //App bar
+            buttonColor: const Color(0xFF489835), //buttons
+            //light green
+            accentColor: const Color(0xFF9BCF31), //reload, option slider
+            //yellow is not used - Color(0xFFF6D709)
+            //red
+            errorColor: const Color(0xFFCE0000), //Cancel, Go Back
+            //off white
+            backgroundColor: const Color(0xFFF7F7ED), //not used
+            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white))),
         home: Scaffold(
           appBar: AppBar(
             title:

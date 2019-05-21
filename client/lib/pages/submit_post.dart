@@ -23,13 +23,14 @@ class _SubmitPostState extends State<SubmitPost> {
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
     'gluten',
-    'peanuts',
     'dairy',
     'fish',
-    'mixed nuts',
+    'peanuts',
+    'treenuts',
     'wheat',
     'shellfish',
-    'soy'
+    'soy',
+    'egg'
   ];
   File _image;
 
@@ -124,23 +125,18 @@ class _SubmitPostState extends State<SubmitPost> {
       Padding(
         child: Center(
             //if no image yet then show upload buttons, otherwise show image.
-            child:
-            _image == null 
-            ? Row(  
-                children: <Widget> [
+            child: _image == null
+                ? Row(children: <Widget>[
                     FlatButton(
-                        textColor: Colors.brown[300],
+                        textColor: Theme.of(context).primaryColor,
                         child: Icon(Icons.add_a_photo),
                         onPressed: () => getImage(ImageSource.camera)),
                     FlatButton(
-                        textColor: Colors.brown[300],
+                        textColor: Theme.of(context).primaryColor,
                         child: Icon(Icons.add_photo_alternate),
-                        onPressed: () => getImage(ImageSource.gallery))  
-                ],
-                mainAxisAlignment: MainAxisAlignment.center
-            )
-            : new Image.file(this._image, fit: BoxFit.fitWidth)
-        ),
+                        onPressed: () => getImage(ImageSource.gallery))
+                  ], mainAxisAlignment: MainAxisAlignment.center)
+                : new Image.file(this._image, fit: BoxFit.fitWidth)),
         padding: EdgeInsets.all(20),
       ),
 
@@ -222,14 +218,13 @@ class _SubmitPostState extends State<SubmitPost> {
             child: Row(
               children: [
                 FlatButton(
-                    textColor: Colors.brown,
+                    textColor: Theme.of(context).errorColor,
                     child: Text('Cancel'),
                     onPressed: () {
                       _clear();
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  color: Colors.brown[300],
                   child: Text('Submit'),
                   onPressed: () {
                     _ensureSubmit();
