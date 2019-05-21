@@ -87,33 +87,33 @@ class _RegisterState extends State<Register> {
                     child: Text('Register'),
                     onPressed: () {
                      //alert msgs
-		     if(emailController.text == '' && passwordController.text.length <= 5){
-			String alert_msg = "Please enter your email and a password with 6 characters or more";
-			alertDialog(context, alert_msg);
-			passwordController.clear();			
-			return;
-			}
-		     if(emailController.text == '') {
-			String alert_msg = "Please enter your email.";
-			alertDialog(context, alert_msg);
+         if(emailController.text == '' && passwordController.text.length <= 5){
+      String alert_msg = "Please enter your email and a password with 6 characters or more";
+      alertDialog(context, alert_msg);
+      passwordController.clear();     
+      return;
+      }
+         if(emailController.text == '') {
+      String alert_msg = "Please enter your email.";
+      alertDialog(context, alert_msg);
                         passwordController.clear();
-		        return; 
+            return; 
                       }
-		    if (!emailController.text.contains("scu.edu")){
-			 String alert_msg = "Please enter your scu.edu email.";
-			 alertDialog(context, alert_msg);
-			 emailController.clear();
-			 passwordController.clear();
-			 return;
-			}
+        if (!emailController.text.contains("scu.edu")){
+       String alert_msg = "Please enter your scu.edu email.";
+       alertDialog(context, alert_msg);
+       emailController.clear();
+       passwordController.clear();
+       return;
+      }
        
                       if (passwordController.text.length <= 5){
-				String alert_msg = "Please enter a password with 6 characters or more.";
-				alertDialog(context, alert_msg);
-				passwordController.clear();
-				emailController.clear();
-				return;
-			}  InheritedClient.of(context).register(
+        String alert_msg = "Please enter a password with 6 characters or more.";
+        alertDialog(context, alert_msg);
+        passwordController.clear();
+        emailController.clear();
+        return;
+      }  InheritedClient.of(context).register(
                           nameController.text,
                           passwordController.text,
                           emailController.text,
@@ -246,42 +246,42 @@ class _LoginState extends State<Login> {
                     textColor: Colors.white,
                     child: Text('Login'),
                     onPressed: () {
-             	    
-		    //alert msgs
-		    if (emailController.text == '' && passwordController.text == ''){
-				String alert_msg = "Please enter your registered email and password";
-				alertDialog(context, alert_msg);
-				return;
-			}
+                  
+        //alert msgs
+        if (emailController.text == '' && passwordController.text == ''){
+        String alert_msg = "Please enter your registered email and password";
+        alertDialog(context, alert_msg);
+        return;
+      }
                       if (emailController.text == ''){
-				String alert_msg = "Please enter your email.";
-				alertDialog(context, alert_msg);
-				passwordController.clear();
-				return;
-			}
+        String alert_msg = "Please enter your email.";
+        alertDialog(context, alert_msg);
+        passwordController.clear();
+        return;
+      }
                       if (passwordController.text == '') {
-                        	String alert_msg = "Please enter your password.";
-				alertDialog(context, alert_msg);
-				emailController.clear();
-				return; 
+                          String alert_msg = "Please enter your password.";
+        alertDialog(context, alert_msg);
+        emailController.clear();
+        return; 
                       }
 
-		      // dart has some pretty subpar async future types
-		      // so this is me dealing with that
+          // dart has some pretty subpar async future types
+          // so this is me dealing with that
 
-		      // in main.dart there's a login func and _login func 
-		      // which i changed to return false when there's a login error
-		      // use .then because login func is async, so you have to wait until 
-		      // a value is returned, then you can call alertDialog
-			InheritedClient.of(context).login(emailController.text, 
-				passwordController.text).then((value){
-					if(!value){
-						String alert_msg = "Invalid password/email combination.";
-						alertDialog(context, alert_msg);
-						passwordController.clear();
-						emailController.clear();
-					}
-			        });
+          // in main.dart there's a login func and _login func 
+          // which i changed to return false when there's a login error
+          // use .then because login func is async, so you have to wait until 
+          // a value is returned, then you can call alertDialog
+      InheritedClient.of(context).login(emailController.text, 
+        passwordController.text).then((value){
+          if(!value){
+            String alert_msg = "Invalid password/email combination.";
+            alertDialog(context, alert_msg);
+            passwordController.clear();
+            emailController.clear();
+          }
+              });
                     })),
           ])),
     ];
