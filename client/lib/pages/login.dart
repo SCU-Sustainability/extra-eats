@@ -126,7 +126,7 @@ class _RegisterState extends State<Register> {
                         children: [
                   FlatButton(
                       textColor: Theme.of(context).primaryColor,
-                      child: Text('I want food',
+                      child: Text('I\'m a student',
                           style: TextStyle(
                               fontSize: 20, fontWeight: FontWeight.w300)),
                       onPressed: () {
