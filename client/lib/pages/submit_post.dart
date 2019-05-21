@@ -19,7 +19,9 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController nameController = TextEditingController();
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
-  DateTime expiration = DateTime.now().add(Duration(hours: 1));
+  DateTime postTime = DateTime.now();
+  //DateTime expiration = postTime.add(Duration(minutes: 30));
+  bool _isScheduled = false;
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
     'gluten',
@@ -41,11 +43,11 @@ class _SubmitPostState extends State<SubmitPost> {
     });
   }
 
-  Future selectExpiration(BuildContext context) async {
+  Future selectPostTime(BuildContext context) async {
     DatePicker.showDateTimePicker(context, showTitleActions: true,
         onConfirm: (date) {
       setState(() {
-        expiration = date;
+        postTime = date;
       });
     });
   }
@@ -98,13 +100,12 @@ class _SubmitPostState extends State<SubmitPost> {
             this.descriptionController.text,
             this._image,
             this.locationController.text,
-            this.expiration,
+            this.postTime,
             tags)
         .then((res) {
-      // Todo: fix this POS
       this
           ._submitResponse(res.data['message'])
-          .then((void next){Navigator.of(context).pop();});
+          .then((void next) {Navigator.of(context).pop();});
       if (res.data['code'] == 1) {
         this._clear();
       }
@@ -167,17 +168,6 @@ class _SubmitPostState extends State<SubmitPost> {
           border: InputBorder.none,
         ),
       ),
-      InkWell(
-          child: Padding(
-              child: Column(children: [
-                Text('Expires on ${expiration.month}/${expiration.day}',
-                    style:
-                        TextStyle(fontSize: 16, fontWeight: FontWeight.w300)),
-                Text('@ ${expiration.hour}:${expiration.minute}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w200))
-              ]),
-              padding: EdgeInsets.all(15.0)),
-          onTap: () => selectExpiration(context)),
       Padding(
           child: Column(children: [
             Center(
@@ -211,7 +201,33 @@ class _SubmitPostState extends State<SubmitPost> {
             ),
           ]),
           padding: EdgeInsets.all(15)),
-
+      InkWell(
+          child: Padding(
+              child: Column(children: [
+                CheckboxListTile(
+                  value: _isScheduled,
+                  onChanged: (bool changed) {
+                    setState((){
+                      _isScheduled = changed;
+                    });
+                    //print(changed);
+                  },
+                  title: Text("Schedule Post?"),
+                  controlAffinity: ListTileControlAffinity.leading
+                ),
+                 
+                Text('Post at ${postTime.month}/${postTime.day}/${postTime.year}',
+                    style:
+                        TextStyle(fontSize: 16, 
+                        fontWeight: FontWeight.w300,
+                        color: _isScheduled ? Colors.black : Colors.white)), //TODO: background color to make it look clickable
+                
+                Text('@ ${postTime.hour}:${postTime.minute}',
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w200,
+                    color: _isScheduled ? Colors.black : Colors.white))
+              ]),
+              padding: EdgeInsets.all(15.0)),
+          onTap: !_isScheduled ? null : () => selectPostTime(context)),
       Center(
         child: Padding(
             child: Row(
@@ -224,9 +240,29 @@ class _SubmitPostState extends State<SubmitPost> {
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  child: Text('Submit'),
+                  child: !_isScheduled? Text('Submit Now') : Text('Schedule Post'),
                   onPressed: () {
-                    _ensureSubmit();
+			// when a post does not have all necessary fields, 
+			// will give a list of what fields the post is missing 
+			Set<String> fields = {};
+			if(nameController.text == ''){ 
+				fields.add('name'); }
+			if(descriptionController.text == ''){ 
+				fields.add('description'); }
+			if(_image == null){ 
+				fields.add('photo'); }
+			if(locationController.text == ''){ 
+				fields.add("location"); }
+			if(fields.length != 0){
+				String alert_msg = "Please add the following field" + (fields.length > 1 ? "s" : "") + " to your post: ";
+				for(var i in fields){
+					if(fields.length == 1){ alert_msg += i + "."; break; }
+					alert_msg += (fields.elementAt(fields.length-1) == i ? "and " + i + ".": i + ", ");
+				}
+				alertDialog(context, alert_msg);
+				return;
+ 			}
+                       _ensureSubmit();
                   },
                 ),
               ],
@@ -242,3 +278,30 @@ class _SubmitPostState extends State<SubmitPost> {
         });
   }
 }
+
+
+// alerts func
+  void alertDialog(BuildContext context, String alert_msg) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(alert_msg),
+          //content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+
