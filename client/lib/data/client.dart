@@ -38,14 +38,16 @@ class Client {
   }
 
   Future<Response> post(String token, String name, String description,
-      File imgFile, String location, DateTime expiration, List tags) async {
+      File imgFile, String location, DateTime postDate, DateTime expiryDate, List tags, bool isScheduled) async {
     FormData formData = new FormData.from({
       'name': name,
       'description': description,
       'image': new UploadFileInfo(imgFile, DateTime.now().toIso8601String()),
       'location': location,
-      'expiration': expiration.toUtc().toIso8601String(),
-      'tags': tags
+      'postDate': postDate.toUtc().toIso8601String(),
+      'expiryDate': expiryDate.toUtc().toIso8601String(),
+      'tags': tags,
+      'isScheduled': isScheduled
     });
     var response = await Dio().post(_url + 'posts',
         data: formData, options: Options(headers: {'x-access-token': token}));
