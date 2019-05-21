@@ -78,9 +78,8 @@ class _SubmitPostState extends State<SubmitPost> {
             actions: <Widget>[
               FlatButton(
                   child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  })
+                  onPressed: Navigator.of(context).pop
+                  )
             ],
           );
         });
@@ -105,7 +104,7 @@ class _SubmitPostState extends State<SubmitPost> {
       // Todo: fix this POS
       this
           ._submitResponse(res.data['message'])
-          .then((void next) => {Navigator.of(context).pop()});
+          .then((void next){Navigator.of(context).pop();});
       if (res.data['code'] == 1) {
         this._clear();
       }
