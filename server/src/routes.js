@@ -253,7 +253,6 @@ router
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
       if (err) return _unauthorized(res);
       User.findById(decoded.id, function(err, user) {
-        // Todo: do we have to delete the post from S3 if the post fails?
 
         if (err /*|| !req.file*/) {
           return res.json({
@@ -288,6 +287,7 @@ router
 
         // Todo: validate data (location)
         // Todo: validate expiration
+        // Add in scheduled time here
         let post = new Post({
           name: req.body.name,
           description: req.body.description,

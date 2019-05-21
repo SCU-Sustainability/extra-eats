@@ -30,3 +30,6 @@ db.once('open', function() {
     console.log('Server has been started on port ' + port);
   });
 });
+
+const background = require('./src/background.js'); 
+background.updatePostStatus(); 

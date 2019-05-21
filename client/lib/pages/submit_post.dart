@@ -139,7 +139,6 @@ class _SubmitPostState extends State<SubmitPost> {
                 : new Image.file(this._image, fit: BoxFit.fitWidth)),
         padding: EdgeInsets.all(20),
       ),
-
       TextField(
         controller: nameController,
         decoration: InputDecoration(
@@ -158,7 +157,6 @@ class _SubmitPostState extends State<SubmitPost> {
           border: InputBorder.none,
         ),
       ),
-
       TextField(
         controller: locationController,
         decoration: InputDecoration(
