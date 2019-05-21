@@ -92,22 +92,28 @@ class _RegisterState extends State<Register> {
 		     if(emailController.text == '' && passwordController.text.length <= 5){
 			String alert_msg = "Please enter your email and a password with 6 characters or more";
 			alertDialog(context, alert_msg);
+			passwordController.clear();			
 			return;
 			}
 		     if(emailController.text == '') {
 			String alert_msg = "Please enter your email.";
 			alertDialog(context, alert_msg);
-                        return; 
+                        passwordController.clear();
+		        return; 
                       }
-		    else if (!emailController.text.contains("scu.edu")){
+		    if (!emailController.text.contains("scu.edu")){
 			 String alert_msg = "Please enter your scu.edu email.";
 			 alertDialog(context, alert_msg);
+			 emailController.clear();
+			 passwordController.clear();
 			 return;
 			}
        
                       if (passwordController.text.length <= 5){
 				String alert_msg = "Please enter a password with 6 characters or more.";
 				alertDialog(context, alert_msg);
+				passwordController.clear();
+				emailController.clear();
 				return;
 			}  InheritedClient.of(context).register(
                           nameController.text,
@@ -252,11 +258,13 @@ class _LoginState extends State<Login> {
                       if (emailController.text == ''){
 				String alert_msg = "Please enter your email.";
 				alertDialog(context, alert_msg);
+				passwordController.clear();
 				return;
 			}
                       if (passwordController.text == '') {
                         	String alert_msg = "Please enter your password.";
 				alertDialog(context, alert_msg);
+				emailController.clear();
 				return; 
                       }
 
@@ -272,6 +280,8 @@ class _LoginState extends State<Login> {
 					if(!value){
 						String alert_msg = "Invalid password/email combination.";
 						alertDialog(context, alert_msg);
+						passwordController.clear();
+						emailController.clear();
 					}
 			        });
                     })),
