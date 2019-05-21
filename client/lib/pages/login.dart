@@ -2,8 +2,6 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
-import '../data/alerts.dart';
-
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
 
