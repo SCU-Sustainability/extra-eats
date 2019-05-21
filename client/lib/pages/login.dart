@@ -99,6 +99,11 @@ class _RegisterState extends State<Register> {
 			alertDialog(context, alert_msg);
                         return; 
                       }
+		    else if (!emailController.text.contains("scu.edu")){
+			 String alert_msg = "Please enter your scu.edu email.";
+			 alertDialog(context, alert_msg);
+			 return;
+			}
        
                       if (passwordController.text.length <= 5){
 				String alert_msg = "Please enter a password with 6 characters or more.";
