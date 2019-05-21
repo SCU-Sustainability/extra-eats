@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:onesignal/onesignal.dart';
 import 'dart:io' show Platform;
@@ -47,11 +49,11 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         .then(this._login);
   }
 
- Future<bool> login(String email, String password) async {
-
-    bool login_worked = await Client.get().login(email, password).then(this._login);
+  Future<bool> login(String email, String password) async {
+    bool login_worked =
+        await Client.get().login(email, password).then(this._login);
     return login_worked;
- }
+  }
 
   void logout() async {
     this._currentIndex = 0;
@@ -70,7 +72,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
           !res.data.containsKey('token') ||
           !res.data.containsKey('provider')) {
         // Handle
-	print(res);
+        print(res);
         return false;
       }
       this._setToken(res.data['token']);
@@ -97,7 +99,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       print(res);
       return false;
     }
-	return true;
+    return true;
   }
 
   void _setToken(String token) {
@@ -113,7 +115,8 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   bool _isLoggedIn() {
-    return this._accessToken != ''; //changed to make the project run for the first time 
+    return this._accessToken !=
+        ''; //changed to make the project run for the first time
     //return true;
   }
 
@@ -162,8 +165,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     );
   }
 
-
-
 // alerts func
   void alertDialog(BuildContext context, String alert_msg) {
     // flutter defined function
@@ -178,14 +179,11 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
+              onPressed: Navigator.of(context).pop,
             ),
           ],
         );
       },
     );
   }
-
 }

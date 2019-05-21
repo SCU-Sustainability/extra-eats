@@ -20,7 +20,7 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   DateTime postTime = DateTime.now();
-  //DateTime expiration = postTime.add(Duration(minutes: 30));
+  //DateTime expiration = );
   bool _isScheduled = false;
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
@@ -80,9 +80,8 @@ class _SubmitPostState extends State<SubmitPost> {
             actions: <Widget>[
               FlatButton(
                   child: Text('OK'),
-                  onPressed: () {
-                    Navigator.of(context).pop();
-                  })
+                  onPressed: Navigator.of(context).pop
+                  )
             ],
           );
         });
@@ -102,7 +101,9 @@ class _SubmitPostState extends State<SubmitPost> {
             this._image,
             this.locationController.text,
             this.postTime,
-            tags)
+            this.postTime.add(Duration(minutes: 30)), //expiry
+            tags,
+            this._isScheduled)
         .then((res) {
       this
           ._submitResponse(res.data['message'])

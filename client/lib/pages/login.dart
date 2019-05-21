@@ -77,7 +77,7 @@ class _RegisterState extends State<Register> {
                     textColor: Theme.of(context).errorColor,
                     child: Text('Go back'),
                     onPressed: () {
-               this.setIndex(0);
+                      this.setIndex(0);
                     })),
             Spacer(flex: 1),
             Transform.scale(
@@ -86,34 +86,38 @@ class _RegisterState extends State<Register> {
                     textColor: Colors.white,
                     child: Text('Register'),
                     onPressed: () {
-                     //alert msgs
-         if(emailController.text == '' && passwordController.text.length <= 5){
-      String alert_msg = "Please enter your email and a password with 6 characters or more";
-      alertDialog(context, alert_msg);
-      passwordController.clear();     
-      return;
-      }
-         if(emailController.text == '') {
-      String alert_msg = "Please enter your email.";
-      alertDialog(context, alert_msg);
+                      //alert msgs
+                      if (emailController.text == '' &&
+                          passwordController.text.length <= 5) {
+                        String alert_msg =
+                            "Please enter your email and a password with 6 characters or more";
+                        alertDialog(context, alert_msg);
                         passwordController.clear();
-            return; 
+                        return;
                       }
-        if (!emailController.text.contains("scu.edu")){
-       String alert_msg = "Please enter your scu.edu email.";
-       alertDialog(context, alert_msg);
-       emailController.clear();
-       passwordController.clear();
-       return;
-      }
-       
-                      if (passwordController.text.length <= 5){
-        String alert_msg = "Please enter a password with 6 characters or more.";
-        alertDialog(context, alert_msg);
-        passwordController.clear();
-        emailController.clear();
-        return;
-      }  InheritedClient.of(context).register(
+                      if (emailController.text == '') {
+                        String alert_msg = "Please enter your email.";
+                        alertDialog(context, alert_msg);
+                        passwordController.clear();
+                        return;
+                      }
+                      if (!emailController.text.contains("scu.edu")) {
+                        String alert_msg = "Please enter your scu.edu email.";
+                        alertDialog(context, alert_msg);
+                        emailController.clear();
+                        passwordController.clear();
+                        return;
+                      }
+
+                      if (passwordController.text.length <= 5) {
+                        String alert_msg =
+                            "Please enter a password with 6 characters or more.";
+                        alertDialog(context, alert_msg);
+                        passwordController.clear();
+                        emailController.clear();
+                        return;
+                      }
+                      InheritedClient.of(context).register(
                           nameController.text,
                           passwordController.text,
                           emailController.text,
@@ -246,42 +250,45 @@ class _LoginState extends State<Login> {
                     textColor: Colors.white,
                     child: Text('Login'),
                     onPressed: () {
-                  
-        //alert msgs
-        if (emailController.text == '' && passwordController.text == ''){
-        String alert_msg = "Please enter your registered email and password";
-        alertDialog(context, alert_msg);
-        return;
-      }
-                      if (emailController.text == ''){
-        String alert_msg = "Please enter your email.";
-        alertDialog(context, alert_msg);
-        passwordController.clear();
-        return;
-      }
+                      //alert msgs
+                      if (emailController.text == '' &&
+                          passwordController.text == '') {
+                        String alert_msg =
+                            "Please enter your registered email and password";
+                        alertDialog(context, alert_msg);
+                        return;
+                      }
+                      if (emailController.text == '') {
+                        String alert_msg = "Please enter your email.";
+                        alertDialog(context, alert_msg);
+                        passwordController.clear();
+                        return;
+                      }
                       if (passwordController.text == '') {
-                          String alert_msg = "Please enter your password.";
-        alertDialog(context, alert_msg);
-        emailController.clear();
-        return; 
+                        String alert_msg = "Please enter your password.";
+                        alertDialog(context, alert_msg);
+                        emailController.clear();
+                        return;
                       }
 
-          // dart has some pretty subpar async future types
-          // so this is me dealing with that
+                      // dart has some pretty subpar async future types
+                      // so this is me dealing with that
 
-          // in main.dart there's a login func and _login func 
-          // which i changed to return false when there's a login error
-          // use .then because login func is async, so you have to wait until 
-          // a value is returned, then you can call alertDialog
-      InheritedClient.of(context).login(emailController.text, 
-        passwordController.text).then((value){
-          if(!value){
-            String alert_msg = "Invalid password/email combination.";
-            alertDialog(context, alert_msg);
-            passwordController.clear();
-            emailController.clear();
-          }
-              });
+                      // in main.dart there's a login func and _login func
+                      // which i changed to return false when there's a login error
+                      // use .then because login func is async, so you have to wait until
+                      // a value is returned, then you can call alertDialog
+                      InheritedClient.of(context)
+                          .login(emailController.text, passwordController.text)
+                          .then((value) {
+                        if (!value) {
+                          String alert_msg =
+                              "Invalid password/email combination.";
+                          alertDialog(context, alert_msg);
+                          passwordController.clear();
+                          emailController.clear();
+                        }
+                      });
                     })),
           ])),
     ];
@@ -296,27 +303,26 @@ class _LoginState extends State<Login> {
   }
 }
 
-
 // alerts func
-  void alertDialog(BuildContext context, String alert_msg) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text(alert_msg),
-          //content: new Text("Alert Dialog body"), //used for a body in the msg
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
+void alertDialog(BuildContext context, String alert_msg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(alert_msg),
+        //content: new Text("Alert Dialog body"), //used for a body in the msg
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Ok"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
