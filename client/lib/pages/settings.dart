@@ -2,30 +2,26 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
-class UserSettings extends StatefulWidget {
-  UserSettings({Key key}) : super(key: key);
+class Settings extends StatefulWidget {
+  Settings({Key key}) : super(key: key);
 
   @override
-  _UserSettingsState createState() => _UserSettingsState();
+  _SettingsState createState() => _SettingsState();
 }
 
-class _UserSettingsState extends State<UserSettings> {
+class _SettingsState extends State<Settings> {
   bool _pushNotifications = true;
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      appBar: AppBar(
-        title: Text('User Settings'),
-      ),
-      body: Container(
-        padding: EdgeInsets.all(16.0),
-        child: Column(children: <Widget>[
-          Row(
+    return ListView(physics: NeverScrollableScrollPhysics(), children: <Widget>[
+      ListTile(
+          leading: Icon(Icons.notifications),
+          title: Row(
             mainAxisAlignment: MainAxisAlignment.start,
             children: <Widget>[
               Text('Push notifications: ',
-                  style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16)),
+                  style: TextStyle(fontWeight: FontWeight.w300)),
               Spacer(flex: 1),
               Transform.scale(
                   scale: 1.5,
@@ -39,37 +35,23 @@ class _UserSettingsState extends State<UserSettings> {
                   )),
             ],
           ),
-        ]),
-      ),
-    );
-  }
-}
-
-class Settings extends StatefulWidget {
-  Settings({Key key}) : super(key: key);
-
-  @override
-  _SettingsState createState() => _SettingsState();
-}
-
-class _SettingsState extends State<Settings> {
-  @override
-  Widget build(BuildContext context) {
-    return ListView(physics: NeverScrollableScrollPhysics(), children: <Widget>[
+          onTap: () => setState(() {
+                _pushNotifications = !_pushNotifications;
+              })),
       ListTile(
-        leading: Icon(Icons.person),
-        title: Text('User Settings',
-            style: TextStyle(fontWeight: FontWeight.w300)),
-        onTap: () {
-          Navigator.push(
-            context,
-            MaterialPageRoute(builder: (context) => UserSettings()),
-          );
-        },
-      ),
+          leading: Icon(Icons.fastfood),
+          title: Text('Hygiene guidelines',
+              style: TextStyle(fontWeight: FontWeight.w300)),
+          onTap: (){} //nothing yet
+          ),
       ListTile(
-        leading: Icon(Icons.arrow_back_ios),
-        title: Text('Signout', style: TextStyle(fontWeight: FontWeight.w300)),
+          leading: Icon(Icons.assignment),
+          title: Text('Legal', style: TextStyle(fontWeight: FontWeight.w300)),
+          onTap: (){} //nothing yet
+          ),
+      ListTile(
+        leading: Icon(Icons.exit_to_app),
+        title: Text('Sign out', style: TextStyle(fontWeight: FontWeight.w300)),
         onTap: InheritedClient.of(context).logout,
       ),
     ]);

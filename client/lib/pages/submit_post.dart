@@ -227,7 +227,27 @@ class _SubmitPostState extends State<SubmitPost> {
                   textColor: Colors.white,
                   child: Text('Submit'),
                   onPressed: () {
-                    _ensureSubmit();
+			// when a post does not have all necessary fields, 
+			// will give a list of what fields the post is missing 
+			Set<String> fields = {};
+			if(nameController.text == ''){ 
+				fields.add('name'); }
+			if(descriptionController.text == ''){ 
+				fields.add('description'); }
+			if(_image == null){ 
+				fields.add('photo'); }
+			if(locationController.text == ''){ 
+				fields.add("location"); }
+			if(fields.length != 0){
+				String alert_msg = "Please add the following field" + (fields.length > 1 ? "s" : "") + " to your post: ";
+				for(var i in fields){
+					if(fields.length == 1){ alert_msg += i + "."; break; }
+					alert_msg += (fields.elementAt(fields.length-1) == i ? "and " + i + ".": i + ", ");
+				}
+				alertDialog(context, alert_msg);
+				return;
+ 			}
+                       _ensureSubmit();
                   },
                 ),
               ],
@@ -243,3 +263,30 @@ class _SubmitPostState extends State<SubmitPost> {
         });
   }
 }
+
+
+// alerts func
+  void alertDialog(BuildContext context, String alert_msg) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(alert_msg),
+          //content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
+

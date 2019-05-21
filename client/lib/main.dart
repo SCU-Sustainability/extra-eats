@@ -47,9 +47,11 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         .then(this._login);
   }
 
-  void login(String email, String password) async {
-    await Client.get().login(email, password).then(this._login);
-  }
+ Future<bool> login(String email, String password) async {
+
+    bool login_worked = await Client.get().login(email, password).then(this._login);
+    return login_worked;
+ }
 
   void logout() async {
     this._currentIndex = 0;
@@ -62,14 +64,14 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     }
   }
 
-  void _login(res) {
+  bool _login(res) {
     try {
       if (!res.data.containsKey('user_id') ||
           !res.data.containsKey('token') ||
           !res.data.containsKey('provider')) {
         // Handle
-        print(res);
-        return;
+	print(res);
+        return false;
       }
       this._setToken(res.data['token']);
       this._userId = res.data['user_id'];
@@ -93,8 +95,9 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
     } catch (Exception) {
       // Handle
       print(res);
-      return;
+      return false;
     }
+	return true;
   }
 
   void _setToken(String token) {
@@ -125,9 +128,10 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       child: MaterialApp(
         title: 'ExtraEats',
         theme: ThemeData(
+            //green
+            primaryColor: const Color(0xFF489835), //App bar
+            buttonColor: const Color(0xFF489835), //buttons
             //light green
-            primaryColor: const Color(0xFF9BCF31), //App bar
-            buttonColor: const Color(0xFF9BCF31), //buttons
             accentColor: const Color(0xFF9BCF31), //reload, option slider
             //yellow is not used - Color(0xFFF6D709)
             //red
@@ -157,4 +161,31 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       userId: this._userId,
     );
   }
+
+
+
+// alerts func
+  void alertDialog(BuildContext context, String alert_msg) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(alert_msg),
+          //content: new Text("Alert Dialog body"),
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Ok"),
+              onPressed: () {
+                Navigator.of(context).pop();
+              },
+            ),
+          ],
+        );
+      },
+    );
+  }
+
 }
