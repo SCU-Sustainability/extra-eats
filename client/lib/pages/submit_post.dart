@@ -28,7 +28,7 @@ class _SubmitPostState extends State<SubmitPost> {
     'dairy',
     'fish',
     'peanuts',
-    'treenuts',
+    'tree nuts',
     'wheat',
     'shellfish',
     'soy',
