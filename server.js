@@ -26,7 +26,7 @@ db.once('open', function() {
   console.log('Connection to database successful');
 
   // Start server
-  app.listen(port, function() {
+  app.listen(port, '0.0.0.0', function() {
     console.log('Server has been started on port ' + port);
   });
 });
