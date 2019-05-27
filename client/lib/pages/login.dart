@@ -89,30 +89,30 @@ class _RegisterState extends State<Register> {
                       //alert msgs
                       if (emailController.text == '' &&
                           passwordController.text.length <= 5) {
-                        String alert_msg =
+                        String alertMsg =
                             "Please enter your email and a password with 6 characters or more";
-                        alertDialog(context, alert_msg);
+                        alertDialog(context, alertMsg);
                         passwordController.clear();
                         return;
                       }
                       if (emailController.text == '') {
-                        String alert_msg = "Please enter your email.";
-                        alertDialog(context, alert_msg);
+                        String alertMsg = "Please enter your email.";
+                        alertDialog(context, alertMsg);
                         passwordController.clear();
                         return;
                       }
                       if (!emailController.text.contains("scu.edu")) {
-                        String alert_msg = "Please enter your scu.edu email.";
-                        alertDialog(context, alert_msg);
+                        String alertMsg = "Please enter your scu.edu email.";
+                        alertDialog(context, alertMsg);
                         emailController.clear();
                         passwordController.clear();
                         return;
                       }
 
                       if (passwordController.text.length <= 5) {
-                        String alert_msg =
+                        String alertMsg =
                             "Please enter a password with 6 characters or more.";
-                        alertDialog(context, alert_msg);
+                        alertDialog(context, alertMsg);
                         passwordController.clear();
                         emailController.clear();
                         return;
@@ -254,20 +254,20 @@ class _LoginState extends State<Login> {
                       //alert msgs
                       if (emailController.text == '' &&
                           passwordController.text == '') {
-                        String alert_msg =
+                        String alertMsg =
                             "Please enter your registered email and password";
-                        alertDialog(context, alert_msg);
+                        alertDialog(context, alertMsg);
                         return;
                       }
                       if (emailController.text == '') {
-                        String alert_msg = "Please enter your email.";
-                        alertDialog(context, alert_msg);
+                        String alertMsg = "Please enter your email.";
+                        alertDialog(context, alertMsg);
                         passwordController.clear();
                         return;
                       }
                       if (passwordController.text == '') {
-                        String alert_msg = "Please enter your password.";
-                        alertDialog(context, alert_msg);
+                        String alertMsg = "Please enter your password.";
+                        alertDialog(context, alertMsg);
                         emailController.clear();
                         return;
                       }
@@ -283,9 +283,9 @@ class _LoginState extends State<Login> {
                           .login(emailController.text, passwordController.text)
                           .then((value) {
                         if (!value) {
-                          String alert_msg =
+                          String alertMsg =
                               "Invalid password/email combination.";
-                          alertDialog(context, alert_msg);
+                          alertDialog(context, alertMsg);
                           passwordController.clear();
                           emailController.clear();
                         }
@@ -305,14 +305,14 @@ class _LoginState extends State<Login> {
 }
 
 // alerts func
-void alertDialog(BuildContext context, String alert_msg) {
+void alertDialog(BuildContext context, String alertMsg) {
   // flutter defined function
   showDialog(
     context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        title: new Text(alert_msg),
+        title: new Text(alertMsg),
         //content: new Text("Alert Dialog body"), //used for a body in the msg
         actions: <Widget>[
           // usually buttons at the bottom of the dialog

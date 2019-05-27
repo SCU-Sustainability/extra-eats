@@ -50,9 +50,9 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
   Future<bool> login(String email, String password) async {
-    bool login_worked =
+    bool loginWorked =
         await Client.get().login(email, password).then(this._login);
-    return login_worked;
+    return loginWorked;
   }
 
   void logout() async {
@@ -166,14 +166,14 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
   }
 
 // alerts func
-  void alertDialog(BuildContext context, String alert_msg) {
+  void alertDialog(BuildContext context, String alert) {
     // flutter defined function
     showDialog(
       context: context,
       builder: (BuildContext context) {
         // return object of type Dialog
         return AlertDialog(
-          title: new Text(alert_msg),
+          title: new Text(alert),
           //content: new Text("Alert Dialog body"),
           actions: <Widget>[
             // usually buttons at the bottom of the dialog
