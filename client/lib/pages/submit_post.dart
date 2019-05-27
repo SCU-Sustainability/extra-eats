@@ -257,9 +257,8 @@ class _SubmitPostState extends State<SubmitPost> {
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  child: !_isScheduled 
-                      ? Text('Post Now') 
-                      : Text('Schedule Post'),
+                  child:
+                      !_isScheduled ? Text('Post Now') : Text('Schedule Post'),
                   onPressed: () {
                     // when a post does not have all necessary fields,
                     // will give a list of what fields the post is missing
@@ -277,19 +276,19 @@ class _SubmitPostState extends State<SubmitPost> {
                       fields.add("location");
                     }
                     if (fields.length != 0) {
-                      String alert_msg = "Please add the following field" +
+                      String alertMsg = "Please add the following field" +
                           (fields.length > 1 ? "s" : "") +
                           " to your post: ";
                       for (var i in fields) {
                         if (fields.length == 1) {
-                          alert_msg += i + ".";
+                          alertMsg += i + ".";
                           break;
                         }
-                        alert_msg += (fields.elementAt(fields.length - 1) == i
+                        alertMsg += (fields.elementAt(fields.length - 1) == i
                             ? "and " + i + "."
                             : i + ", ");
                       }
-                      alertDialog(context, alert_msg);
+                      alertDialog(context, alertMsg);
                       return;
                     }
                     _ensureSubmit();
@@ -310,14 +309,14 @@ class _SubmitPostState extends State<SubmitPost> {
 }
 
 // alerts func
-void alertDialog(BuildContext context, String alert_msg) {
+void alertDialog(BuildContext context, String alertMsg) {
   // flutter defined function
   showDialog(
     context: context,
     builder: (BuildContext context) {
       // return object of type Dialog
       return AlertDialog(
-        title: new Text(alert_msg),
+        title: new Text(alertMsg),
         //content: new Text("Alert Dialog body"),
         actions: <Widget>[
           // usually buttons at the bottom of the dialog
