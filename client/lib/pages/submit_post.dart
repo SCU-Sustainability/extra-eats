@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -20,7 +20,6 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   DateTime postTime = DateTime.now();
-  //DateTime expiration = );
   bool _isScheduled = false;
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
@@ -34,6 +33,7 @@ class _SubmitPostState extends State<SubmitPost> {
     'soy',
     'egg'
   ];
+  //TODO: add tags ['vegetarian', 'vegan'] etc. see google drive
   File _image;
 
   Future getImage(ImageSource src) async {
@@ -43,13 +43,33 @@ class _SubmitPostState extends State<SubmitPost> {
     });
   }
 
-  Future selectPostTime(BuildContext context) async {
-    DatePicker.showDateTimePicker(context, showTitleActions: true,
-        onConfirm: (date) {
+  Future selectTime(BuildContext context) async {
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(postTime),
+    );
+    if (time != null && time != TimeOfDay.fromDateTime(postTime)) {
       setState(() {
-        postTime = date;
+        postTime = DateTime(postTime.year, postTime.month, postTime.day,
+            time.hour, time.minute);
       });
-    });
+    }
+  }
+
+  Future selectDay(BuildContext context) async {
+    final day = await showDatePicker(
+      context: context,
+      initialDate: postTime,
+      firstDate: DateTime.now()
+          .subtract(Duration(hours: DateTime.now().hour)), //beginning of today
+      lastDate: DateTime.now().add(
+          Duration(days: 14)), //TODO: ask Lindsey how many weeks ahead can pick
+    );
+    if (day != null && day != postTime) {
+      setState(() {
+        postTime = day;
+      });
+    }
   }
 
   @override
@@ -135,7 +155,7 @@ class _SubmitPostState extends State<SubmitPost> {
                         textColor: Theme.of(context).primaryColor,
                         child: Icon(Icons.add_photo_alternate),
                         onPressed: () => getImage(ImageSource.gallery))
-                  ], mainAxisAlignment: MainAxisAlignment.center)
+                  ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
                 : new Image.file(this._image, fit: BoxFit.fitWidth)),
         padding: EdgeInsets.all(20),
       ),
@@ -180,57 +200,51 @@ class _SubmitPostState extends State<SubmitPost> {
               ),
             ),
             Center(
-              child: Wrap(
-                  spacing: 2.0,
-                  runSpacing: 0.0,
-                  children: List<Widget>.generate(this._allergens.length,
-                      (int index) {
-                    return ChoiceChip(
-                        label: Text(this._allergens[index]),
-                        selected: this._selectedAllergens.contains(index),
-                        onSelected: (bool selected) {
-                          setState(() {
-                            if (!this._selectedAllergens.contains(index)) {
-                              this._selectedAllergens.add(index);
-                            } else {
-                              this._selectedAllergens.remove(index);
-                            }
-                          });
-                        });
-                  })),
-            ),
+                child: Wrap(spacing: 2.0, runSpacing: 0.0, children: [
+              for (var index = 0; index < this._allergens.length; index++)
+                ChoiceChip(
+                    label: Text(this._allergens[index]),
+                    selected: this._selectedAllergens.contains(index),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (!this._selectedAllergens.contains(index)) {
+                          this._selectedAllergens.add(index);
+                        } else {
+                          this._selectedAllergens.remove(index);
+                        }
+                      });
+                    })
+            ])),
           ]),
           padding: EdgeInsets.all(15)),
-      InkWell(
-          child: Padding(
-              child: Column(children: [
-                CheckboxListTile(
-                    value: _isScheduled,
-                    onChanged: (bool changed) {
-                      setState(() {
-                        _isScheduled = changed;
-                      });
-                      //print(changed);
-                    },
-                    title: Text("Schedule Post?"),
-                    controlAffinity: ListTileControlAffinity.leading),
-
-                Text(
-                    'Post at ${postTime.month}/${postTime.day}/${postTime.year}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w300,
-                        color: _isScheduled ? Colors.black : Colors.white)),
-                        //TODO: background color to make it look clickable
-
-                Text('@ ${postTime.hour}:${postTime.minute}',
-                    style: TextStyle(
-                        fontSize: 16,
-                        fontWeight: FontWeight.w200,
-                        color: _isScheduled ? Colors.black : Colors.white))
-              ]),
-              padding: EdgeInsets.all(15.0)),
-          onTap: !_isScheduled ? null : () => selectPostTime(context)),
+      Container(
+          padding: EdgeInsets.all(15.0),
+          child: Column(children: [
+            CheckboxListTile(
+                value: _isScheduled,
+                onChanged: (bool changed) {
+                  setState(() {
+                    _isScheduled = changed;
+                  });
+                  //print(changed);
+                },
+                title: Text(
+                  "Schedule Post?",
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+                ),
+                controlAffinity: ListTileControlAffinity.leading),
+            if (_isScheduled)
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                OutlineButton(
+                  child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
+                  onPressed: () => selectDay(context),
+                ),
+                OutlineButton(
+                  child: Text('Time: ${DateFormat.jm().format(postTime)}'),
+                  onPressed: () => selectTime(context),
+                )
+              ])
+          ])),
       Center(
         child: Padding(
             child: Row(
@@ -243,8 +257,8 @@ class _SubmitPostState extends State<SubmitPost> {
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  child: !_isScheduled
-                      ? Text('Submit Now')
+                  child: !_isScheduled 
+                      ? Text('Post Now') 
                       : Text('Schedule Post'),
                   onPressed: () {
                     // when a post does not have all necessary fields,
