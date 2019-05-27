@@ -2,6 +2,18 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
+var _logo = [
+    Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
+    Padding(
+      padding: const EdgeInsets.all(5.0),
+      child: Text(
+        'ExtraEats',
+        textAlign: TextAlign.center,
+        style: TextStyle(fontSize: 45),
+      ),
+    ),
+  ];
+
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
 
@@ -32,42 +44,34 @@ class _RegisterState extends State<Register> {
 
   Widget registerForm() {
     var items = [
-      Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
-      Divider(color: Colors.white, height: 5.0),
-      Text(
-        'Extra Eats',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 45),
-      ),
-      Divider(color: Colors.white, height: 5.0),
+      ..._logo,
       TextField(
         controller: emailController,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
           hintText: 'Email',
           contentPadding: EdgeInsets.all(20.0),
-          border: InputBorder.none,
+          //border: InputBorder.none,
         ),
       ),
-      Divider(color: Colors.grey, height: 0.0),
       TextField(
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.all(20.0),
-          border: InputBorder.none,
+          //border: InputBorder.none,
         ),
       ),
-      Divider(color: Colors.grey, height: 0.0),
       TextField(
         controller: nameController,
         decoration: InputDecoration(
           hintText: 'Name (optional)',
           contentPadding: EdgeInsets.all(20.0),
-          border: InputBorder.none,
+          //border: InputBorder.none,
         ),
       ),
-      Divider(color: Colors.grey, height: 0.0),
+      
       Padding(
           padding: EdgeInsets.all(32.0),
           child: Row(children: [
@@ -206,32 +210,25 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     var items = [
-      Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
-      Divider(color: Colors.white, height: 5.0),
-      Text(
-        'Extra Eats',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 45),
-      ),
-      Divider(color: Colors.white, height: 5.0),
+      ..._logo,
       TextField(
         controller: emailController,
+        keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
             hintText: 'Email',
             contentPadding: EdgeInsets.all(20.0),
-            border: InputBorder.none),
+            //border: InputBorder.none
+        ),
       ),
-      Divider(color: Colors.grey, height: 0.0),
       TextField(
         controller: passwordController,
         obscureText: true,
         decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.all(20.0),
-          border: InputBorder.none,
+          //border: InputBorder.none,
         ),
       ),
-      Divider(color: Colors.grey, height: 0.0),
       Padding(
           padding: EdgeInsets.all(32.0),
           child: Row(children: [

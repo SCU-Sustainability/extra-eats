@@ -136,12 +136,13 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
             buttonColor: const Color(0xFF489835), //buttons
             //light green
             accentColor: const Color(0xFF9BCF31), //reload, option slider
-            //yellow is not used - Color(0xFFF6D709)
+            //yellow
+            cardColor: Color(0xFFF6D709),
             //red
             errorColor: const Color(0xFFCE0000), //Cancel, Go Back
             //off white
             backgroundColor: const Color(0xFFF7F7ED), //not used
-            primaryTextTheme: TextTheme(title: TextStyle(color: Colors.white))),
+            ),
         home: Scaffold(
           appBar: AppBar(
             title:

@@ -142,50 +142,51 @@ class _SubmitPostState extends State<SubmitPost> {
   @override
   Widget build(BuildContext context) {
     var items = [
-      Padding(
-        child: Center(
-            //if no image yet then show upload buttons, otherwise show image.
-            child: _image == null
-                ? Row(children: <Widget>[
-                    OutlineButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Icon(Icons.add_a_photo),
-                        onPressed: () => getImage(ImageSource.camera)),
-                    OutlineButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Icon(Icons.add_photo_alternate),
-                        onPressed: () => getImage(ImageSource.gallery))
-                  ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
-                : new Image.file(this._image, fit: BoxFit.fitWidth)),
+      Container(
         padding: EdgeInsets.all(20),
+        alignment: Alignment.center,
+        //if no image yet then show upload buttons, otherwise show image.
+        child: _image == null
+            ? Row(children: <Widget>[
+                OutlineButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Icon(Icons.add_a_photo),
+                    onPressed: () => getImage(ImageSource.camera)),
+                OutlineButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Icon(Icons.add_photo_alternate),
+                    onPressed: () => getImage(ImageSource.gallery))
+              ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
+            : new Image.file(this._image, fit: BoxFit.fitWidth),
       ),
-
       TextField(
         controller: nameController,
+        textAlign: TextAlign.center,
         decoration: InputDecoration(
           hintText: 'Event name',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
           contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          border: OutlineInputBorder(),
         ),
       ),
-      // Divider(color: Colors.grey, height: 0.0),
       TextField(
         controller: descriptionController,
+        keyboardType: TextInputType.multiline,
+        maxLines: null, //expands as more lines added
         decoration: InputDecoration(
+          icon: Icon(Icons.subject),
           hintText: 'Event description',
           contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          border: OutlineInputBorder(),
         ),
       ),
-
       TextField(
         controller: locationController,
         decoration: InputDecoration(
+          icon: Icon(Icons.location_on),
           hintText: 'Location',
-          hintStyle: TextStyle(fontWeight: FontWeight.w300),
           contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          border: OutlineInputBorder(),
         ),
       ),
       Padding(
@@ -219,6 +220,7 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
       Container(
           padding: EdgeInsets.all(15.0),
+          color: _isScheduled ? Theme.of(context).cardColor : Colors.white,
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,
@@ -300,7 +302,11 @@ class _SubmitPostState extends State<SubmitPost> {
             padding: EdgeInsets.only(bottom: 32)),
       ),
     ];
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+              color: Colors.white,
+              height: 5,
+            ),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return items[index];
