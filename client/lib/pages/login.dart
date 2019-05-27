@@ -146,10 +146,11 @@ class _RegisterState extends State<Register> {
         ? registerForm()
         : Scaffold(
             appBar: AppBar(title: Text('Select an account type')),
-            body: Container(
-                child: Center(
+            body: Center(
+                child: IntrinsicWidth(
                     child: Column(
                         mainAxisAlignment: MainAxisAlignment.center,
+                        crossAxisAlignment: CrossAxisAlignment.stretch,
                         children: [
                   Padding(
                     padding: const EdgeInsets.all(8.0),
