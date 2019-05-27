@@ -165,8 +165,7 @@ class _SubmitPostState extends State<SubmitPost> {
         decoration: InputDecoration(
           hintText: 'Event name',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
-          contentPadding: EdgeInsets.all(15.0),
-          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(horizontal: 40,vertical: 20), //TODO: fix margins
         ),
       ),
       TextField(
@@ -176,8 +175,7 @@ class _SubmitPostState extends State<SubmitPost> {
         decoration: InputDecoration(
           icon: Icon(Icons.subject),
           hintText: 'Event description',
-          contentPadding: EdgeInsets.all(15.0),
-          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(vertical:20),
         ),
       ),
       TextField(
@@ -185,8 +183,7 @@ class _SubmitPostState extends State<SubmitPost> {
         decoration: InputDecoration(
           icon: Icon(Icons.location_on),
           hintText: 'Location',
-          contentPadding: EdgeInsets.all(15.0),
-          border: OutlineInputBorder(),
+          contentPadding: EdgeInsets.symmetric(vertical:20),
         ),
       ),
       Padding(
@@ -305,7 +302,7 @@ class _SubmitPostState extends State<SubmitPost> {
     return ListView.separated(
         separatorBuilder: (context, index) => Divider(
               color: Colors.white,
-              height: 5,
+              height: 0,
             ),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
