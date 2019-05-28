@@ -12,6 +12,9 @@ const User = require('./models/user');
 const Post = require('./models/post');
 const Mailer = require('./mailer');
 const push = require('./push');
+const dataURI = require('datauri'); 
+const path = require('path'); 
+const fs = require("fs");
 
 const router = express.Router();
 
@@ -245,9 +248,12 @@ router.route('/users/verify/:user_id').post(function(req, res) {
 // Posts
 router
   .route('/posts')
+  //upload.single('image')
   .post(upload.single('image'), function(req, res) {
     // Check: Auth
     // Post-upload
+    console.log("BODY:", req.body);
+    console.log("FILE:", req.file); 
 
     let token = req.headers['x-access-token'];
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
@@ -270,12 +276,10 @@ router
           return res.json({
             message: 'You are not a provider!',
             code: -2
-          });
-
+          });  
         if (
           !req.body.name ||
           !req.body.description ||
-          !req.body.tags ||
           !req.body.location
         ) {
           // Never reached?
@@ -295,7 +299,7 @@ router
           public_id: req.file.public_id,
           tags: req.body.tags,
           location: req.body.location,
-          expiration: req.body.expiration,
+          expiration: req.body.expiryDate,
           creator: user._id
         });
 
@@ -320,6 +324,7 @@ router
               });
             }
             push(req.body.name, req.body.description).then(response => {
+              console.log("here"); 
               return res.json({ message: 'Posted!', code: 1 });
             });
           });
