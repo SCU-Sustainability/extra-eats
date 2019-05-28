@@ -62,8 +62,7 @@ class _SubmitPostState extends State<SubmitPost> {
       initialDate: postTime,
       firstDate: DateTime.now()
           .subtract(Duration(hours: DateTime.now().hour)), //beginning of today
-      lastDate: DateTime.now().add(
-          Duration(days: 14)), //TODO: ask Lindsey how many weeks ahead can pick
+      lastDate: DateTime.now().add(Duration(days: 7)), //week from now
     );
     if (day != null && day != postTime) {
       setState(() {
@@ -161,7 +160,7 @@ class _SubmitPostState extends State<SubmitPost> {
       ),
       TextField(
         controller: nameController,
-        textAlign: TextAlign.center,
+        //textAlign: TextAlign.center,
         decoration: InputDecoration(
           hintText: 'Event name',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
@@ -228,17 +227,17 @@ class _SubmitPostState extends State<SubmitPost> {
                   //print(changed);
                 },
                 title: Text(
-                  "Schedule Post?",
+                  "Select Day and Time", //todo add caret
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                 ),
                 controlAffinity: ListTileControlAffinity.leading),
             if (_isScheduled)
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                OutlineButton(
+                RaisedButton(
                   child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
                   onPressed: () => selectDay(context),
                 ),
-                OutlineButton(
+                RaisedButton(
                   child: Text('Time: ${DateFormat.jm().format(postTime)}'),
                   onPressed: () => selectTime(context),
                 )

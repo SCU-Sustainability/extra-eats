@@ -137,7 +137,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
           //light green
           accentColor: const Color(0xFF9BCF31), //reload, option slider
           //yellow
-          cardColor: Color(0xFFF6D709),
+          cardColor: Colors.grey[300],
           //red
           errorColor: const Color(0xFFCE0000), //Cancel, Go Back
           //off white
