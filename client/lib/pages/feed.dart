@@ -101,6 +101,8 @@ class _FeedState extends State<Feed> {
                 child: Text('Delete',
                     style: TextStyle(color: Theme.of(context).errorColor)),
                 onPressed: () {
+		  String alert_msg = "Are you sure you want to delete this post?";
+		  if(!alertDialog(context, alert_msg)){ return; } 
                   Client.get()
                       .deletePost(InheritedClient.of(context).accessToken,
                           currentPost.id)
@@ -162,3 +164,37 @@ class _FeedState extends State<Feed> {
     );
   }
 }
+
+
+// alerts func
+  bool alertDialog(BuildContext context, String alert_msg) {
+    // flutter defined function
+    showDialog(
+      context: context,
+      builder: (BuildContext context) {
+        // return object of type Dialog
+        return AlertDialog(
+          title: new Text(alert_msg),
+          //content: new Text("Alert Dialog body"), //used for a body in the msg
+          actions: <Widget>[
+            // usually buttons at the bottom of the dialog
+            new FlatButton(
+              child: new Text("Yes"),
+              onPressed: () {
+	        Navigator.of(context).pop();
+     		return true; 
+	        },
+            ),
+	   new FlatButton(
+	       child: new Text("No"),
+		onPressed: () {
+		   Navigator.of(context).pop();
+	           return false;
+		},
+	    ),
+          ],
+        );
+      },
+    );
+  }
+
