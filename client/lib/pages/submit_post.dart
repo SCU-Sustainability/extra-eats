@@ -217,7 +217,7 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
       Container(
           padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Theme.of(context).cardColor : Colors.white,
+          color: _isScheduled ? Theme.of(context).cardColor : Colors.white, //TODO: Why is this white different from all other whites?
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,
