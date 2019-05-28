@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:flutter_datetime_picker/flutter_datetime_picker.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:io';
 import 'dart:async';
@@ -20,7 +20,6 @@ class _SubmitPostState extends State<SubmitPost> {
   TextEditingController descriptionController = TextEditingController();
   TextEditingController locationController = TextEditingController();
   DateTime postTime = DateTime.now();
-  //DateTime expiration = );
   bool _isScheduled = false;
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
@@ -28,12 +27,13 @@ class _SubmitPostState extends State<SubmitPost> {
     'dairy',
     'fish',
     'peanuts',
-    'treenuts',
+    'tree nuts',
     'wheat',
     'shellfish',
     'soy',
     'egg'
   ];
+  //TODO: add tags ['vegetarian', 'vegan'] etc. see google drive
   File _image;
 
   Future getImage(ImageSource src) async {
@@ -43,13 +43,32 @@ class _SubmitPostState extends State<SubmitPost> {
     });
   }
 
-  Future selectPostTime(BuildContext context) async {
-    DatePicker.showDateTimePicker(context, showTitleActions: true,
-        onConfirm: (date) {
+  Future selectTime(BuildContext context) async {
+    final time = await showTimePicker(
+      context: context,
+      initialTime: TimeOfDay.fromDateTime(postTime),
+    );
+    if (time != null && time != TimeOfDay.fromDateTime(postTime)) {
       setState(() {
-        postTime = date;
+        postTime = DateTime(postTime.year, postTime.month, postTime.day,
+            time.hour, time.minute);
       });
-    });
+    }
+  }
+
+  Future selectDay(BuildContext context) async {
+    final day = await showDatePicker(
+      context: context,
+      initialDate: postTime,
+      firstDate: DateTime.now()
+          .subtract(Duration(hours: DateTime.now().hour)), //beginning of today
+      lastDate: DateTime.now().add(Duration(days: 7)), //week from now
+    );
+    if (day != null && day != postTime) {
+      setState(() {
+        postTime = day;
+      });
+    }
   }
 
   @override
@@ -79,9 +98,7 @@ class _SubmitPostState extends State<SubmitPost> {
             title: Text(response),
             actions: <Widget>[
               FlatButton(
-                  child: Text('OK'),
-                  onPressed: Navigator.of(context).pop
-                  )
+                  child: Text('OK'), onPressed: Navigator.of(context).pop)
             ],
           );
         });
@@ -105,9 +122,9 @@ class _SubmitPostState extends State<SubmitPost> {
             tags,
             this._isScheduled)
         .then((res) {
-      this
-          ._submitResponse(res.data['message'])
-          .then((void next) {Navigator.of(context).pop();});
+      this._submitResponse(res.data['message']).then((void next) {
+        Navigator.of(context).pop();
+      });
       if (res.data['code'] == 1) {
         this._clear();
       }
@@ -124,48 +141,48 @@ class _SubmitPostState extends State<SubmitPost> {
   @override
   Widget build(BuildContext context) {
     var items = [
-      Padding(
-        child: Center(
-            //if no image yet then show upload buttons, otherwise show image.
-            child: _image == null
-                ? Row(children: <Widget>[
-                    FlatButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Icon(Icons.add_a_photo),
-                        onPressed: () => getImage(ImageSource.camera)),
-                    FlatButton(
-                        textColor: Theme.of(context).primaryColor,
-                        child: Icon(Icons.add_photo_alternate),
-                        onPressed: () => getImage(ImageSource.gallery))
-                  ], mainAxisAlignment: MainAxisAlignment.center)
-                : new Image.file(this._image, fit: BoxFit.fitWidth)),
+      Container(
         padding: EdgeInsets.all(20),
+        alignment: Alignment.center,
+        //if no image yet then show upload buttons, otherwise show image.
+        child: _image == null
+            ? Row(children: <Widget>[
+                OutlineButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Icon(Icons.add_a_photo),
+                    onPressed: () => getImage(ImageSource.camera)),
+                OutlineButton(
+                    textColor: Theme.of(context).primaryColor,
+                    child: Icon(Icons.add_photo_alternate),
+                    onPressed: () => getImage(ImageSource.gallery))
+              ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
+            : new Image.file(this._image, fit: BoxFit.fitWidth),
       ),
       TextField(
         controller: nameController,
         decoration: InputDecoration(
-          hintText: 'Event name',
+          icon: Icon(Icons.subject),
+          hintText: 'Event Name',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
-          contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical: 20), //TODO: fix margins
         ),
       ),
-      // Divider(color: Colors.grey, height: 0.0),
       TextField(
         controller: descriptionController,
+        keyboardType: TextInputType.multiline,
+        maxLines: null, //expands as more lines added
         decoration: InputDecoration(
-          hintText: 'Event description',
-          contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          icon: Icon(Icons.subject),
+          hintText: 'Food Description',
+          contentPadding: EdgeInsets.symmetric(vertical:20),
         ),
       ),
       TextField(
         controller: locationController,
         decoration: InputDecoration(
+          icon: Icon(Icons.location_on),
           hintText: 'Location',
-          hintStyle: TextStyle(fontWeight: FontWeight.w300),
-          contentPadding: EdgeInsets.all(15.0),
-          border: InputBorder.none,
+          contentPadding: EdgeInsets.symmetric(vertical:20),
         ),
       ),
       Padding(
@@ -180,54 +197,52 @@ class _SubmitPostState extends State<SubmitPost> {
               ),
             ),
             Center(
-              child: Wrap(
-                  spacing: 2.0,
-                  runSpacing: 0.0,
-                  children: List<Widget>.generate(this._allergens.length,
-                      (int index) {
-                    return ChoiceChip(
-                        label: Text(this._allergens[index]),
-                        selected: this._selectedAllergens.contains(index),
-                        onSelected: (bool selected) {
-                          setState(() {
-                            if (!this._selectedAllergens.contains(index)) {
-                              this._selectedAllergens.add(index);
-                            } else {
-                              this._selectedAllergens.remove(index);
-                            }
-                          });
-                        });
-                  })),
-            ),
+                child: Wrap(spacing: 2.0, runSpacing: 0.0, children: [
+              for (var index = 0; index < this._allergens.length; index++)
+                ChoiceChip(
+                    label: Text(this._allergens[index]),
+                    selected: this._selectedAllergens.contains(index),
+                    onSelected: (bool selected) {
+                      setState(() {
+                        if (!this._selectedAllergens.contains(index)) {
+                          this._selectedAllergens.add(index);
+                        } else {
+                          this._selectedAllergens.remove(index);
+                        }
+                      });
+                    })
+            ])),
           ]),
           padding: EdgeInsets.all(15)),
-      InkWell(
-          child: Padding(
-              child: Column(children: [
-                CheckboxListTile(
-                  value: _isScheduled,
-                  onChanged: (bool changed) {
-                    setState((){
-                      _isScheduled = changed;
-                    });
-                    //print(changed);
-                  },
-                  title: Text("Schedule Post?"),
-                  controlAffinity: ListTileControlAffinity.leading
+      Container(
+          padding: EdgeInsets.all(15.0),
+          color: _isScheduled ? Theme.of(context).cardColor : null, //TODO: Why is this white different from all other whites?
+          child: Column(children: [
+            CheckboxListTile(
+                value: _isScheduled,
+                onChanged: (bool changed) {
+                  setState(() {
+                    _isScheduled = changed;
+                  });
+                  //print(changed);
+                },
+                title: Text(
+                  "Select Day and Time", //todo add caret
+                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                 ),
-                 
-                Text('Post at ${postTime.month}/${postTime.day}/${postTime.year}',
-                    style:
-                        TextStyle(fontSize: 16, 
-                        fontWeight: FontWeight.w300,
-                        color: _isScheduled ? Colors.black : Colors.white)), //TODO: background color to make it look clickable
-                
-                Text('@ ${postTime.hour}:${postTime.minute}',
-                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w200,
-                    color: _isScheduled ? Colors.black : Colors.white))
-              ]),
-              padding: EdgeInsets.all(15.0)),
-          onTap: !_isScheduled ? null : () => selectPostTime(context)),
+                controlAffinity: ListTileControlAffinity.leading),
+            if (_isScheduled)
+              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
+                RaisedButton(
+                  child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
+                  onPressed: () => selectDay(context), textColor: Colors.white,
+                ),
+                RaisedButton(
+                  child: Text('Time: ${DateFormat.jm().format(postTime)}'),
+                  onPressed: () => selectTime(context), textColor: Colors.white,
+                )
+              ])
+          ])),
       Center(
         child: Padding(
             child: Row(
@@ -240,29 +255,41 @@ class _SubmitPostState extends State<SubmitPost> {
                     }),
                 RaisedButton(
                   textColor: Colors.white,
-                  child: !_isScheduled? Text('Submit Now') : Text('Schedule Post'),
+                  child:
+                      !_isScheduled ? Text('Post Now') : Text('Schedule Post'),
                   onPressed: () {
-			// when a post does not have all necessary fields, 
-			// will give a list of what fields the post is missing 
-			Set<String> fields = {};
-			if(nameController.text == ''){ 
-				fields.add('name'); }
-			if(descriptionController.text == ''){ 
-				fields.add('description'); }
-			if(_image == null){ 
-				fields.add('photo'); }
-			if(locationController.text == ''){ 
-				fields.add("location"); }
-			if(fields.length != 0){
-				String alert_msg = "Please add the following field" + (fields.length > 1 ? "s" : "") + " to your post: ";
-				for(var i in fields){
-					if(fields.length == 1){ alert_msg += i + "."; break; }
-					alert_msg += (fields.elementAt(fields.length-1) == i ? "and " + i + ".": i + ", ");
-				}
-				alertDialog(context, alert_msg);
-				return;
- 			}
-                       _ensureSubmit();
+                    // when a post does not have all necessary fields,
+                    // will give a list of what fields the post is missing
+                    Set<String> fields = {};
+                    if (nameController.text == '') {
+                      fields.add('name');
+                    }
+                    if (descriptionController.text == '') {
+                      fields.add('description');
+                    }
+                    if (_image == null) {
+                      fields.add('photo');
+                    }
+                    if (locationController.text == '') {
+                      fields.add("location");
+                    }
+                    if (fields.length != 0) {
+                      String alertMsg = "Please add the following field" +
+                          (fields.length > 1 ? "s" : "") +
+                          " to your post: ";
+                      for (var i in fields) {
+                        if (fields.length == 1) {
+                          alertMsg += i + ".";
+                          break;
+                        }
+                        alertMsg += (fields.elementAt(fields.length - 1) == i
+                            ? "and " + i + "."
+                            : i + ", ");
+                      }
+                      alertDialog(context, alertMsg);
+                      return;
+                    }
+                    _ensureSubmit();
                   },
                 ),
               ],
@@ -271,7 +298,11 @@ class _SubmitPostState extends State<SubmitPost> {
             padding: EdgeInsets.only(bottom: 32)),
       ),
     ];
-    return ListView.builder(
+    return ListView.separated(
+        separatorBuilder: (context, index) => Divider(
+              color: Colors.white,
+              height: 0,
+            ),
         itemCount: items.length,
         itemBuilder: (BuildContext context, int index) {
           return items[index];
@@ -279,29 +310,26 @@ class _SubmitPostState extends State<SubmitPost> {
   }
 }
 
-
 // alerts func
-  void alertDialog(BuildContext context, String alert_msg) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text(alert_msg),
-          //content: new Text("Alert Dialog body"),
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Ok"),
-              onPressed: () {
-                Navigator.of(context).pop();
-              },
-            ),
-          ],
-        );
-      },
-    );
-  }
-
-
+void alertDialog(BuildContext context, String alertMsg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(alertMsg),
+        //content: new Text("Alert Dialog body"),
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Ok"),
+            onPressed: () {
+              Navigator.of(context).pop();
+            },
+          ),
+        ],
+      );
+    },
+  );
+}

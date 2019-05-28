@@ -8,9 +8,16 @@ import 'dart:convert';
 class Client {
   static final Client _client = new Client._internal();
   static final String _localhost = 'http://localhost:8080/api/';
-  static final String _local = 'http://10.0.2.2:8080/api/';
+  static final String _local = 'http://172.21.72.250:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
   static final String _url = _local;
+  
+  static final BaseOptions _options = new BaseOptions(
+    baseUrl: _url,
+    connectTimeout: 10000, //10s
+    receiveTimeout: 5000,
+  );
+  Dio dio = new Dio(_options);
 
   static Client get() {
     return _client;
@@ -23,14 +30,14 @@ class Client {
   }
 
   Future<Response> login(String email, String password) async {
-    var response = await Dio().postUri(Uri.parse(_url + 'login'),
+    var response = await dio.postUri(Uri.parse('login'),
         data: {'email': email, 'password': password});
     return response;
   }
 
   Future<Response> register(
       String name, String password, String email, bool provider) async {
-    var response = await Dio().postUri(Uri.parse(_url + 'users'), data: {
+    var response = await dio.postUri(Uri.parse('users'), data: {
       'email': email,
       'password': password,
       'name': name,
@@ -52,20 +59,20 @@ class Client {
       'tags': tags,
       'isScheduled': isScheduled
     });
-    var response = await Dio().post(_url + 'posts',
+    var response = await dio.post('posts',
         data: formData, options: Options(headers: {'x-access-token': token}));
     return response;
   }
 
   Future<Response> getPosts(String token) async {
-    var response = await Dio().get(_url + 'posts',
+    var response = await dio.get('posts',
         options: Options(headers: {'x-access-token': token}));
     print(response);
     return response;
   }
 
   Future<Response> deletePost(String token, String postId) async {
-    var response = await Dio().delete(_url + 'posts',
+    var response = await dio.delete('posts',
         options: Options(headers: {'x-access-token': token, 'id': postId}));
     return response;
   }
