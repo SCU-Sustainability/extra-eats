@@ -36,6 +36,21 @@ var PostSchema = new Schema({
   expiration: {
     type: Date,
     required: true
+  }, 
+  scheduledDay: {
+    type: Number
+  },
+  scheduledMonth: {
+    type: Number
+  },
+  scheduledHour: {
+    type: Number
+  },
+  scheduledMinute: {
+    type: Number
+  },
+  status: {
+    type: String //Expired, scheduled, or active. Set this field in background.js
   }
 });
 
