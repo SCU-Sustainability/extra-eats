@@ -78,7 +78,6 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
       this._setToken(res.data['token']);
       this._userId = res.data['user_id'];
       this._provider = res.data['provider'];
-      // Todo: change _children and _items
       if (Platform.isAndroid) {
         OneSignal.shared.init('6d50216a-231d-4cf5-9abd-7928d4f020fb');
         OneSignal.shared

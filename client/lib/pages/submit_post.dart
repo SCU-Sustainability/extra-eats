@@ -174,7 +174,7 @@ class _SubmitPostState extends State<SubmitPost> {
         decoration: InputDecoration(
           icon: Icon(Icons.subject),
           hintText: 'Food Description',
-          contentPadding: EdgeInsets.symmetric(vertical:20),
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
         ),
       ),
       TextField(
@@ -182,7 +182,7 @@ class _SubmitPostState extends State<SubmitPost> {
         decoration: InputDecoration(
           icon: Icon(Icons.location_on),
           hintText: 'Location',
-          contentPadding: EdgeInsets.symmetric(vertical:20),
+          contentPadding: EdgeInsets.symmetric(vertical: 20),
         ),
       ),
       Padding(
@@ -216,7 +216,7 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
       Container(
           padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Theme.of(context).cardColor : null, //TODO: Why is this white different from all other whites?
+          color: _isScheduled ? Theme.of(context).cardColor : null,
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,
@@ -235,11 +235,13 @@ class _SubmitPostState extends State<SubmitPost> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 RaisedButton(
                   child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
-                  onPressed: () => selectDay(context), textColor: Colors.white,
+                  onPressed: () => selectDay(context),
+                  textColor: Colors.white,
                 ),
                 RaisedButton(
                   child: Text('Time: ${DateFormat.jm().format(postTime)}'),
-                  onPressed: () => selectTime(context), textColor: Colors.white,
+                  onPressed: () => selectTime(context),
+                  textColor: Colors.white,
                 )
               ])
           ])),

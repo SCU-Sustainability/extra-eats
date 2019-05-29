@@ -3,16 +3,16 @@ import 'package:flutter/material.dart';
 import '../actions.dart';
 
 var _logo = [
-    Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
-    Padding(
-      padding: const EdgeInsets.all(5.0),
-      child: Text(
-        'ExtraEats',
-        textAlign: TextAlign.center,
-        style: TextStyle(fontSize: 45),
-      ),
+  Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
+  Padding(
+    padding: const EdgeInsets.all(5.0),
+    child: Text(
+      'ExtraEats',
+      textAlign: TextAlign.center,
+      style: TextStyle(fontSize: 45),
     ),
-  ];
+  ),
+];
 
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
@@ -71,7 +71,6 @@ class _RegisterState extends State<Register> {
           //border: InputBorder.none,
         ),
       ),
-      
       Padding(
           padding: EdgeInsets.all(32.0),
           child: Row(children: [
@@ -215,9 +214,8 @@ class _LoginState extends State<Login> {
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
         decoration: InputDecoration(
-            hintText: 'Email',
-            contentPadding: EdgeInsets.all(20.0),
-            //border: InputBorder.none
+          hintText: 'Email',
+          contentPadding: EdgeInsets.all(20.0),
         ),
       ),
       TextField(
@@ -226,7 +224,6 @@ class _LoginState extends State<Login> {
         decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.all(20.0),
-          //border: InputBorder.none,
         ),
       ),
       Padding(

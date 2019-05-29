@@ -165,36 +165,36 @@ class _FeedState extends State<Feed> {
   }
 }
 
-
 // alerts func
-  bool alertDialog(BuildContext context, String alert_msg) {
-    // flutter defined function
-    showDialog(
-      context: context,
-      builder: (BuildContext context) {
-        // return object of type Dialog
-        return AlertDialog(
-          title: new Text(alert_msg),
-          //content: new Text("Alert Dialog body"), //used for a body in the msg
-          actions: <Widget>[
-            // usually buttons at the bottom of the dialog
-            new FlatButton(
-              child: new Text("Yes"),
-              onPressed: () {
-	        Navigator.of(context).pop();
+bool alertDialog(BuildContext context, String alert_msg) {
+  // flutter defined function
+  showDialog(
+    context: context,
+    builder: (BuildContext context) {
+      // return object of type Dialog
+      return AlertDialog(
+        title: new Text(alert_msg),
+        //content: new Text("Alert Dialog body"), //used for a body in the msg
+        actions: <Widget>[
+          // usually buttons at the bottom of the dialog
+          new FlatButton(
+            child: new Text("Yes"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              return true;
      		return true; 
-	        },
-            ),
-	   new FlatButton(
-	       child: new Text("No"),
-		onPressed: () {
-		   Navigator.of(context).pop();
-	           return false;
-		},
-	    ),
-          ],
-        );
-      },
-    );
-  }
-
+              return true;
+            },
+          ),
+          new FlatButton(
+            child: new Text("No"),
+            onPressed: () {
+              Navigator.of(context).pop();
+              return false;
+            },
+          ),
+        ],
+      );
+    },
+  );
+}
