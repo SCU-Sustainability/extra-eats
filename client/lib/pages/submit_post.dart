@@ -160,11 +160,11 @@ class _SubmitPostState extends State<SubmitPost> {
       ),
       TextField(
         controller: nameController,
-        //textAlign: TextAlign.center,
         decoration: InputDecoration(
-          hintText: 'Event name',
+          icon: Icon(Icons.subject),
+          hintText: 'Event Name',
           hintStyle: TextStyle(fontWeight: FontWeight.bold),
-          contentPadding: EdgeInsets.symmetric(horizontal: 40,vertical: 20), //TODO: fix margins
+          contentPadding: EdgeInsets.symmetric(vertical: 20), //TODO: fix margins
         ),
       ),
       TextField(
@@ -173,7 +173,7 @@ class _SubmitPostState extends State<SubmitPost> {
         maxLines: null, //expands as more lines added
         decoration: InputDecoration(
           icon: Icon(Icons.subject),
-          hintText: 'Event description',
+          hintText: 'Food Description',
           contentPadding: EdgeInsets.symmetric(vertical:20),
         ),
       ),
@@ -216,7 +216,7 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
       Container(
           padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Theme.of(context).cardColor : Colors.white, //TODO: Why is this white different from all other whites?
+          color: _isScheduled ? Theme.of(context).cardColor : null, //TODO: Why is this white different from all other whites?
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,
@@ -235,11 +235,11 @@ class _SubmitPostState extends State<SubmitPost> {
               Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
                 RaisedButton(
                   child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
-                  onPressed: () => selectDay(context),
+                  onPressed: () => selectDay(context), textColor: Colors.white,
                 ),
                 RaisedButton(
                   child: Text('Time: ${DateFormat.jm().format(postTime)}'),
-                  onPressed: () => selectTime(context),
+                  onPressed: () => selectTime(context), textColor: Colors.white,
                 )
               ])
           ])),
