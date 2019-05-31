@@ -216,7 +216,7 @@ class _SubmitPostState extends State<SubmitPost> {
           padding: EdgeInsets.all(15)),
       Container(
           padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Theme.of(context).cardColor : null,
+          color: _isScheduled ? Colors.grey[300] : null,
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,

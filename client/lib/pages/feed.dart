@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 
 import 'dart:async';
 
@@ -7,11 +8,9 @@ import '../data/client.dart';
 import '../actions.dart';
 
 class PostView extends StatelessWidget {
-  Post post;
+  final Post post;
 
-  PostView({Key key, Post post}) : super(key: key) {
-    this.post = post;
-  }
+  PostView({Key key, this.post}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -25,23 +24,19 @@ class PostView extends StatelessWidget {
       ),
       Text(this.post.description,
           style: TextStyle(fontWeight: FontWeight.w300, fontSize: 16)),
-      Text('Expires on ' +
-          this.post.expiration.toLocal().month.toString() +
-          '/' +
-          this.post.expiration.toLocal().day.toString() +
-          ' at ' +
-          this.post.expiration.toLocal().hour.toString() +
-          ':' +
-          this.post.expiration.toLocal().minute.toString()),
-      Padding(
-          child: Wrap(
-              spacing: 2.0,
-              runSpacing: 0.0,
-              children:
-                  List<Widget>.generate(this.post.tags.length, (int index) {
-                return Chip(label: Text(this.post.tags[index]));
-              })),
-          padding: EdgeInsets.only(top: 15)),
+      Text(
+          'Expires at ' +
+              DateFormat('h:mm a on MMM d')
+                  .format(this.post.expiration.toLocal()),
+          style: TextStyle(fontWeight: FontWeight.w300, fontSize: 12)),
+      if (this.post.tags.length > 0)
+        Padding(child: Text('May Contain:'), padding: EdgeInsets.only(top: 15)),
+      Wrap(
+          spacing: 2.0,
+          runSpacing: 0.0,
+          children: List<Widget>.generate(this.post.tags.length, (int index) {
+            return Chip(label: Text(this.post.tags[index]));
+          }))
     ];
     return Scaffold(
         appBar: AppBar(title: Text(this.post.name)),
@@ -89,28 +84,6 @@ class _FeedState extends State<Feed> {
         itemCount: posts.length,
         itemBuilder: (context, index) {
           var currentPost = posts[posts.length - index - 1];
-          var buttons = [
-            FlatButton(
-                child: Text('More Info'),
-                onPressed: () {
-                  this._openPost(currentPost, context);
-                }),
-          ];
-          if (userId == currentPost.creator) {
-            buttons.add(FlatButton(
-                child: Text('Delete',
-                    style: TextStyle(color: Theme.of(context).errorColor)),
-                onPressed: () {
-		  String alert_msg = "Are you sure you want to delete this post?";
-		  if(!alertDialog(context, alert_msg)){ return; } 
-                  Client.get()
-                      .deletePost(InheritedClient.of(context).accessToken,
-                          currentPost.id)
-                      .then((res) {
-                    setState(() {});
-                  });
-                }));
-          }
           return Padding(
               padding: EdgeInsets.all(15),
               child: Card(
@@ -121,7 +94,33 @@ class _FeedState extends State<Feed> {
                             fontWeight: FontWeight.w300, fontSize: 20)),
                     subtitle: Text(currentPost.location)),
                 Image.network(currentPost.image),
-                ButtonTheme.bar(child: ButtonBar(children: buttons))
+                ButtonTheme.bar(
+                    child: ButtonBar(children: [
+                  FlatButton(
+                      child: Text('More Info'),
+                      onPressed: () {
+                        this._openPost(currentPost, context);
+                      }),
+                  if (userId == currentPost.creator)
+                    FlatButton(
+                        child: Text('Delete',
+                            style:
+                                TextStyle(color: Theme.of(context).errorColor)),
+                        onPressed: () {
+                          String alert_msg =
+                              "Are you sure you want to delete this post?";
+                          if (!alertDialog(context, alert_msg)) {
+                            return;
+                          }
+                          Client.get()
+                              .deletePost(
+                                  InheritedClient.of(context).accessToken,
+                                  currentPost.id)
+                              .then((res) {
+                            setState(() {});
+                          });
+                        })
+                ]))
               ])));
         });
     return listView;
@@ -181,8 +180,6 @@ bool alertDialog(BuildContext context, String alert_msg) {
             child: new Text("Yes"),
             onPressed: () {
               Navigator.of(context).pop();
-              return true;
-     		return true; 
               return true;
             },
           ),
