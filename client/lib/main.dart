@@ -87,7 +87,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
         this._items.insert(
             1,
             BottomNavigationBarItem(
-              icon: Icon(Icons.add_a_photo),
+              icon: Icon(Icons.add_box),
               title: Text('Post'),
             ));
         this._children.insert(1, SubmitPost());
@@ -135,11 +135,10 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
           buttonColor: const Color(0xFF489835), //buttons
           //light green
           accentColor: const Color(0xFF9BCF31), //reload, option slider
-          //there is no yellow
           //red
           errorColor: const Color(0xFFCE0000), //Cancel, Go Back
           //off white
-          backgroundColor: const Color(0xFFF7F7ED), //not used
+          //backgroundColor: const Color(0xFFF7F7ED), //not used
         ),
         home: Scaffold(
           appBar: AppBar(

@@ -158,31 +158,40 @@ class _SubmitPostState extends State<SubmitPost> {
               ], mainAxisAlignment: MainAxisAlignment.spaceEvenly)
             : new Image.file(this._image, fit: BoxFit.fitWidth),
       ),
-      TextField(
-        controller: nameController,
-        decoration: InputDecoration(
-          icon: Icon(Icons.subject),
-          hintText: 'Event Name',
-          hintStyle: TextStyle(fontWeight: FontWeight.bold),
-          contentPadding: EdgeInsets.symmetric(vertical: 20), //TODO: fix margins
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextField(
+          controller: nameController,
+          decoration: InputDecoration(
+            icon: Icon(Icons.subject),
+            hintText: 'Event Name',
+            hintStyle: TextStyle(fontWeight: FontWeight.bold),
+            contentPadding: EdgeInsets.symmetric(vertical: 20),
+          ),
         ),
       ),
-      TextField(
-        controller: descriptionController,
-        keyboardType: TextInputType.multiline,
-        maxLines: null, //expands as more lines added
-        decoration: InputDecoration(
-          icon: Icon(Icons.subject),
-          hintText: 'Food Description',
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextField(
+          controller: descriptionController,
+          keyboardType: TextInputType.multiline,
+          maxLines: null, //expands as more lines added
+          decoration: InputDecoration(
+            icon: Icon(Icons.subject),
+            hintText: 'Food Description',
+            contentPadding: EdgeInsets.symmetric(vertical: 20),
+          ),
         ),
       ),
-      TextField(
-        controller: locationController,
-        decoration: InputDecoration(
-          icon: Icon(Icons.location_on),
-          hintText: 'Location',
-          contentPadding: EdgeInsets.symmetric(vertical: 20),
+      Padding(
+        padding: const EdgeInsets.symmetric(horizontal: 16),
+        child: TextField(
+          controller: locationController,
+          decoration: InputDecoration(
+            icon: Icon(Icons.location_on),
+            hintText: 'Location',
+            contentPadding: EdgeInsets.symmetric(vertical: 20),
+          ),
         ),
       ),
       Padding(
@@ -214,9 +223,13 @@ class _SubmitPostState extends State<SubmitPost> {
             ])),
           ]),
           padding: EdgeInsets.all(15)),
-      Container(
+      AnimatedContainer(
+          duration: MediaQuery.of(context).disableAnimations 
+          ? Duration(milliseconds: 0)
+          : Duration(milliseconds: 700),
+          curve: Curves.ease,
           padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Colors.grey[300] : null,
+          color: _isScheduled ? Colors.grey[300] : Colors.grey[50],
           child: Column(children: [
             CheckboxListTile(
                 value: _isScheduled,
@@ -224,24 +237,35 @@ class _SubmitPostState extends State<SubmitPost> {
                   setState(() {
                     _isScheduled = changed;
                   });
-                  //print(changed);
                 },
                 title: Text(
-                  "Select Day and Time", //todo add caret
+                  "Schedule day and time",
                   style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                 ),
                 controlAffinity: ListTileControlAffinity.leading),
             if (_isScheduled)
-              Row(mainAxisAlignment: MainAxisAlignment.spaceEvenly, children: [
-                RaisedButton(
-                  child: Text('Date: ${DateFormat.yMMMMd().format(postTime)}'),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                children: [
+                FlatButton(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.calendar_today), 
+                      Text('   ${DateFormat.yMMMMd().format(postTime)}')
+                    ]
+                  ),
                   onPressed: () => selectDay(context),
-                  textColor: Colors.white,
+                  color: Colors.white,
                 ),
-                RaisedButton(
-                  child: Text('Time: ${DateFormat.jm().format(postTime)}'),
+                FlatButton(
+                  child: Row(
+                    children: <Widget>[
+                      Icon(Icons.access_time),
+                      Text('   ${DateFormat.jm().format(postTime)}'),
+                    ],
+                  ),
                   onPressed: () => selectTime(context),
-                  textColor: Colors.white,
+                  color: Colors.white,
                 )
               ])
           ])),

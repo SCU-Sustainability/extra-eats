@@ -98,6 +98,7 @@ class _FeedState extends State<Feed> {
                     child: ButtonBar(children: [
                   FlatButton(
                       child: Text('More Info'),
+                      textColor: Theme.of(context).primaryColor,
                       onPressed: () {
                         this._openPost(currentPost, context);
                       }),
