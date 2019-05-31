@@ -1,7 +1,9 @@
 import 'package:dio/dio.dart';
+import 'package:http/http.dart' as http;
 
 import 'dart:io';
 import 'dart:async';
+import 'dart:convert'; 
 
 class Client {
   static final Client _client = new Client._internal();
@@ -46,6 +48,7 @@ class Client {
 
   Future<Response> post(String token, String name, String description,
       File imgFile, String location, DateTime postDate, DateTime expiryDate, List tags, bool isScheduled) async {
+
     FormData formData = new FormData.from({
       'name': name,
       'description': description,
@@ -64,6 +67,7 @@ class Client {
   Future<Response> getPosts(String token) async {
     var response = await dio.get('posts',
         options: Options(headers: {'x-access-token': token}));
+    print(response);
     return response;
   }
 
