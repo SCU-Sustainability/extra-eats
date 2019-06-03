@@ -85,6 +85,7 @@ class _SubmitPostState extends State<SubmitPost> {
     locationController.clear();
     this._selectedAllergens.clear();
     setState(() {
+      postTime = DateTime.now();
       _image = null;
     });
     FocusScope.of(context).requestFocus(new FocusNode());
