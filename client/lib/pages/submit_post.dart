@@ -86,6 +86,7 @@ class _SubmitPostState extends State<SubmitPost> {
     this._selectedAllergens.clear();
     setState(() {
       postTime = DateTime.now();
+      _isScheduled = false;
       _image = null;
     });
     FocusScope.of(context).requestFocus(new FocusNode());
@@ -207,31 +208,38 @@ class _SubmitPostState extends State<SubmitPost> {
               ),
             ),
             Center(
-                child: Wrap(spacing: 2.0, runSpacing: 0.0, children: [
-              for (var index = 0; index < this._allergens.length; index++)
-                ChoiceChip(
-                    label: Text(this._allergens[index]),
-                    selected: this._selectedAllergens.contains(index),
-                    onSelected: (bool selected) {
-                      setState(() {
-                        if (!this._selectedAllergens.contains(index)) {
-                          this._selectedAllergens.add(index);
-                        } else {
-                          this._selectedAllergens.remove(index);
-                        }
-                      });
-                    })
-            ])),
+              child: Wrap(
+                spacing: 2.0,
+                runSpacing: 0.0,
+                children: [
+                  for (var index = 0; index < this._allergens.length; index++)
+                    ChoiceChip(
+                      label: Text(this._allergens[index]),
+                      selected: this._selectedAllergens.contains(index),
+                      onSelected: (bool selected) {
+                        setState(() {
+                          if (!this._selectedAllergens.contains(index)) {
+                            this._selectedAllergens.add(index);
+                          } else {
+                            this._selectedAllergens.remove(index);
+                          }
+                        });
+                      },
+                    ),
+                ],
+              ),
+            ),
           ]),
           padding: EdgeInsets.all(15)),
       AnimatedContainer(
-          duration: MediaQuery.of(context).disableAnimations 
-          ? Duration(milliseconds: 0)
-          : Duration(milliseconds: 700),
-          curve: Curves.ease,
-          padding: EdgeInsets.all(15.0),
-          color: _isScheduled ? Colors.grey[300] : Colors.grey[50],
-          child: Column(children: [
+        duration: MediaQuery.of(context).disableAnimations
+            ? Duration(milliseconds: 0)
+            : Duration(milliseconds: 700),
+        curve: Curves.ease,
+        padding: EdgeInsets.all(15.0),
+        color: _isScheduled ? Colors.grey[300] : Colors.grey[50],
+        child: Column(
+          children: [
             CheckboxListTile(
                 value: _isScheduled,
                 onChanged: (bool changed) {
@@ -248,28 +256,29 @@ class _SubmitPostState extends State<SubmitPost> {
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                 children: [
-                FlatButton(
-                  child: Row(
-                    children: <Widget>[
-                      Icon(Icons.calendar_today), 
-                      Text('   ${DateFormat.yMMMMd().format(postTime)}')
-                    ]
+                  FlatButton(
+                    child: Row(children: <Widget>[
+                      Icon(Icons.calendar_today),
+                      // 3 spaces for padding
+                      Text('   ' + DateFormat.yMMMMd().format(postTime))
+                    ]),
+                    onPressed: () => selectDay(context),
+                    color: Colors.white,
                   ),
-                  onPressed: () => selectDay(context),
-                  color: Colors.white,
-                ),
-                FlatButton(
-                  child: Row(
-                    children: <Widget>[
+                  FlatButton(
+                    child: Row(children: <Widget>[
                       Icon(Icons.access_time),
-                      Text('   ${DateFormat.jm().format(postTime)}'),
-                    ],
+                      // 3 spaces for padding
+                      Text('   ' + DateFormat.jm().format(postTime)),
+                    ]),
+                    onPressed: () => selectTime(context),
+                    color: Colors.white,
                   ),
-                  onPressed: () => selectTime(context),
-                  color: Colors.white,
-                )
-              ])
-          ])),
+                ],
+              ),
+          ],
+        ),
+      ),
       Center(
         child: Padding(
             child: Row(
@@ -277,9 +286,7 @@ class _SubmitPostState extends State<SubmitPost> {
                 FlatButton(
                     textColor: Theme.of(context).errorColor,
                     child: Text('Cancel'),
-                    onPressed: () {
-                      _clear();
-                    }),
+                    onPressed: _clear),
                 RaisedButton(
                   textColor: Colors.white,
                   child:
@@ -287,19 +294,12 @@ class _SubmitPostState extends State<SubmitPost> {
                   onPressed: () {
                     // when a post does not have all necessary fields,
                     // will give a list of what fields the post is missing
-                    Set<String> fields = {};
-                    if (nameController.text == '') {
-                      fields.add('name');
-                    }
-                    if (descriptionController.text == '') {
-                      fields.add('description');
-                    }
-                    if (_image == null) {
-                      fields.add('photo');
-                    }
-                    if (locationController.text == '') {
-                      fields.add("location");
-                    }
+                    Set<String> fields = {
+                      if (nameController.text == '') 'name',
+                      if (descriptionController.text == '') 'description',
+                      if (_image == null) 'photo',
+                      if (locationController.text == '') 'location',
+                    };
                     if (fields.length != 0) {
                       String alertMsg = "Please add the following field" +
                           (fields.length > 1 ? "s" : "") +
@@ -331,9 +331,7 @@ class _SubmitPostState extends State<SubmitPost> {
               height: 0,
             ),
         itemCount: items.length,
-        itemBuilder: (BuildContext context, int index) {
-          return items[index];
-        });
+        itemBuilder: (BuildContext context, int index) => items[index]);
   }
 }
 
@@ -351,9 +349,7 @@ void alertDialog(BuildContext context, String alertMsg) {
           // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Ok"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            onPressed: Navigator.of(context).pop,
           ),
         ],
       );

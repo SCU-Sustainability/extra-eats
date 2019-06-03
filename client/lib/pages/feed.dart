@@ -159,8 +159,7 @@ class _FeedState extends State<Feed> {
 }
 
 // alerts func
-void alertDialog(BuildContext context, String alert_msg, Post post, Function then) {
-  bool answer;
+void alertDialog(BuildContext context, String alert_msg, Post post, Function reload) {
   // flutter defined function
   showDialog(
     context: context,
@@ -177,15 +176,12 @@ void alertDialog(BuildContext context, String alert_msg, Post post, Function the
               Navigator.of(context).pop();
               Client.get()
                   .deletePost(InheritedClient.of(context).accessToken, post.id);
-              then(); //reload the page
+              reload(); //reload the page
             },
           ),
           new FlatButton(
             child: new Text("No"),
-            onPressed: () {
-              Navigator.of(context).pop();
-              answer = false;
-            },
+            onPressed: Navigator.of(context).pop,
           ),
         ],
       );

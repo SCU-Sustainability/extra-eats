@@ -72,75 +72,79 @@ class _RegisterState extends State<Register> {
         ),
       ),
       Padding(
-          padding: EdgeInsets.all(32.0),
-          child: Row(children: [
-            Transform.scale(
-                scale: 1.3,
-                child: FlatButton(
-                    textColor: Theme.of(context).errorColor,
-                    child: Text('Go back'),
-                    onPressed: () {
-                      this.setIndex(0);
-                    })),
-            Spacer(flex: 1),
-            Transform.scale(
-                scale: 1.3,
-                child: RaisedButton(
-                    textColor: Colors.white,
-                    child: Text('Register'),
-                    onPressed: () {
-                      //alert msgs
-                      if (emailController.text == '' &&
-                          passwordController.text.length <= 5) {
-                        String alertMsg =
-                            "Please enter your email and a password with 6 characters or more";
-                        alertDialog(context, alertMsg);
-                        passwordController.clear();
-                        return;
-                      }
-                      if (emailController.text == '') {
-                        String alertMsg = "Please enter your email.";
-                        alertDialog(context, alertMsg);
-                        passwordController.clear();
-                        return;
-                      }
-                      if (!emailController.text.contains("scu.edu")) {
-                        String alertMsg = "Please enter your scu.edu email.";
-                        alertDialog(context, alertMsg);
-                        emailController.clear();
-                        passwordController.clear();
-                        return;
-                      }
+        padding: EdgeInsets.all(32.0),
+        child: Row(children: [
+          Transform.scale(
+            scale: 1.3,
+            child: FlatButton(
+                textColor: Theme.of(context).errorColor,
+                child: Text('Go back'),
+                onPressed: () {
+                  this.setIndex(0);
+                }),
+          ),
+          Spacer(flex: 1),
+          Transform.scale(
+            scale: 1.3,
+            child: RaisedButton(
+                textColor: Colors.white,
+                child: Text('Register'),
+                onPressed: () {
+                  //alert msgs
+                  if (emailController.text == '' &&
+                      passwordController.text.length <= 5) {
+                    String alertMsg =
+                        "Please enter your email and a password with 6 characters or more";
+                    alertDialog(context, alertMsg);
+                    passwordController.clear();
+                    return;
+                  }
+                  if (emailController.text == '') {
+                    String alertMsg = "Please enter your email.";
+                    alertDialog(context, alertMsg);
+                    passwordController.clear();
+                    return;
+                  }
+                  if (!emailController.text.contains("scu.edu")) {
+                    String alertMsg = "Please enter your scu.edu email.";
+                    alertDialog(context, alertMsg);
+                    emailController.clear();
+                    passwordController.clear();
+                    return;
+                  }
 
-                      if (passwordController.text.length <= 5) {
-                        String alertMsg =
-                            "Please enter a password with 6 characters or more.";
-                        alertDialog(context, alertMsg);
-                        passwordController.clear();
-                        emailController.clear();
-                        return;
-                      }
-                      InheritedClient.of(context).register(
-                          nameController.text,
-                          passwordController.text,
-                          emailController.text,
-                          this._provider);
-                      Navigator.pop(context);
-                    })),
-          ])),
+                  if (passwordController.text.length <= 5) {
+                    String alertMsg =
+                        "Please enter a password with 6 characters or more.";
+                    alertDialog(context, alertMsg);
+                    passwordController.clear();
+                    emailController.clear();
+                    return;
+                  }
+                  InheritedClient.of(context).register(
+                      nameController.text,
+                      passwordController.text,
+                      emailController.text,
+                      this._provider);
+                  Navigator.pop(context);
+                }),
+          ),
+        ]),
+      ),
     ];
 
     return Scaffold(
-        appBar: AppBar(
-          title: Text('Register'),
-        ),
-        body: Padding(
-            child: ListView.builder(
-                itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return items[index];
-                }),
-            padding: EdgeInsets.only(top: 50)));
+      appBar: AppBar(
+        title: Text('Register'),
+      ),
+      body: Padding(
+          child: ListView.builder(
+              itemCount: items.length,
+              itemBuilder: (BuildContext context, int index) {
+                return items[index];
+              }),
+          padding: EdgeInsets.only(top: 50)),
+    );
   }
 
   @override
@@ -227,74 +231,76 @@ class _LoginState extends State<Login> {
         ),
       ),
       Padding(
-          padding: EdgeInsets.all(32.0),
-          child: Row(children: [
-            Transform.scale(
-                scale: 1.3,
-                child: OutlineButton(
-                    textColor: Theme.of(context).primaryColor,
-                    child: Text('Register'),
-                    onPressed: () {
-                      Navigator.push(context,
-                          MaterialPageRoute(builder: (context) => Register()));
-                    })),
-            Spacer(flex: 1),
-            Transform.scale(
-                scale: 1.3,
-                child: RaisedButton(
-                    textColor: Colors.white,
-                    child: Text('Login'),
-                    onPressed: () {
-                      //alert msgs
-                      if (emailController.text == '' &&
-                          passwordController.text == '') {
-                        String alertMsg =
-                            "Please enter your registered email and password";
-                        alertDialog(context, alertMsg);
-                        return;
-                      }
-                      if (emailController.text == '') {
-                        String alertMsg = "Please enter your email.";
-                        alertDialog(context, alertMsg);
-                        passwordController.clear();
-                        return;
-                      }
-                      if (passwordController.text == '') {
-                        String alertMsg = "Please enter your password.";
-                        alertDialog(context, alertMsg);
-                        emailController.clear();
-                        return;
-                      }
+        padding: EdgeInsets.all(32.0),
+        child: Row(children: [
+          Transform.scale(
+            scale: 1.3,
+            child: OutlineButton(
+                textColor: Theme.of(context).primaryColor,
+                child: Text('Register'),
+                onPressed: () {
+                  Navigator.push(context,
+                      MaterialPageRoute(builder: (context) => Register()));
+                }),
+          ),
+          Spacer(flex: 1),
+          Transform.scale(
+            scale: 1.3,
+            child: RaisedButton(
+              textColor: Colors.white,
+              child: Text('Login'),
+              onPressed: () {
+                //alert msgs
+                if (emailController.text == '' &&
+                    passwordController.text == '') {
+                  String alertMsg =
+                      "Please enter your registered email and password";
+                  alertDialog(context, alertMsg);
+                  return;
+                }
+                if (emailController.text == '') {
+                  String alertMsg = "Please enter your email.";
+                  alertDialog(context, alertMsg);
+                  passwordController.clear();
+                  return;
+                }
+                if (passwordController.text == '') {
+                  String alertMsg = "Please enter your password.";
+                  alertDialog(context, alertMsg);
+                  emailController.clear();
+                  return;
+                }
 
-                      // dart has some pretty subpar async future types
-                      // so this is me dealing with that
+                // dart has some pretty subpar async future types
+                // so this is me dealing with that
 
-                      // in main.dart there's a login func and _login func
-                      // which i changed to return false when there's a login error
-                      // use .then because login func is async, so you have to wait until
-                      // a value is returned, then you can call alertDialog
-                      InheritedClient.of(context)
-                          .login(emailController.text, passwordController.text)
-                          .then((value) {
-                        if (!value) {
-                          String alertMsg =
-                              "Invalid password/email combination.";
-                          alertDialog(context, alertMsg);
-                          passwordController.clear();
-                          emailController.clear();
-                        }
-                      });
-                    })),
-          ])),
+                // in main.dart there's a login func and _login func
+                // which i changed to return false when there's a login error
+                // use .then because login func is async, so you have to wait until
+                // a value is returned, then you can call alertDialog
+                InheritedClient.of(context)
+                    .login(emailController.text, passwordController.text)
+                    .then((value) {
+                  if (!value) {
+                    String alertMsg = "Invalid password/email combination.";
+                    alertDialog(context, alertMsg);
+                    passwordController.clear();
+                    emailController.clear();
+                  }
+                });
+              },
+            ),
+          ),
+        ]),
+      ),
     ];
 
     return Padding(
-        child: ListView.builder(
-            itemCount: items.length,
-            itemBuilder: (BuildContext context, int index) {
-              return items[index];
-            }),
-        padding: EdgeInsets.only(top: 50));
+      child: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int index) => items[index]),
+      padding: EdgeInsets.only(top: 50),
+    );
   }
 }
 
