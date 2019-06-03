@@ -93,7 +93,9 @@ class _FeedState extends State<Feed> {
                         style: TextStyle(
                             fontWeight: FontWeight.w300, fontSize: 20)),
                     subtitle: Text(currentPost.location)),
-                Image.network(currentPost.image),
+                InkWell(
+                    child: Image.network(currentPost.image),
+                    onTap: () => this._openPost(currentPost, context)),
                 ButtonTheme.bar(
                     child: ButtonBar(children: [
                   FlatButton(
@@ -110,16 +112,7 @@ class _FeedState extends State<Feed> {
                         onPressed: () {
                           String alert_msg =
                               "Are you sure you want to delete this post?";
-                          if (!alertDialog(context, alert_msg)) {
-                            return;
-                          }
-                          Client.get()
-                              .deletePost(
-                                  InheritedClient.of(context).accessToken,
-                                  currentPost.id)
-                              .then((res) {
-                            setState(() {});
-                          });
+                          alertDialog(context, alert_msg, currentPost, () => setState((){}));
                         })
                 ]))
               ])));
@@ -166,7 +159,8 @@ class _FeedState extends State<Feed> {
 }
 
 // alerts func
-bool alertDialog(BuildContext context, String alert_msg) {
+void alertDialog(BuildContext context, String alert_msg, Post post, Function then) {
+  bool answer;
   // flutter defined function
   showDialog(
     context: context,
@@ -181,14 +175,16 @@ bool alertDialog(BuildContext context, String alert_msg) {
             child: new Text("Yes"),
             onPressed: () {
               Navigator.of(context).pop();
-              return true;
+              Client.get()
+                  .deletePost(InheritedClient.of(context).accessToken, post.id);
+              then(); //reload the page
             },
           ),
           new FlatButton(
             child: new Text("No"),
             onPressed: () {
               Navigator.of(context).pop();
-              return false;
+              answer = false;
             },
           ),
         ],
