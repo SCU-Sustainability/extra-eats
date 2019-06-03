@@ -1,3 +1,5 @@
+//documentation at github.com/zeyneloz/onesignal-node
+
 const OneSignal = require('onesignal-node');
 
 const pushClient = new OneSignal.Client({
@@ -10,9 +12,8 @@ const pushClient = new OneSignal.Client({
 
 const push = (name, description) => {
   let notif = new OneSignal.Notification({
-    contents: {
-      en: name + '\n' + description
-    },
+    headings: { en: name },
+    contents: { en: description },
     included_segments: ['Active Users', 'Inactive Users']
   });
 
