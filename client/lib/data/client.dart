@@ -1,16 +1,14 @@
 import 'package:dio/dio.dart';
-import 'package:http/http.dart' as http;
 
 import 'dart:io';
 import 'dart:async';
-import 'dart:convert'; 
 
 class Client {
   static final Client _client = new Client._internal();
   static final String _localhost = 'http://localhost:8080/api/';
   static final String _local = 'http://172.16.121.200:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
-  static final String _url = _local;
+  static final String _url = _localhost;
   
   static final BaseOptions _options = new BaseOptions(
     baseUrl: _url,
@@ -30,6 +28,7 @@ class Client {
   }
 
   Future<Response> login(String email, String password) async {
+    ping(); 
     var response = await dio.postUri(Uri.parse('login'),
         data: {'email': email, 'password': password});
     return response;
@@ -54,13 +53,14 @@ class Client {
       'description': description,
       'image': new UploadFileInfo(imgFile, DateTime.now().toIso8601String()),
       'location': location,
-      'postDate': postDate.toUtc().toIso8601String(),
-      'expiryDate': expiryDate.toUtc().toIso8601String(),
+      'postDate': postDate.toIso8601String(),
+      'expiryDate': expiryDate.toIso8601String(),
       'tags': tags,
       'isScheduled': isScheduled
     });
     var response = await dio.post('posts',
         data: formData, options: Options(headers: {'x-access-token': token}));
+    print("here");
     return response;
   }
 
