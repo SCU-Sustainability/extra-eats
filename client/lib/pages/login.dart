@@ -51,7 +51,6 @@ class _RegisterState extends State<Register> {
         decoration: InputDecoration(
           hintText: 'Email',
           contentPadding: EdgeInsets.all(20.0),
-          //border: InputBorder.none,
         ),
       ),
       TextField(
@@ -60,7 +59,6 @@ class _RegisterState extends State<Register> {
         decoration: InputDecoration(
           hintText: 'Password',
           contentPadding: EdgeInsets.all(20.0),
-          //border: InputBorder.none,
         ),
       ),
       TextField(
@@ -68,7 +66,6 @@ class _RegisterState extends State<Register> {
         decoration: InputDecoration(
           hintText: 'Name (optional)',
           contentPadding: EdgeInsets.all(20.0),
-          //border: InputBorder.none,
         ),
       ),
       Padding(
@@ -105,7 +102,7 @@ class _RegisterState extends State<Register> {
                     passwordController.clear();
                     return;
                   }
-                  if (!emailController.text.contains("scu.edu")) {
+                  if (!emailController.text.contains("@scu.edu")) {
                     String alertMsg = "Please enter your scu.edu email.";
                     alertDialog(context, alertMsg);
                     emailController.clear();
@@ -318,9 +315,8 @@ void alertDialog(BuildContext context, String alertMsg) {
           // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Ok"),
-            onPressed: () {
-              Navigator.of(context).pop();
-            },
+            textColor: Theme.of(context).primaryColor,
+            onPressed: Navigator.of(context).pop,
           ),
         ],
       );

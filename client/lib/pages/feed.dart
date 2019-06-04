@@ -43,9 +43,7 @@ class PostView extends StatelessWidget {
         body: Padding(
             child: ListView.builder(
                 itemCount: items.length,
-                itemBuilder: (BuildContext context, int index) {
-                  return items[index];
-                }),
+                itemBuilder: (BuildContext context, int index) => items[index]),
             padding: EdgeInsets.all(30)));
   }
 }
@@ -71,53 +69,60 @@ class _FeedState extends State<Feed> {
       return [];
   }
 
-  _openPost(Post post, BuildContext context) {
+  static _openPost(Post post, BuildContext context) {
     Navigator.push(
         context, MaterialPageRoute(builder: (context) => PostView(post: post)));
   }
 
   Widget _listPosts(List<Post> posts, BuildContext context) {
     String userId = InheritedClient.of(context).userId;
-    Widget listView = ListView.builder(
-        physics: BouncingScrollPhysics(),
-        shrinkWrap: true,
-        itemCount: posts.length,
-        itemBuilder: (context, index) {
-          var currentPost = posts[posts.length - index - 1];
-          return Padding(
-              padding: EdgeInsets.all(15),
-              child: Card(
-                  child: Column(children: [
-                ListTile(
-                    title: Text(currentPost.name,
-                        style: TextStyle(
-                            fontWeight: FontWeight.w300, fontSize: 20)),
-                    subtitle: Text(currentPost.location)),
-                InkWell(
-                    child: Image.network(currentPost.image),
-                    onTap: () => this._openPost(currentPost, context)),
-                ButtonTheme.bar(
-                    child: ButtonBar(children: [
-                  FlatButton(
-                      child: Text('More Info'),
-                      textColor: Theme.of(context).primaryColor,
-                      onPressed: () {
-                        this._openPost(currentPost, context);
-                      }),
-                  if (userId == currentPost.creator)
+    return ListView.builder(
+      physics: BouncingScrollPhysics(),
+      shrinkWrap: true,
+      itemCount: posts.length,
+      itemBuilder: (context, index) {
+        var currentPost = posts[posts.length - index - 1];
+        return Padding(
+          padding: EdgeInsets.all(15),
+          child: Card(
+            child: Column(children: [
+              ListTile(
+                  title: Text(currentPost.name,
+                      style:
+                          TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+                  subtitle: Text(currentPost.location)),
+              InkWell(
+                  child: Image.network(currentPost.image),
+                  onTap: () => _openPost(currentPost, context)),
+              ButtonTheme.bar(
+                child: ButtonBar(
+                  children: [
                     FlatButton(
+                        child: Text('More Info'),
+                        textColor: Theme.of(context).primaryColor,
+                        onPressed: () {
+                          _openPost(currentPost, context);
+                        }),
+                    if (userId == currentPost.creator)
+                      FlatButton(
                         child: Text('Delete',
                             style:
                                 TextStyle(color: Theme.of(context).errorColor)),
                         onPressed: () {
                           String alert_msg =
                               "Are you sure you want to delete this post?";
-                          alertDialog(context, alert_msg, currentPost, () => setState((){}));
-                        })
-                ]))
-              ])));
-        });
-    return listView;
+                          alertDialog(context, alert_msg, currentPost,
+                              () => setState(() {}));
+                        },
+                      ),
+                  ],
+                ),
+              ),
+            ]),
+          ),
+        );
+      },
+    );
   }
 
   Widget _postBuilder(BuildContext context) {
@@ -159,7 +164,8 @@ class _FeedState extends State<Feed> {
 }
 
 // alerts func
-void alertDialog(BuildContext context, String alert_msg, Post post, Function reload) {
+void alertDialog(
+    BuildContext context, String alert_msg, Post post, Function reload) {
   // flutter defined function
   showDialog(
     context: context,
@@ -172,6 +178,7 @@ void alertDialog(BuildContext context, String alert_msg, Post post, Function rel
           // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Yes"),
+            textColor: Theme.of(context).primaryColor,
             onPressed: () {
               Navigator.of(context).pop();
               Client.get()
@@ -181,6 +188,7 @@ void alertDialog(BuildContext context, String alert_msg, Post post, Function rel
           ),
           new FlatButton(
             child: new Text("No"),
+            textColor: Theme.of(context).primaryColor,
             onPressed: Navigator.of(context).pop,
           ),
         ],

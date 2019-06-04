@@ -175,6 +175,7 @@ class _TasteTheWasteState extends State<TasteTheWaste> {
             // usually buttons at the bottom of the dialog
             new FlatButton(
               child: new Text("Ok"),
+              color: Theme.of(context).primaryColor,
               onPressed: Navigator.of(context).pop,
             ),
           ],

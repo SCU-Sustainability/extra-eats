@@ -8,7 +8,7 @@ import 'dart:convert';
 class Client {
   static final Client _client = new Client._internal();
   static final String _localhost = 'http://localhost:8080/api/';
-  static final String _local = 'http://172.21.72.250:8080/api/';
+  static final String _local = 'http://172.16.121.200:8080/api/';
   static final String _external = 'https://taste-the-waste.herokuapp.com/api/';
   static final String _url = _local;
   
