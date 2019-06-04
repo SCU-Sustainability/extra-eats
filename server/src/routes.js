@@ -293,7 +293,7 @@ router
         // Todo: validate expiration
         // Add in scheduled time here
         var status; 
-        if (req.body.isScheduled) {
+        if (req.body.isScheduled == 'true') {
           status = 'scheduled'
         } else {
           status = 'active'
