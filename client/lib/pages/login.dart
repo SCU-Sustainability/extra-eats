@@ -2,17 +2,11 @@ import 'package:flutter/material.dart';
 
 import '../actions.dart';
 
-var _logo = [
-  Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
-  Padding(
-    padding: const EdgeInsets.all(5.0),
-    child: Text(
-      'ExtraEats',
-      textAlign: TextAlign.center,
-      style: TextStyle(fontSize: 45),
-    ),
-  ),
-];
+var _logo = Padding(
+  padding: EdgeInsets.only(top:50, bottom:5),
+  child:
+      Image(image: AssetImage('assets/logo.png'), width: 200.0, height: 200.0),
+);
 
 class Register extends StatefulWidget {
   Register({Key key}) : super(key: key);
@@ -44,7 +38,7 @@ class _RegisterState extends State<Register> {
 
   Widget registerForm() {
     var items = [
-      ..._logo,
+      _logo,
       TextField(
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
@@ -134,13 +128,11 @@ class _RegisterState extends State<Register> {
       appBar: AppBar(
         title: Text('Register'),
       ),
-      body: Padding(
-          child: ListView.builder(
-              itemCount: items.length,
-              itemBuilder: (BuildContext context, int index) {
-                return items[index];
-              }),
-          padding: EdgeInsets.only(top: 50)),
+      body: ListView.builder(
+          itemCount: items.length,
+          itemBuilder: (BuildContext context, int index) {
+            return items[index];
+          }),
     );
   }
 
@@ -210,7 +202,7 @@ class _LoginState extends State<Login> {
   @override
   Widget build(BuildContext context) {
     var items = [
-      ..._logo,
+      _logo,
       TextField(
         controller: emailController,
         keyboardType: TextInputType.emailAddress,
@@ -292,11 +284,9 @@ class _LoginState extends State<Login> {
       ),
     ];
 
-    return Padding(
-      child: ListView.builder(
-          itemCount: items.length,
-          itemBuilder: (BuildContext context, int index) => items[index]),
-      padding: EdgeInsets.only(top: 50),
+    return ListView.builder(
+      itemCount: items.length,
+      itemBuilder: (BuildContext context, int index) => items[index],
     );
   }
 }
