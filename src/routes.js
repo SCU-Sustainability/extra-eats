@@ -253,7 +253,7 @@ router
     // Check: Auth
     // Post-upload
     console.log("BODY:", req.body);
-    console.log("FILE:", req.file); 
+    // console.log("FILE:", req.file); 
 
     let token = req.headers['x-access-token'];
     jwt.verify(token, process.env.SECRET, function(err, decoded) {
@@ -292,6 +292,15 @@ router
         // Todo: validate data (location)
         // Todo: validate expiration
         // Add in scheduled time here
+        var status; 
+        if (req.body.isScheduled == 'true') {
+          status = 'scheduled'
+        } else {
+          status = 'active'
+        }
+
+        let postDate = new Date(req.body.postDate); 
+
         let post = new Post({
           name: req.body.name,
           description: req.body.description,
@@ -300,9 +309,13 @@ router
           tags: req.body.tags,
           location: req.body.location,
           expiration: req.body.expiryDate,
-          creator: user._id
+          creator: user._id,
+          status: status,
+          scheduledDay: postDate.getDate(),
+          scheduledMonth: postDate.getMonth() + 1, 
+          scheduledHour: postDate.getHours(),
+          scheduledMinute: postDate.getMinutes()
         });
-
         post.save(function(err) {
           if (err) {
             console.log(err);
@@ -329,6 +342,7 @@ router
             });
           });
         });
+        // return res.json({ message: 'Posted!', code: 1 });
       });
     });
   })
@@ -339,13 +353,13 @@ router
       if (err) return _unauthorized(res);
       let tags = [];
       if (req.body.tags) tags = req.body.tags;
-      let filter = tags.length === 0 ? {} : { tags: tags };
+      let filter = tags.length === 0 ? {status: 'active'} : { tags: tags, status: 'active' };
       let now = new Date();
       filter['expiration'] = {
         $gte: now
       };
 
-      Post.find({ expiration: { $lt: now } }, function(err, posts) {
+      Post.find({ expiration: { $lt: now }},   function(err, posts) {
         if (err) {
           console.log(err);
           return;
