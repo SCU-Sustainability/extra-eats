@@ -19,7 +19,9 @@ exports.updatePostStatus = function() {
 		// console.log(month);
 
 		post.updateMany({scheduledDay: numberDay, scheduledMonth: month, scheduledMinute: minutes, scheduledHour: hour}, {$set: {status: 'active'}}).exec(function(err, posts) {
-			console.log("Posts made active: ", posts.nModified); 
+			if (err) {
+				console.log(err); 
+			} 
 		})
 
 	}) 
