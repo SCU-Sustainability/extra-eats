@@ -203,7 +203,7 @@ class _SubmitPostState extends State<SubmitPost> {
           Padding(
             padding: const EdgeInsets.all(15),
             child: Text(
-              'Allergens',
+              'Tags (Optional)',
               style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
             ),
           ),
