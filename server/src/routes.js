@@ -382,7 +382,7 @@ router
           }
         });
       });
-      Post.find(filter, (err, posts) => {
+      Post.find(filter, null, {sort: {expiration: 1}}, (err, posts) => {
         if (err) {
           console.log(err);
           return res.json({
