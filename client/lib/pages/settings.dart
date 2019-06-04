@@ -67,6 +67,22 @@ class _SettingsState extends State<Settings> {
 
   @override
   Widget build(BuildContext context) {
+    return Column(
+      children: [
+        settingsListOrError(context),
+        Spacer(),
+        Text('Sponsored by:',
+            style: TextStyle(fontWeight: FontWeight.w300, fontSize: 20)),
+        Container(
+          alignment: Alignment.center,
+          padding: const EdgeInsets.all(8.0),
+          child: Image(image: AssetImage('assets/sambazon.png'), width: 200.0),
+        ),
+      ],
+    );
+  }
+
+  Widget settingsListOrError(BuildContext context) {
     var errorStyle = TextStyle(color: Theme.of(context).errorColor);
     if (!_saved)
       return settingsList(context);
@@ -128,12 +144,7 @@ class _SettingsState extends State<Settings> {
             RaisedButton(
                 textColor: Colors.white,
                 child: Text('Save'),
-                onPressed: savePreferences)
-          //Text('Sponsored by', style: TextStyle(fontWeight: FontWeight.w300)),
-          // Image(
-          //     image: AssetImage('assets/sambazon.png'),
-          //     width: 200.0,
-          //     height: 200.0)
+                onPressed: savePreferences),
         ]);
   }
 }
