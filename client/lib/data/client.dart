@@ -13,7 +13,7 @@ class Client {
   static final BaseOptions _options = new BaseOptions(
     baseUrl: _url,
     connectTimeout: 10000, //10s
-    receiveTimeout: 5000,
+    receiveTimeout: 500000,
   );
   Dio dio = new Dio(_options);
 
@@ -60,14 +60,12 @@ class Client {
     });
     var response = await dio.post('posts',
         data: formData, options: Options(headers: {'x-access-token': token}));
-    print("here");
     return response;
   }
 
   Future<Response> getPosts(String token) async {
     var response = await dio.get('posts',
         options: Options(headers: {'x-access-token': token}));
-    print(response);
     return response;
   }
 
