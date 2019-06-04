@@ -24,17 +24,17 @@ class _SubmitPostState extends State<SubmitPost> {
   bool _isScheduled = false;
   List<int> _selectedAllergens = new List<int>();
   List<String> _allergens = [
-    'gluten',
-    'dairy',
-    'fish',
-    'peanuts',
-    'tree nuts',
-    'wheat',
-    'shellfish',
-    'soy',
-    'egg'
+    'gluten free',
+    'dairy free',
+    'no fish',
+    'no peanuts',
+    'no tree nuts',
+    'no wheat',
+    'no shellfish',
+    'no soy',
+    'no egg',
+    'vegetarian'
   ];
-  //TODO: add tags ['vegetarian', 'vegan'] etc. see google drive
   File _image;
 
   Future getImage(ImageSource src) async {
