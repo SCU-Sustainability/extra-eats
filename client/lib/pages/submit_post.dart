@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:intl/intl.dart';
@@ -165,7 +166,7 @@ class _SubmitPostState extends State<SubmitPost> {
         child: TextField(
           controller: nameController,
           decoration: InputDecoration(
-            icon: Icon(Icons.subject),
+            icon: Icon(Icons.star),
             hintText: 'Event Name',
             hintStyle: TextStyle(fontWeight: FontWeight.bold),
             contentPadding: EdgeInsets.symmetric(vertical: 20),
@@ -197,132 +198,137 @@ class _SubmitPostState extends State<SubmitPost> {
         ),
       ),
       Padding(
-          child: Column(children: [
-            Center(
-              child: Padding(
-                child: Text(
-                  'Allergens',
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+        padding: EdgeInsets.all(15),
+        child: Column(children: [
+          Padding(
+            padding: const EdgeInsets.all(15),
+            child: Text(
+              'Allergens',
+              style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
+            ),
+          ),
+          Wrap(
+            spacing: 2.0,
+            runSpacing: 0.0,
+            children: [
+              for (var index = 0; index < this._allergens.length; index++)
+                ChoiceChip(
+                  label: Text(this._allergens[index]),
+                  selected: this._selectedAllergens.contains(index),
+                  onSelected: (bool selected) {
+                    setState(() {
+                      if (!this._selectedAllergens.contains(index)) {
+                        this._selectedAllergens.add(index);
+                      } else {
+                        this._selectedAllergens.remove(index);
+                      }
+                    });
+                  },
                 ),
-                padding: EdgeInsets.all(15),
-              ),
-            ),
-            Center(
-              child: Wrap(
-                spacing: 2.0,
-                runSpacing: 0.0,
-                children: [
-                  for (var index = 0; index < this._allergens.length; index++)
-                    ChoiceChip(
-                      label: Text(this._allergens[index]),
-                      selected: this._selectedAllergens.contains(index),
-                      onSelected: (bool selected) {
-                        setState(() {
-                          if (!this._selectedAllergens.contains(index)) {
-                            this._selectedAllergens.add(index);
-                          } else {
-                            this._selectedAllergens.remove(index);
-                          }
-                        });
-                      },
-                    ),
-                ],
-              ),
-            ),
-          ]),
-          padding: EdgeInsets.all(15)),
-      AnimatedContainer(
-        duration: MediaQuery.of(context).disableAnimations
-            ? Duration(milliseconds: 0)
-            : Duration(milliseconds: 700),
-        curve: Curves.ease,
-        padding: EdgeInsets.all(15.0),
-        color: _isScheduled ? Colors.grey[300] : Colors.grey[50],
-        child: Column(
-          children: [
-            CheckboxListTile(
-                value: _isScheduled,
-                onChanged: (bool changed) {
+            ],
+          ),
+        ]),
+      ),
+      Padding(
+        padding: const EdgeInsets.all(15.0),
+        child: AnimatedContainer(
+          duration: MediaQuery.of(context).disableAnimations
+              ? Duration(milliseconds: 0)
+              : Duration(milliseconds: 700),
+          curve: Curves.ease,
+          padding: EdgeInsets.all(15.0),
+          color: _isScheduled ? Colors.grey[300] : Colors.grey[50],
+          child: Column(
+            children: [
+              ListTile(
+                onTap: () {
                   setState(() {
-                    _isScheduled = changed;
+                    _isScheduled = !_isScheduled;
                   });
                 },
-                title: Text(
-                  "Schedule day and time",
-                  style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
-                ),
-                controlAffinity: ListTileControlAffinity.leading),
-            if (_isScheduled)
-              Row(
-                mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-                children: [
-                  FlatButton(
-                    child: Row(children: <Widget>[
-                      Icon(Icons.calendar_today),
-                      // 3 spaces for padding
-                      Text('   ' + DateFormat.yMMMMd().format(postTime))
-                    ]),
-                    onPressed: () => selectDay(context),
-                    color: Colors.white,
+                title: Column(children: <Widget>[
+                  Text(
+                    "Schedule day and time",
+                    style: TextStyle(fontSize: 16, fontWeight: FontWeight.w300),
                   ),
-                  FlatButton(
-                    child: Row(children: <Widget>[
-                      Icon(Icons.access_time),
-                      // 3 spaces for padding
-                      Text('   ' + DateFormat.jm().format(postTime)),
-                    ]),
-                    onPressed: () => selectTime(context),
-                    color: Colors.white,
-                  ),
-                ],
+                  if (_isScheduled)
+                    Icon(Icons.arrow_drop_up)
+                  else
+                    Icon(Icons.arrow_drop_down),
+                ]),
               ),
-          ],
+              if (_isScheduled)
+                Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                  children: [
+                    FlatButton(
+                      child: Row(children: <Widget>[
+                        Icon(Icons.calendar_today),
+                        // 3 spaces for padding
+                        Text('   ' + DateFormat.yMMMMd().format(postTime))
+                      ]),
+                      onPressed: () => selectDay(context),
+                      color: Colors.white,
+                    ),
+                    FlatButton(
+                      child: Row(children: <Widget>[
+                        Icon(Icons.access_time),
+                        // 3 spaces for padding
+                        Text('   ' + DateFormat.jm().format(postTime)),
+                      ]),
+                      onPressed: () => selectTime(context),
+                      color: Colors.white,
+                    ),
+                  ],
+                ),
+            ],
+          ),
         ),
       ),
       Center(
         child: Padding(
-            child: Row(
-              children: [
-                FlatButton(
-                    textColor: Theme.of(context).errorColor,
-                    child: Text('Cancel'),
-                    onPressed: _clear),
-                RaisedButton(
-                  textColor: Colors.white,
-                  child:
-                      !_isScheduled ? Text('Post Now') : Text('Schedule Post'),
-                  onPressed: () {
-                    // when a post does not have all necessary fields,
-                    // will give a list of what fields the post is missing
-                    Set<String> fields = {
-                      if (nameController.text == '') 'name',
-                      if (descriptionController.text == '') 'description',
-                      if (_image == null) 'photo',
-                      if (locationController.text == '') 'location',
-                    };
-                    if (fields.length != 0) {
-                      String alertMsg = "Please add the following field" +
-                          (fields.length > 1 ? "s" : "") +
-                          " to your post: ";
-                      for (var i in fields) {
-                        if (fields.length == 1) {
-                          alertMsg += i + ".";
-                          break;
-                        }
-                        alertMsg += (fields.elementAt(fields.length - 1) == i
-                            ? "and " + i + "."
-                            : i + ", ");
+          padding: EdgeInsets.only(bottom: 32),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: [
+              FlatButton(
+                  textColor: Theme.of(context).errorColor,
+                  child: Text('Cancel'),
+                  onPressed: _clear),
+              RaisedButton(
+                textColor: Colors.white,
+                child: !_isScheduled ? Text('Post Now') : Text('Schedule Post'),
+                onPressed: () {
+                  // when a post does not have all necessary fields,
+                  // will give a list of what fields the post is missing
+                  Set<String> fields = {
+                    if (nameController.text == '') 'name',
+                    if (descriptionController.text == '') 'description',
+                    if (_image == null) 'photo',
+                    if (locationController.text == '') 'location',
+                  };
+                  if (fields.length != 0) {
+                    String alertMsg = "Please add the following field" +
+                        (fields.length > 1 ? "s" : "") +
+                        " to your post: ";
+                    for (var i in fields) {
+                      if (fields.length == 1) {
+                        alertMsg += i + ".";
+                        break;
                       }
-                      alertDialog(context, alertMsg);
-                      return;
+                      alertMsg += (fields.elementAt(fields.length - 1) == i
+                          ? "and " + i + "."
+                          : i + ", ");
                     }
-                    _ensureSubmit();
-                  },
-                ),
-              ],
-              mainAxisAlignment: MainAxisAlignment.center,
-            ),
-            padding: EdgeInsets.only(bottom: 32)),
+                    alertDialog(context, alertMsg);
+                    return;
+                  }
+                  _ensureSubmit();
+                },
+              ),
+            ],
+          ),
+        ),
       ),
     ];
     return ListView.separated(
@@ -349,6 +355,7 @@ void alertDialog(BuildContext context, String alertMsg) {
           // usually buttons at the bottom of the dialog
           new FlatButton(
             child: new Text("Ok"),
+            textColor: Theme.of(context).primaryColor,
             onPressed: Navigator.of(context).pop,
           ),
         ],
